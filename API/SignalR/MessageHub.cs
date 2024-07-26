@@ -30,7 +30,7 @@ public class MessageHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         var group = await AddToGroup(groupName);
 
-        await Clients.Group(groupName).SendAsync("UpdateGroup", group);
+        await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
 
         var messages = await _uow.MessageRepository.GetMessageThread(Context.User.GetUsername(), otherUser);
 
