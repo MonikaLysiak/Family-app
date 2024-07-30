@@ -31,13 +31,13 @@ public class LikesController : BaseApiController
 
         if (userLike != null) return BadRequest("You already like this user");
 
-        userLike = new UserLike
+        userLike = new Invitation
         {
-            SourceUserId = sourceUserId,
-            TargetUserId = likedUser.Id
+            InviterUserId = sourceUserId,
+            InviteeUserId = likedUser.Id
         };
 
-        sourceUser.LikedUsers.Add(userLike);
+        sourceUser.InvitationsSent.Add(userLike);
 
         if (await _uow.Complete()) return Ok();
 

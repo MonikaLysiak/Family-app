@@ -72,15 +72,15 @@ public class UsersController : BaseApiController
 
         if (result.Error != null) return BadRequest(result.Error.Message);
 
-        var photo = new Photo
+        var photo = new UserPhoto
         {
             Url = result.SecureUrl.AbsoluteUri,
             PublicId = result.PublicId
         };
 
-        if (user.Photos.Count == 0) photo.IsMain = true;
+        if (user.UserPhotos.Count == 0) photo.IsMain = true;
 
-        user.Photos.Add(photo);
+        user.UserPhotos.Add(photo);
 
         if (await _uow.Complete()) 
         {
@@ -97,13 +97,13 @@ public class UsersController : BaseApiController
 
         if (user == null) return NotFound();
 
-        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+        var photo = user.UserPhotos.FirstOrDefault(x => x.Id == photoId);
 
         if (photo == null) return NotFound();
 
         if (photo.IsMain) return BadRequest("this is already your main photo");
 
-        var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
+        var currentMain = user.UserPhotos.FirstOrDefault(x => x.IsMain);
         if (currentMain !=null) currentMain.IsMain = false;
         photo.IsMain = true;
 
@@ -117,7 +117,7 @@ public class UsersController : BaseApiController
     {
         var user = await _uow.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
-        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+        var photo = user.UserPhotos.FirstOrDefault(x => x.Id == photoId);
 
         if (photo == null) return NotFound();
 
@@ -129,7 +129,7 @@ public class UsersController : BaseApiController
             if (result.Error != null) return BadRequest(result.Error.Message);
         }
 
-        user.Photos.Remove(photo);
+        user.UserPhotos.Remove(photo);
 
         if (await _uow.Complete()) return Ok();
 

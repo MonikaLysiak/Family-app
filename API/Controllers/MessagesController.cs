@@ -36,7 +36,7 @@ public class MessagesController : BaseApiController
         var message = new Message
         {
             Sender = sender,
-            Recipient = recipient,
+            Family = recipient,
             SenderUsername = sender.UserName,
             RecipientUsername = recipient.UserName,
             Content = createMessageDto.Content

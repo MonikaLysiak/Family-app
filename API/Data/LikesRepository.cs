@@ -14,9 +14,9 @@ public class LikesRepository : ILikesRepository
     {
         _context = context;
     }
-    public async Task<UserLike> GetUserLike(int sourceUserId, int targetUserId)
+    public async Task<Invitation> GetUserLike(int sourceUserId, int targetUserId)
     {
-        return await _context.Likes.FindAsync(sourceUserId, targetUserId);
+        return await _context.Invitations.FindAsync(sourceUserId, targetUserId);
     }
 
     //to be fixed
@@ -24,26 +24,26 @@ public class LikesRepository : ILikesRepository
     public async Task<PagedList<LikeDto>> GetUserLikes(LikesParams likesParams)
     {
         var users = _context.Users.OrderBy(u => u.UserName).AsQueryable();
-        var likes = _context.Likes.AsQueryable();
+        var likes = _context.Invitations.AsQueryable();
 
         if (likesParams.Predicate == "liked")
         {
-            likes = likes.Where(like => like.SourceUserId == likesParams.UserId);
-            users = likes.Select(like => like.TargetUser);
+            likes = likes.Where(like => like.InviterUserId == likesParams.UserId);
+            users = likes.Select(like => like.InviteeUser);
         }
 
         if (likesParams.Predicate == "likedBy")
         {
-            likes = likes.Where(like => like.TargetUserId == likesParams.UserId);
-            users = likes.Select(like => like.SourceUser);
+            likes = likes.Where(like => like.InviteeUserId == likesParams.UserId);
+            users = likes.Select(like => like.InviterUser);
         }
 
         var likedUsers = users.Select(user => new LikeDto
         {
             UserName = user.UserName,
-            KnownAs = user.KnownAs,
+            KnownAs = user.Name,
             Age = user.DateOfBirth.CalculateAge(),
-            PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url,
+            PhotoUrl = user.UserPhotos.FirstOrDefault(x => x.IsMain).Url,
             City = user.City,
             Id = user.Id
         });
@@ -54,7 +54,7 @@ public class LikesRepository : ILikesRepository
     public async Task<AppUser> GetUserWithLikes(int userId)
     {
         return await _context.Users
-            .Include(x => x.LikedUsers)
+            .Include(x => x.InvitationsSent)
             .FirstOrDefaultAsync(x => x.Id == userId);
     }
 }

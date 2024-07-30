@@ -2,8 +2,8 @@
 
 namespace API.Entities;
 
-[Table("Photos")]
-public class Photo
+[Table("UserPhotos")]
+public class UserPhoto
 {
     public int Id { get; set; }
     public string Url { get; set; }

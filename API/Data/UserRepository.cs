@@ -58,7 +58,7 @@ public class UserRepository : IUserRepository
     public async Task<AppUser> GetUserByUsernameAsync(string username)
     {
         return await _context.Users
-            .Include(p => p.Photos)
+            .Include(p => p.UserPhotos)
             .SingleOrDefaultAsync(x => x.UserName == username);
     }
 
@@ -70,7 +70,7 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<AppUser>> GetUsersAsync()
     {
         return await _context.Users
-            .Include(p => p.Photos)
+            .Include(p => p.UserPhotos)
             .ToListAsync();
     }
 

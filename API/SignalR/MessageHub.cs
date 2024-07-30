@@ -61,7 +61,7 @@ public class MessageHub : Hub
         var message = new Message
         {
             Sender = sender,
-            Recipient = recipient,
+            Family = recipient,
             SenderUsername = sender.UserName,
             RecipientUsername = recipient.UserName,
             Content = createMessageDto.Content
@@ -80,7 +80,7 @@ public class MessageHub : Hub
             var connections = await PresenceTracker.GetConnectionsForUser(recipient.UserName);
             if (connections != null)
             {
-                await _presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived", new {username = sender.UserName, knownAs = sender.KnownAs});
+                await _presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived", new {username = sender.UserName, knownAs = sender.Name});
             }
         }
 

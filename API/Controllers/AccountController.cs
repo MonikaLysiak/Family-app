@@ -42,7 +42,7 @@ public class AccountController : BaseApiController
         {
             Username = user.UserName,
             Token = await _tokenService.CreateToken(user),
-            KnownAs = user.KnownAs,
+            KnownAs = user.Name,
             Gender = user.Gender
         };
     }
@@ -51,7 +51,7 @@ public class AccountController : BaseApiController
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await _userManager.Users
-            .Include(p => p.Photos)
+            .Include(p => p.UserPhotos)
             .SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
         if(user == null) return Unauthorized("invalid username");
@@ -64,8 +64,8 @@ public class AccountController : BaseApiController
         {
             Username = user.UserName,
             Token = await _tokenService.CreateToken(user),
-            PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-            KnownAs = user.KnownAs,
+            PhotoUrl = user.UserPhotos.FirstOrDefault(x => x.IsMain)?.Url,
+            KnownAs = user.Name,
             Gender = user.Gender
         };
     }
