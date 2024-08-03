@@ -2,6 +2,6 @@
 
 public class MessageParams : PaginationParams
 {
-    public string Username { get; set; }
+    public int FamilyId { get; set; }
     public string Container { get; set; } = "Unread";
 }

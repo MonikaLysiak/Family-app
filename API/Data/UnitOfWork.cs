@@ -17,7 +17,9 @@ public class UnitOfWork : IUnitOfWork
 
     public IMessageRepository MessageRepository => new MessageRepository(_context, _mapper);
 
-    public ILikesRepository LikesRepository => new LikesRepository(_context);
+    public IInvitationsRepository LikesRepository => new InvitationsRepository(_context);
+
+    public IFamilyRepository FamilyRepository => new FamilyRepository(_context);
 
     public async Task<bool> Complete()
     {

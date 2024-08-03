@@ -25,20 +25,21 @@ public class MessagesController : BaseApiController
     {
         var username = User.GetUsername();
 
-        if (username == createMessageDto.RecipientUsername.ToLower())
-            return BadRequest("You cennot send messages to yourself");
+        if (!await _uow.FamilyRepository.IsFamilyMember(createMessageDto.FamilyId, username))
+            return BadRequest("You are not a member of this family");
 
         var sender = await _uow.UserRepository.GetUserByUsernameAsync(username);
-        var recipient = await _uow.UserRepository.GetUserByUsernameAsync(createMessageDto.RecipientUsername);
+        var family = await _uow.FamilyRepository.GetFamilyByIdAsync(createMessageDto.FamilyId);
 
-        if (recipient == null) return NotFound();
+        if (family == null) return NotFound("There is no family of that id");
 
         var message = new Message
         {
             Sender = sender,
-            Family = recipient,
+            Family = family,
+            SenderId = sender.Id,
             SenderUsername = sender.UserName,
-            RecipientUsername = recipient.UserName,
+            FamilyId = family.Id,
             Content = createMessageDto.Content
         };
 
@@ -50,11 +51,14 @@ public class MessagesController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedList<MessageDto>>> GetMessagesForUser([FromQuery] MessageParams messageParams)
+    public async Task<ActionResult<PagedList<MessageDto>>> GetMessagesForFamily([FromQuery] MessageParams messageParams)
     {
-        messageParams.Username = User.GetUsername();
+        var username = User.GetUsername();
 
-        var messages = await _uow.MessageRepository.GetMessagesForUser(messageParams);
+        if (!await _uow.FamilyRepository.IsFamilyMember(messageParams.FamilyId, username))
+            return BadRequest("You are not a member of this family");
+
+        var messages = await _uow.MessageRepository.GetMessagesForFamily(messageParams);
 
         Response.AddPaginationHeader(new PaginationHeader(messages.CurrentPage, messages.PageSize,
             messages.TotalCount, messages.TotalPages));
@@ -69,15 +73,21 @@ public class MessagesController : BaseApiController
 
         var message = await _uow.MessageRepository.GetMessage(id);
 
-        if (message.SenderUsername != username && message.RecipientUsername != username) return Unauthorized();
+        if (message.SenderUsername != username) return Unauthorized();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(message.FamilyId, username))
+            return BadRequest("You are not a member of this family");
 
         if (message.SenderUsername == username) message.SenderDeleted = true;
-        if (message.RecipientUsername == username) message.RecipientDeleted = true;
 
-        if (message.SenderDeleted && message.RecipientDeleted)
-        {
-            _uow.MessageRepository.DeleteMessage(message);
-        }
+        //not going to delete messages entirely, only not showing (delete maby when admin or family owner deletes it to ??)
+        //maby make functionaliy of retriving messages ??
+        //maby show that a message has been deleted ??
+        // if (message.SenderDeleted)
+        // {
+        //     _uow.MessageRepository.DeleteMessage(message);
+        // }
+        
 
         if (await _uow.Complete()) return Ok();
 

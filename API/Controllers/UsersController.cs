@@ -29,6 +29,8 @@ public class UsersController : BaseApiController
         var gender = await _uow.UserRepository.GetUserGender(User.GetUsername());
         userParams.CurrentUsername = User.GetUsername();
 
+        // make this an enum or delete entirely
+        // must change filters and sorting and add seeking of username etc.
         if (string.IsNullOrEmpty(userParams.Gender))
         {
             userParams.Gender = gender == "male" ? "female" : "male";
@@ -48,7 +50,7 @@ public class UsersController : BaseApiController
     }
 
     [HttpPut]
-    public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+    public async Task<ActionResult> UpdateUser(FamilyMemberUpdateDto memberUpdateDto)
     {
         var user = await _uow.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 

@@ -1,4 +1,5 @@
-﻿using API.DTOs;
+﻿using System.Numerics;
+using API.DTOs;
 using API.Entities;
 using API.Extensions;
 using API.Interfaces;
@@ -25,14 +26,22 @@ public class MessageHub : Hub
     public override async Task OnConnectedAsync()
     {
         var httpContext = Context.GetHttpContext();
-        var otherUser = httpContext.Request.Query["user"];
-        var groupName = GetGroupName(Context.User.GetUsername(), otherUser);
+        
+        if (!int.TryParse(httpContext.Request.Query["familyId"], out var familyId))
+            throw new HubException("'familyId' must exist as an integer");
+
+        var username = Context.User.GetUsername();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, username))
+            throw new HubException("You are not a member of this family");
+
+        var groupName = familyId.ToString();
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         var group = await AddToGroup(groupName);
 
         await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
 
-        var messages = await _uow.MessageRepository.GetMessageThread(Context.User.GetUsername(), otherUser);
+        var messages = await _uow.MessageRepository.GetMessageThread(familyId);
 
         if (_uow.HasChanges()) await _uow.Complete();
 
@@ -50,38 +59,38 @@ public class MessageHub : Hub
     {
         var username = Context.User.GetUsername();
 
-        if (username == createMessageDto.RecipientUsername.ToLower())
-            throw new HubException("You cannot send messages to yourself");
+        if (!await _uow.FamilyRepository.IsFamilyMember(createMessageDto.FamilyId, username))
+            throw new HubException("You are not a member of this family");
 
         var sender = await _uow.UserRepository.GetUserByUsernameAsync(username);
-        var recipient = await _uow.UserRepository.GetUserByUsernameAsync(createMessageDto.RecipientUsername);
-
-        if (recipient == null) throw new HubException("Not found user");
-
+        var family = await _uow.FamilyRepository.GetFamilyByIdAsync(createMessageDto.FamilyId) ?? throw new HubException("Not found user");
+        
         var message = new Message
         {
-            Sender = sender,
-            Family = recipient,
+            SenderId = sender.Id,
             SenderUsername = sender.UserName,
-            RecipientUsername = recipient.UserName,
+            Sender = sender,
+
+            FamilyId = family.Id,
+            Family = family,
+            
             Content = createMessageDto.Content
         };
 
-        var groupName = GetGroupName(sender.UserName, recipient.UserName);
+        var groupName = createMessageDto.FamilyId.ToString();
 
         var group = await _uow.MessageRepository.GetMessageGroup(groupName);
 
-        if (group.Connections.Any(x => x.Username == recipient.UserName))
+        var connections = await PresenceTracker.GetConnectionsForUser(createMessageDto.FamilyId.ToString()); // , username ?? check this method again
+        
+        // make it so that all members of the family get notification except of the sender user
+        // must change connections ??
+        // must change receiving methods in client??
+        // must add family name in notification ??
+        
+        if (connections != null)
         {
-            message.DateRead = DateTime.UtcNow;
-        }
-        else
-        {
-            var connections = await PresenceTracker.GetConnectionsForUser(recipient.UserName);
-            if (connections != null)
-            {
-                await _presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived", new {username = sender.UserName, knownAs = sender.Name});
-            }
+            await _presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived", new {username = sender.UserName, knownAs = sender.Name});
         }
 
         _uow.MessageRepository.AddMessage(message);
@@ -90,12 +99,6 @@ public class MessageHub : Hub
         {
             await Clients.Group(groupName).SendAsync("NewMessage", _mapper.Map<MessageDto>(message));
         }
-    }
-
-    private string GetGroupName(string caller, string other)
-    {
-        var stringCompare = string.CompareOrdinal(caller, other) < 0;
-        return stringCompare ? $"{caller}-{other}" : $"{other}-{caller}";
     }
 
     private async Task<Group> AddToGroup(string groupName)

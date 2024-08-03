@@ -20,8 +20,7 @@ public class Seed
         var roles = new List<AppRole>
         {
             new AppRole{Name = "Member"},
-            new AppRole{Name = "Admin"},
-            new AppRole{Name = "Moderator"},
+            new AppRole{Name = "Admin"}
         };
 
         foreach (var role in roles)
@@ -43,6 +42,6 @@ public class Seed
         };
 
         await userManager.CreateAsync(admin, "Pa$$w0rd");
-        await userManager.AddToRolesAsync(admin, new[] {"Admin", "Moderator"});
+        await userManager.AddToRolesAsync(admin, new[] {"Admin"});
     }
 }

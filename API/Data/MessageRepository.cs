@@ -59,47 +59,29 @@ public class MessageRepository : IMessageRepository
             .FirstOrDefaultAsync(x => x.Name == groupName);
     }
 
-    public async Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams)
+    //to be deleted (past functionality does not apply anymore)
+    public async Task<PagedList<MessageDto>> GetMessagesForFamily(MessageParams messageParams)
     {
         var query = _context.Messages
             .OrderByDescending(x => x.MessageSent)
             .AsQueryable();
 
-        query = messageParams.Container switch
-        {
-            "Inbox" => query.Where(u => u.RecipientUsername == messageParams.Username && u.RecipientDeleted == false),
-            "Outbox" => query.Where(u => u.SenderUsername == messageParams.Username && u.SenderDeleted == false),
-            _ => query.Where(u => u.RecipientUsername == messageParams.Username && u.RecipientDeleted == false && u.DateRead == null)
-        };
+        query = query.Where(u => u.FamilyId == messageParams.FamilyId && u.SenderDeleted == false);
 
         var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
 
         return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
     }
 
-    public async Task<IEnumerable<MessageDto>> GetMessageThread(string currntUserName, string recipientUserName)
+    public async Task<IEnumerable<MessageDto>> GetMessageThread(int familyId)
     {
         var query = _context.Messages
             .Where(
-                m => m.RecipientUsername == currntUserName && 
-                m.RecipientDeleted == false &&
-                m.SenderUsername == recipientUserName ||
-                m.RecipientUsername == recipientUserName &&
-                m.SenderDeleted == false &&
-                m.SenderUsername == currntUserName
+                m => m.FamilyId == familyId && 
+                m.SenderDeleted == false
             )
             .OrderBy(m => m.MessageSent)
             .AsQueryable();
-
-        var unreadMessages = query.Where(m => m.DateRead == null && m.RecipientUsername == currntUserName).ToList();
-
-        if (unreadMessages.Any())
-        {
-            foreach (var message in unreadMessages)
-            {
-                message.DateRead = DateTime.UtcNow;
-            }
-        }
 
         return await query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider).ToListAsync();
     }

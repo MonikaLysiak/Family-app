@@ -53,6 +53,7 @@ public class PresenceTracker
         return Task.FromResult(onlineUsers);
     }
 
+    // what this does?
     public static Task<List<string>> GetConnectionsForUser(string username)
     {
         List<string> connectionIds;

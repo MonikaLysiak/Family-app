@@ -5,7 +5,7 @@ namespace API.Entities;
 public class AppUser : IdentityUser<int>
 {
     public string Name { get; set; }
-    public string Surame { get; set; }
+    public string Surname { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
     public DateOnly DateOfBirth { get; set; }
     public string Gender { get; set; }
