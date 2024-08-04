@@ -23,12 +23,12 @@ public class MessagesController : BaseApiController
     [HttpPost]
     public async Task<ActionResult<MessageDto>> CreateMessage(CreateMessageDto createMessageDto)
     {
-        var username = User.GetUsername();
+        var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(createMessageDto.FamilyId, username))
+        if (!await _uow.FamilyRepository.IsFamilyMember(createMessageDto.FamilyId, userId))
             return BadRequest("You are not a member of this family");
 
-        var sender = await _uow.UserRepository.GetUserByUsernameAsync(username);
+        var sender = await _uow.UserRepository.GetUserByIdAsync(userId);
         var family = await _uow.FamilyRepository.GetFamilyByIdAsync(createMessageDto.FamilyId);
 
         if (family == null) return NotFound("There is no family of that id");
@@ -53,9 +53,9 @@ public class MessagesController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<PagedList<MessageDto>>> GetMessagesForFamily([FromQuery] MessageParams messageParams)
     {
-        var username = User.GetUsername();
+        var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(messageParams.FamilyId, username))
+        if (!await _uow.FamilyRepository.IsFamilyMember(messageParams.FamilyId, userId))
             return BadRequest("You are not a member of this family");
 
         var messages = await _uow.MessageRepository.GetMessagesForFamily(messageParams);
@@ -69,16 +69,16 @@ public class MessagesController : BaseApiController
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteMessage(int id)
     {
-        var username = User.GetUsername();
+        var userId = User.GetUserId();
 
         var message = await _uow.MessageRepository.GetMessage(id);
 
-        if (message.SenderUsername != username) return Unauthorized();
+        if (message.SenderId != userId) return Unauthorized();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(message.FamilyId, username))
+        if (!await _uow.FamilyRepository.IsFamilyMember(message.FamilyId, userId))
             return BadRequest("You are not a member of this family");
 
-        if (message.SenderUsername == username) message.SenderDeleted = true;
+        message.SenderDeleted = true;
 
         //not going to delete messages entirely, only not showing (delete maby when admin or family owner deletes it to ??)
         //maby make functionaliy of retriving messages ??
@@ -87,7 +87,6 @@ public class MessagesController : BaseApiController
         // {
         //     _uow.MessageRepository.DeleteMessage(message);
         // }
-        
 
         if (await _uow.Complete()) return Ok();
 

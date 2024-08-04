@@ -5,11 +5,11 @@ public class Family
     public int Id { get; set; }
     public string Name { get; set; }
 
-    public List<FamilyPhoto> FamilyPhotos { get; set; } = new();
+    public List<FamilyPhoto> FamilyPhotos { get; set; } = [];
 
-    public ICollection<AppUserFamily> UserFamilies { get; set; }
+    public List<AppUserFamily> UserFamilies { get; set; } = [];
 
     public ICollection<Invitation> FamilyInvitations { get; set; }
 
-    public ICollection<Message> Messages { get; set; }
+    public List<Message> Messages { get; set; } = [];
 }

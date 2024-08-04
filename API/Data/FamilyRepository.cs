@@ -1,5 +1,6 @@
 using API.Entities;
 using API.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
@@ -11,13 +12,25 @@ public class FamilyRepository : IFamilyRepository
         _context = context;
     }
 
-    public Task<Family> GetFamilyByIdAsync(int familyId)
+    public void AddFamily(Family family)
     {
-        throw new NotImplementedException();
+        _context.Families.Add(family);
     }
 
-    public Task<bool> IsFamilyMember(int familyId, string username)
+    public async Task<Family> GetFamilyByIdAsync(int familyId)
     {
-        throw new NotImplementedException();
+        return await _context.Families.FindAsync(familyId);
+    }
+
+    public async Task<bool> IsFamilyMember(int familyId, string username)
+    {
+        return await _context.AppUsersFamilies
+            .AnyAsync(uf => uf.FamilyId == familyId && uf.User.UserName == username);
+    }
+    
+    public async Task<bool> IsFamilyMember(int familyId, int userId)
+    {
+        return await _context.AppUsersFamilies
+            .AnyAsync(uf => uf.FamilyId == familyId && uf.UserId == userId);
     }
 }
