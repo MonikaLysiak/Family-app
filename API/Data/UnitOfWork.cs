@@ -19,7 +19,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IInvitationsRepository LikesRepository => new InvitationsRepository(_context);
 
-    public IFamilyRepository FamilyRepository => new FamilyRepository(_context);
+    public IFamilyRepository FamilyRepository => new FamilyRepository(_context, _mapper);
 
     public async Task<bool> Complete()
     {

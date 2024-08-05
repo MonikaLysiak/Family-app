@@ -1,0 +1,10 @@
+<div class="card mb-4" *ngIf="family">
+    <div class="card-img-wrapper" (click)="goToFamily(family)">
+        <img src="{{family.photoUrl || './assets/user.png'}}" alt="{{family.name}}" class="card-img-top">
+    </div>
+    <div class="cadr-body p-1">
+        <h6 class="card-title text-center mb-1 animate" (click)="goToFamily(family)">
+            {{family.name}}
+        </h6>
+    </div>
+</div>

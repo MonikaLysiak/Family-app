@@ -4,6 +4,7 @@ import { BehaviorSubject, map } from 'rxjs';
 import { User } from '../_models/user';
 import { environment } from 'src/environments/environment';
 import { PresenceService } from './presence.service';
+import { Family } from '../_models/family';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,9 @@ export class AccountService {
   baseUrl = environment.apiUrl;
   private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
+
+  private currentFamilySource = new BehaviorSubject<Family | null>(null);
+  currentFamily$ = this.currentFamilySource.asObservable();
 
   constructor(private http: HttpClient, private presenceService: PresenceService) { }
 
@@ -43,6 +47,23 @@ export class AccountService {
     localStorage.setItem('user', JSON.stringify(user))
     this.currentUserSource.next(user);
     this.presenceService.createHubConnection(user);
+  }
+
+  // check if cant be , model, and then not from Query??
+  // check the options and how to best recieve data in controller
+  addFamily(familyName: string) {
+    return this.http.post<Family>(this.baseUrl + 'family/' + familyName, {}).pipe(
+      map(family => {
+        if (family) {
+          this.setCurrentFamily(family);
+        }
+      })
+    )
+  }
+
+  //why this way? should i chnge it to simple property??
+  setCurrentFamily(family: Family | null){
+    this.currentFamilySource.next(family);
   }
 
   logout() {

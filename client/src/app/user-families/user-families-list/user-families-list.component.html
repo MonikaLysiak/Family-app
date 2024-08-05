@@ -1,0 +1,43 @@
+<div *ngIf="!addFamilyMode && families.length > 0">
+
+    <div class="text-center mt-3">
+        <h2>Your Families</h2>
+    </div>
+    
+    <div class="row" *ngIf="!addFamilyMode">
+        <div class="col-2" *ngFor="let family of families">
+            <app-family-card [family]="family"></app-family-card>
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-center" *ngIf="pagination">
+        <pagination
+            [boundaryLinks]="true" 
+            [totalItems]="pagination.totalItems" 
+            [itemsPerPage]="pagination.itemsPerPage"
+            [maxSize]="10"
+            [(ngModel)]="pagination.currentPage"
+            (pageChanged)="pageChanged($event)"
+            previousText="&lsaquo;" 
+            nextText="&rsaquo;" 
+            firstText="&laquo;"
+            lastText="&raquo;">
+        </pagination>
+    </div>
+</div>
+
+<div class="container mt-5" *ngIf="families.length == 0">
+    <div *ngIf="!addFamilyMode" style="text-align: center;">
+        <h1>You are currently not a member of any Family</h1>
+        <p class="lead">Create Family of your own</p>
+        <div class="text-center">
+            <button *ngIf="!(accountService.currentFamily$ | async)" (click)="addFamilyToggle()" class="btn btn-primary btn-lg me-2">Add Family</button>
+        </div>
+    </div>
+
+    <div *ngIf="addFamilyMode" class="container">
+        <div class="row justify-content-center">
+            <app-add-family (cancelRegister)="cancelAddFamilyMode($event)"></app-add-family>
+        </div>
+    </div>
+</div>

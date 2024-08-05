@@ -14,6 +14,11 @@ import { preventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.gu
 import { memberDetailedResolver } from './_resolvers/member-detailed.resolver';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { adminGuard } from './_guards/admin.guard';
+import { UserFamiliesListComponent } from './user-families/user-families-list/user-families-list.component';
+import { FamilyMemberListComponent } from './family/family-member-list/family-member-list.component';
+import { FamilyListsComponent } from './family/family-lists/family-lists.component';
+import { FamilyPhotosComponent } from './family/family-photos/family-photos.component';
+import { FamilyHomeComponent } from './family/family-home/family-home.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -21,12 +26,18 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
     children: [
-      {path: 'members', component: MemberListComponent},
+      {path: 'families', component: UserFamiliesListComponent},
+      {path: 'families/:familyId', component: FamilyHomeComponent},
+      {path: 'userProfile', component: MemberEditComponent, canDeactivate: [preventUnsavedChangesGuard]}, //to be changed
+      {path: 'familyMembers', component: FamilyMemberListComponent},
+      {path: 'familyLists', component: FamilyListsComponent},
+      {path: 'familyPhotos', component: FamilyPhotosComponent},
+      {path: 'messages', component: MessagesComponent},
       {path: 'members/:username', component: MemberDetailComponent, resolve: {member: memberDetailedResolver}},
       {path: 'member/edit', component: MemberEditComponent, canDeactivate: [preventUnsavedChangesGuard]},
       {path: 'lists', component: ListsComponent},
-      {path: 'messages', component: MessagesComponent},
-      {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]}
+      {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]},
+      {path: 'members', component: MemberListComponent}
     ]
   },
   {path: 'errors', component: TestErrorComponent},

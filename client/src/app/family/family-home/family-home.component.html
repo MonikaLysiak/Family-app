@@ -1,0 +1,4 @@
+<p>family-home works!</p>
+<div class="col-2" *ngIf="accountService.currentFamily$ | async">
+    <app-family-card [family]="accountService.currentFamily$ | async"></app-family-card>
+</div>

@@ -32,6 +32,13 @@ import { RolesModalComponent } from './modals/roles-modal/roles-modal.component'
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from './_services/customRouteReuseStrategy';
 import { ConfirmDialogComponent } from './modals/confirm-dialog/confirm-dialog.component';
+import { UserFamiliesListComponent } from './user-families/user-families-list/user-families-list.component';
+import { FamilyMemberListComponent } from './family/family-member-list/family-member-list.component';
+import { FamilyListsComponent } from './family/family-lists/family-lists.component';
+import { FamilyPhotosComponent } from './family/family-photos/family-photos.component';
+import { AddFamilyComponent } from './user-families/add-family/add-family.component';
+import { FamilyCardComponent } from './user-families/family-card/family-card.component';
+import { FamilyHomeComponent } from './family/family-home/family-home.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +62,14 @@ import { ConfirmDialogComponent } from './modals/confirm-dialog/confirm-dialog.c
     UserManagementComponent,
     PhotoManagementComponent,
     RolesModalComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    UserFamiliesListComponent,
+    FamilyMemberListComponent,
+    FamilyListsComponent,
+    FamilyPhotosComponent,
+    AddFamilyComponent,
+    FamilyCardComponent,
+    FamilyHomeComponent
   ],
   imports: [
     BrowserModule,

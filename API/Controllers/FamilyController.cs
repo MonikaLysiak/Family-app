@@ -1,12 +1,15 @@
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+[Authorize]
 public class FamilyController : BaseApiController
 {
     private readonly IUnitOfWork _uow;
@@ -18,8 +21,8 @@ public class FamilyController : BaseApiController
         _mapper = mapper;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<FamilyDto>> CreateFamily([FromQuery]string familyName)
+    [HttpPost("{familyName}")]
+    public async Task<ActionResult<FamilyDto>> CreateFamily(string familyName)
     {
         var username = User.GetUsername();
 
@@ -49,6 +52,18 @@ public class FamilyController : BaseApiController
         if (await _uow.Complete()) return Ok(_mapper.Map<FamilyDto>(family));
 
         return BadRequest("Failed add user to family");
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<PagedList<FamilyDto>>> GetFamilies([FromQuery]FamilyParams familyParams)
+    {
+        familyParams.CurrentUserId = User.GetUserId();
+
+        var families = await _uow.FamilyRepository.GetUserFamiliesAsync(familyParams);
+
+        Response.AddPaginationHeader(new PaginationHeader(families.CurrentPage, families.PageSize, families.TotalCount, families.TotalPages));
+
+        return Ok(families);
     }
 
     
