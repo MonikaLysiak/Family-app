@@ -26,6 +26,14 @@ public class UserRepository : IUserRepository
             .SingleOrDefaultAsync();
     }
 
+    public async Task<MemberDto> GetMemberAsync(int userId)
+    {
+        return await _context.Users
+            .Where(x => x.Id == userId)
+            .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+            .SingleOrDefaultAsync();
+    }
+
     public async Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams)
     {
         var query = _context.Users.AsQueryable();

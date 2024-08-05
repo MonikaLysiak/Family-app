@@ -19,6 +19,9 @@ import { FamilyMemberListComponent } from './family/family-member-list/family-me
 import { FamilyListsComponent } from './family/family-lists/family-lists.component';
 import { FamilyPhotosComponent } from './family/family-photos/family-photos.component';
 import { FamilyHomeComponent } from './family/family-home/family-home.component';
+import { FamilyMemberCardComponent } from './family-member/family-member-card/family-member-card.component';
+import { familyMemberDetailedResolver } from './_resolvers/family-member-detailed.resolver';
+import { FamilyMemberDetailsComponent } from './family-member/family-member-details/family-member-details.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -30,6 +33,7 @@ const routes: Routes = [
       {path: 'families/:familyId', component: FamilyHomeComponent},
       {path: 'userProfile', component: MemberEditComponent, canDeactivate: [preventUnsavedChangesGuard]}, //to be changed
       {path: 'familyMembers', component: FamilyMemberListComponent},
+      {path: 'familyMembers/:familyMemberId', component: FamilyMemberDetailsComponent, resolve: {familyMember: familyMemberDetailedResolver}},
       {path: 'familyLists', component: FamilyListsComponent},
       {path: 'familyPhotos', component: FamilyPhotosComponent},
       {path: 'messages', component: MessagesComponent},

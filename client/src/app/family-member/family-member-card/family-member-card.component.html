@@ -1,0 +1,12 @@
+<div class="card mb-4" *ngIf="familyMember">
+    <div class="card-img-wrapper" routerLink="/familyMembers/{{familyMember.id}}">
+        <img src="{{familyMember.photoUrl || './assets/user.png'}}" alt="{{familyMember.name}}" class="card-img-top">
+    </div>
+    <div class="cadr-body p-1">
+        <h6 class="card-title text-center mb-1">
+            <span [class.is-online]="(presenceService.onlineUsers$ | async)?.includes(familyMember.userName)">
+                {{familyMember.nickname}}
+            </span>
+        </h6>
+    </div>
+</div>

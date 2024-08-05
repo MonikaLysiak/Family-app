@@ -21,6 +21,8 @@ public class UnitOfWork : IUnitOfWork
 
     public IFamilyRepository FamilyRepository => new FamilyRepository(_context, _mapper);
 
+    public IFamilyMemberRepository FamilyMemberRepository => new FamilyMemberRepository(_context, _mapper);
+
     public async Task<bool> Complete()
     {
         return await _context.SaveChangesAsync() > 0;

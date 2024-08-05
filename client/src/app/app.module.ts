@@ -39,6 +39,7 @@ import { FamilyPhotosComponent } from './family/family-photos/family-photos.comp
 import { AddFamilyComponent } from './user-families/add-family/add-family.component';
 import { FamilyCardComponent } from './user-families/family-card/family-card.component';
 import { FamilyHomeComponent } from './family/family-home/family-home.component';
+import { FamilyMemberCardComponent } from './family-member/family-member-card/family-member-card.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { FamilyHomeComponent } from './family/family-home/family-home.component'
     FamilyPhotosComponent,
     AddFamilyComponent,
     FamilyCardComponent,
-    FamilyHomeComponent
+    FamilyHomeComponent,
+    FamilyMemberCardComponent
   ],
   imports: [
     BrowserModule,

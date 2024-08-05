@@ -1,15 +1,15 @@
 import { Photo } from "./photo";
 
-export interface Member {
+export interface FamilyMember {
     id: number;
     userName: string;
+    name: string;
+    surname: string;
     photoUrl: string;
     age: number;
     nickname: string;
     created: Date;
     lastActive: Date;
     gender: string;
-    name: string;
-    surname: string;
     photos: Photo[];
   }

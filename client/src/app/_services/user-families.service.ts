@@ -7,6 +7,7 @@ import { FamilyParams } from '../_models/familyParams';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AccountService } from './account.service';
 import { map, of, take } from 'rxjs';
+import { FamilyMember } from '../_models/family-member';
 
 @Injectable({
   providedIn: 'root'
@@ -68,5 +69,11 @@ export class UserFamiliesService {
     if (family) return of(family);
 
     return this.http.get<Family>(this.baseUrl + 'family/' + familyId);
+  }
+
+  getFamilyMemberDetails(familyMemberId: string) {
+    var familyId = this.accountService.getCurrentFamilyId();
+
+    return this.http.get<FamilyMember>(this.baseUrl + 'family/' + familyId  + '/' + familyMemberId);
   }
 }

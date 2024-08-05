@@ -12,7 +12,17 @@ public class AutoMapperProfiles : Profile
         CreateMap<AppUser, MemberDto>()
             .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.UserPhotos.FirstOrDefault(x => x.IsMain).Url))
             .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.CalculateAge()));
-            
+
+        CreateMap<AppUserFamily, MemberDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.User.Name))
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+            .ForMember(dest => dest.Created, opt => opt.MapFrom(src => src.User.Created))
+            .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.User.UserPhotos.FirstOrDefault(x => x.IsMain).Url))
+            .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => src.User.Surname))
+            .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.User.Gender))
+            .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.User.DateOfBirth.CalculateAge()));
+
         CreateMap<Family, FamilyDto>();
 
         CreateMap<UserPhoto, PhotoDto>();

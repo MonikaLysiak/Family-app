@@ -65,6 +65,35 @@ public class FamilyController : BaseApiController
 
         return Ok(families);
     }
-
     
+    [HttpGet("members")]
+    public async Task<ActionResult<MemberDto>> GetFamilyMembers([FromQuery]FamilyMemberParams familyMemberParams)
+    {
+        var currentUserId = User.GetUserId();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyMemberParams.FamilyId, currentUserId))
+            return BadRequest("You are not a member of this family");
+            
+        var familyMembers = await _uow.FamilyMemberRepository.GetFamilyMembersAsync(familyMemberParams);
+
+        return Ok(familyMembers);
+    }
+    
+    [HttpGet("{familyId}/{familyMemberId}")]
+    public async Task<ActionResult<MemberDto>> GetFamilyMember(int familyId, int familyMemberId)
+    {
+        var currentUserId = User.GetUserId();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, currentUserId))
+            return BadRequest("You are not a member of this family");
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, familyMemberId))
+            return BadRequest("This user is not a member of this family");
+            
+        var familyMember = await _uow.UserRepository.GetMemberAsync(familyMemberId);
+
+        familyMember.Nickname = await _uow.FamilyMemberRepository.GetFamilyMemberNickname(familyId, familyMemberId);
+
+        return Ok(familyMember);
+    }
 }

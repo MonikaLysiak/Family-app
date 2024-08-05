@@ -66,6 +66,16 @@ export class AccountService {
     this.currentFamilySource.next(family);
   }
 
+  getCurrentFamilyId() : string{
+    var familyId = '';
+    this.currentFamily$.subscribe(family => 
+      {
+        if (family)
+        familyId = family?.id
+      });
+    return familyId;
+  }
+
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
