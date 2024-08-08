@@ -1,0 +1,20 @@
+<form [formGroup]="addFamilyMemberForm" (ngSubmit)="addFamilyMemberForm.valid && inviteFamilyMember()" autocomplete="off">
+    <h2 class="text-center text-primary">Invite new family member</h2>
+    <hr>
+
+    <app-text-input [formControl]="$any(addFamilyMemberForm.controls['username'])" [label]="'username'">
+    </app-text-input>
+
+    <div class="row" *ngIf="validationErrors">
+        <ul class="text-denger">
+            <li *ngFor="let error of validationErrors">
+                {{error}}
+            </li>
+        </ul>
+    </div>
+
+    <div class="text-center">
+        <button [disabled]="!addFamilyMemberForm.valid" class="btn btn-success me-2" type="submit">Invite family member</button>
+        <button class="btn btn-defoult" type="button" (click)="cancel()">Cancel</button>
+    </div>
+</form>

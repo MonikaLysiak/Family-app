@@ -1,5 +1,5 @@
 <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && addFamily()" autocomplete="off">
-    <h2 class="text-center text-primary">Sign up</h2>
+    <h2 class="text-center text-primary">Create new family</h2>
     <hr>
 
     <app-text-input [formControl]="$any(registerForm.controls['familyName'])" [label]="'familyName'">

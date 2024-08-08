@@ -23,7 +23,7 @@ public class FamilyController : BaseApiController
         _photoService = photoService;
     }
 
-    [HttpPost("add-family/{familyName}")]
+    [HttpPost("{familyName}")]
     public async Task<ActionResult<FamilyDto>> CreateFamily(string familyName)
     {
         var username = User.GetUsername();

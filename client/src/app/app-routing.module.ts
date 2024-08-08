@@ -19,10 +19,10 @@ import { FamilyMemberListComponent } from './family/family-member-list/family-me
 import { FamilyListsComponent } from './family/family-lists/family-lists.component';
 import { FamilyPhotosComponent } from './family/family-photos/family-photos.component';
 import { FamilyHomeComponent } from './family/family-home/family-home.component';
-import { FamilyMemberCardComponent } from './family-member/family-member-card/family-member-card.component';
 import { familyMemberDetailedResolver } from './_resolvers/family-member-detailed.resolver';
 import { FamilyMemberDetailsComponent } from './family-member/family-member-details/family-member-details.component';
 import { familyDetailedResolver } from './_resolvers/family-detailed.resolver';
+import { InvitationsComponent } from './invitations/invitations/invitations.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -32,6 +32,7 @@ const routes: Routes = [
     children: [
       {path: 'families', component: UserFamiliesListComponent},
       {path: 'families/:familyId', component: FamilyHomeComponent, resolve: {family: familyDetailedResolver}},
+      {path: 'invitations', component: InvitationsComponent},
       {path: 'familyMembers', component: FamilyMemberListComponent},
       {path: 'familyMembers/:familyMemberId', component: FamilyMemberDetailsComponent, resolve: {familyMember: familyMemberDetailedResolver}},
       {path: 'familyLists', component: FamilyListsComponent},

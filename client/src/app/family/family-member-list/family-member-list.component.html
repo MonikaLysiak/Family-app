@@ -1,24 +1,46 @@
-<div class="text-center mt-3">
-    <h2>Your matches - {{pagination?.totalItems}} found</h2>
-</div>
+<div *ngIf="!addFamilyMemberMode">
+    <div *ngIf="familyMembers.length > 0">
+        <div class="text-center mt-3">
+            <h2>Family members</h2>
+        </div>
+        
+        <div class="row">
+            <div class="col-2" *ngFor="let member of familyMembers">
+                <app-family-member-card [familyMember]="member"></app-family-member-card>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-center" *ngIf="pagination">
+            <pagination
+                [boundaryLinks]="true" 
+                [totalItems]="pagination.totalItems" 
+                [itemsPerPage]="pagination.itemsPerPage"
+                [maxSize]="10"
+                [(ngModel)]="pagination.currentPage"
+                (pageChanged)="pageChanged($event)"
+                previousText="&lsaquo;" 
+                nextText="&rsaquo;" 
+                firstText="&laquo;"
+                lastText="&raquo;">
+            </pagination>
+        </div>
+    </div>
 
-<div class="row">
-    <div class="col-2" *ngFor="let member of familyMembers">
-        <app-family-member-card [familyMember]="member"></app-family-member-card>
+    <div *ngIf="familyMembers?.length == 0">
+        <div style="text-align: center;">
+            <h1>You are currently the only member of this Family</h1>
+            <p class="lead">Invite more members</p>
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <button (click)="addFamilyMemberToggle()" class="btn btn-primary btn-lg me-2">Invite new family member</button>
     </div>
 </div>
 
-<div class="d-flex justify-content-center" *ngIf="pagination">
-    <pagination
-        [boundaryLinks]="true" 
-        [totalItems]="pagination.totalItems" 
-        [itemsPerPage]="pagination.itemsPerPage"
-        [maxSize]="10"
-        [(ngModel)]="pagination.currentPage"
-        (pageChanged)="pageChanged($event)"
-        previousText="&lsaquo;" 
-        nextText="&rsaquo;" 
-        firstText="&laquo;"
-        lastText="&raquo;">
-    </pagination>
+
+<div *ngIf="addFamilyMemberMode" class="container">
+    <div class="row justify-content-center">
+        <app-add-invitation (cancelAddFamilyMember)="cancelAddFamilyMemberMode($event)"></app-add-invitation>
+    </div>
 </div>

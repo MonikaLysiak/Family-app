@@ -2,6 +2,8 @@
 
 public class Invitation
 {
+    public int Id { get; set;}
+    
     public AppUser InviterUser { get; set; }
     public int InviterUserId { get; set; }
 

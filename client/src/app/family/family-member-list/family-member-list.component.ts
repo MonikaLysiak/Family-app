@@ -9,12 +9,13 @@ import { FamilyService } from 'src/app/_services/family.service';
   styleUrls: ['./family-member-list.component.css']
 })
 export class FamilyMemberListComponent {
-  familyMembers?: FamilyMember[];
+  familyMembers: FamilyMember[] = [];
   pagination?: Pagination;
   pageNumber = 1;
   pageSize = 5;
   orderBy = 'created'
   loading = false;
+  addFamilyMemberMode = false;
 
   constructor(private familyService: FamilyService) {}
 
@@ -26,6 +27,7 @@ export class FamilyMemberListComponent {
     this.loading = true
     this.familyService.getFamilyMembers(this.pageNumber, this.pageSize, this.orderBy).subscribe({
       next: response => {
+        if (!response.result) return;
         this.familyMembers = response.result;
         this.pagination = response.pagination;
         this.loading = false;
@@ -38,5 +40,13 @@ export class FamilyMemberListComponent {
       this.pageNumber = event.page;
       this.loadFamilyMembers();
     }
+  }
+
+  addFamilyMemberToggle() {
+    this.addFamilyMemberMode = !this.addFamilyMemberMode;
+  }
+
+  cancelAddFamilyMemberMode(event: boolean) {
+    this.addFamilyMemberMode = event;
   }
 }

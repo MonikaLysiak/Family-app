@@ -71,9 +71,19 @@ export class AccountService {
     this.currentFamily$.pipe(take(1)).subscribe(family => 
       {
         if (family)
-        familyId = family?.id
+          familyId = family?.id
       });
     return familyId;
+  }
+
+  getCurrentFamily() : Family | undefined{
+    var family;
+    this.currentFamily$.pipe(take(1)).subscribe(family => 
+      {
+        if (family)
+          family = family;
+      });
+    return family;
   }
 
   logout() {
@@ -85,5 +95,15 @@ export class AccountService {
 
   getDecodedToken(token: string){
     return JSON.parse(atob(token.split('.')[1]))
+  }
+  
+  inviteFamilyMember(username: string) {
+    return this.http.post<Family>(this.baseUrl + 'invitations/' + username + '/' + this.getCurrentFamilyId(), {}).pipe(
+      map(family => {
+        if (family) {
+          this.setCurrentFamily(family);
+        }
+      })
+    )
   }
 }

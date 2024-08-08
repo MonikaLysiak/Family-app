@@ -13,33 +13,34 @@ public class InvitationsRepository : IInvitationsRepository
     {
         _context = context;
     }
-    public async Task<Invitation> GetUserInvitation(int familyId, int targetUserId, int sourceUserId)
+
+    public async Task<Invitation> GetUserInvitationAsync(int familyId, int targetUserId)
     {
-        return await _context.Invitations.FindAsync(familyId, targetUserId, sourceUserId);
+        return await _context.Invitations.SingleOrDefaultAsync(i => i.FamilyId == familyId && i.InviteeUserId == targetUserId);
     }
 
-    public async Task<PagedList<InvitationDto>> GetUserInvitations(InvitationsParams invitationsParams)
+    public async Task<PagedList<InvitationDto>> GetUserInvitationsAsync(InvitationsParams invitationsParams)
     {
         var users = Enumerable.Empty<object>()
-                      .Select(_ => new { user = (AppUser)null, family = (Family)null })
+                      .Select(_ => new { id = -1, user = (AppUser)null, family = (Family)null })
                       .AsQueryable();
         var invitations = _context.Invitations.AsQueryable();
 
-        if (invitationsParams.Predicate == "invitationsRecieved")
+        if (invitationsParams.Predicate == "sent")
         {
-            invitations = invitations.Where(invite => invite.InviterUserId == invitationsParams.UserId); // likesParams.UserId -> aktualny urzytkownik
-            users = invitations.Select(invite => new {user = invite.InviteeUser, family = invite.Family});
+            invitations = invitations.Where(invite => invite.InviterUserId == invitationsParams.UserId);
+            users = invitations.Select(invite => new {id = invite.Id, user = invite.InviteeUser, family = invite.Family});
         }
 
-        if (invitationsParams.Predicate == "invitationsSent")
+        if (invitationsParams.Predicate == "received")
         {
             invitations = invitations.Where(like => like.InviteeUserId == invitationsParams.UserId);
-            users = invitations.Select(invite => new {user = invite.InviterUser, family = invite.Family});
+            users = invitations.Select(invite => new {id = invite.Id, user = invite.InviterUser, family = invite.Family});
         }
 
         var invitationsInfo = users.Select(inviteInfo => new InvitationDto
         {
-            Id = inviteInfo.user.Id,
+            Id = inviteInfo.id,
 
             UserName = inviteInfo.user.UserName,
             Name = inviteInfo.user.Name,
@@ -53,10 +54,29 @@ public class InvitationsRepository : IInvitationsRepository
         return await PagedList<InvitationDto>.CreateAsync(invitationsInfo, invitationsParams.PageNumber, invitationsParams.PageSize);
     }
 
-    public async Task<AppUser> GetUserWithInvitations(int userId)
+    public async Task<AppUser> GetUserWithInvitationsAsync(int userId)
     {
         return await _context.Users
             .Include(x => x.InvitationsSent)
             .FirstOrDefaultAsync(x => x.Id == userId);
+    }
+
+    public async Task<Invitation> GetInvitationByIdAsync(int invitationId)
+    {
+        return await _context.Invitations.FindAsync(invitationId);
+    }
+
+    public async Task<bool> DeleteInvitationAsync(int invitationId)
+    {
+        var invitation = await _context.Invitations.FindAsync(invitationId);
+
+        if (invitation == null)
+        {
+            return false;
+        }
+
+        _context.Invitations.Remove(invitation);
+
+        return await _context.SaveChangesAsync() > 0;
     }
 }

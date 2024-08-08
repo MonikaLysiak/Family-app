@@ -59,7 +59,8 @@ public class DataContext : IdentityDbContext<AppUser, AppRole, int,
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Invitation>()
-            .HasKey(k => new { k.FamilyId, k.InviteeUserId, k.InviterUserId });
+            .HasIndex(k => new { k.FamilyId, k.InviteeUserId })
+            .IsUnique();
 
         builder.Entity<Invitation>()
             .HasOne(s => s.InviterUser)

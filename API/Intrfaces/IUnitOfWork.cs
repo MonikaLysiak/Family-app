@@ -4,7 +4,7 @@ public interface IUnitOfWork
 {
     IUserRepository UserRepository { get; }
     IMessageRepository MessageRepository { get; }
-    IInvitationsRepository LikesRepository { get; }
+    IInvitationsRepository InvitationsRepository { get; }
     IFamilyRepository FamilyRepository { get; }
     IFamilyMemberRepository FamilyMemberRepository { get; }
     

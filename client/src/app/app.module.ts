@@ -42,6 +42,7 @@ import { FamilyMemberCardComponent } from './family-member/family-member-card/fa
 import { InvitationsComponent } from './invitations/invitations/invitations.component';
 import { InvitationReceivedCardComponent } from './invitations/invitation-received-card/invitation-received-card.component';
 import { InvitationSentCardComponent } from './invitations/invitation-sent-card/invitation-sent-card.component';
+import { AddInvitationComponent } from './invitations/add-invitation/add-invitation.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { InvitationSentCardComponent } from './invitations/invitation-sent-card/
     FamilyMemberCardComponent,
     InvitationsComponent,
     InvitationReceivedCardComponent,
-    InvitationSentCardComponent
+    InvitationSentCardComponent,
+    AddInvitationComponent
   ],
   imports: [
     BrowserModule,

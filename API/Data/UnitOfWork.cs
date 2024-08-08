@@ -17,7 +17,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IMessageRepository MessageRepository => new MessageRepository(_context, _mapper);
 
-    public IInvitationsRepository LikesRepository => new InvitationsRepository(_context);
+    public IInvitationsRepository InvitationsRepository => new InvitationsRepository(_context);
 
     public IFamilyRepository FamilyRepository => new FamilyRepository(_context, _mapper);
 
