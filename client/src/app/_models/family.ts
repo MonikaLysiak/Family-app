@@ -1,5 +1,8 @@
+import { Photo } from "./photo";
+
 export interface Family {
-    id: string;
+    id: number;
     photoUrl: string;
     name: string;
+    familyPhotos: Photo[];
 }

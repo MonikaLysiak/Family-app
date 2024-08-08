@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, take } from 'rxjs';
 import { User } from '../_models/user';
 import { environment } from 'src/environments/environment';
 import { PresenceService } from './presence.service';
@@ -66,9 +66,9 @@ export class AccountService {
     this.currentFamilySource.next(family);
   }
 
-  getCurrentFamilyId() : string{
-    var familyId = '';
-    this.currentFamily$.subscribe(family => 
+  getCurrentFamilyId() : number{
+    var familyId = -1;
+    this.currentFamily$.pipe(take(1)).subscribe(family => 
       {
         if (family)
         familyId = family?.id
@@ -79,6 +79,7 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+    this.currentFamilySource.next(null);
     this.presenceService.stopHubConnection();
   }
 

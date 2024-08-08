@@ -142,7 +142,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AppUsersFamilies");
+                    b.ToTable("AppUsersFamilies", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.AppUserRole", b =>
@@ -171,7 +171,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Connection", b =>
@@ -189,7 +189,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("GroupName");
 
-                    b.ToTable("Connections");
+                    b.ToTable("Connections", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Family", b =>
@@ -203,7 +203,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Families");
+                    b.ToTable("Families", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.FamilyList", b =>
@@ -238,7 +238,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("FamilyId");
 
-                    b.ToTable("FamilyLists");
+                    b.ToTable("FamilyLists", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.FamilyPhoto", b =>
@@ -268,7 +268,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("FamilyId");
 
-                    b.ToTable("FamilyPhotos");
+                    b.ToTable("FamilyPhotos", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Group", b =>
@@ -278,7 +278,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Invitation", b =>
@@ -301,7 +301,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("InviterUserId");
 
-                    b.ToTable("Invitations");
+                    b.ToTable("Invitations", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Message", b =>
@@ -334,7 +334,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.UserPhoto", b =>
@@ -359,7 +359,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("UserPhotos");
+                    b.ToTable("UserPhotos", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

@@ -84,6 +84,7 @@ public class UsersController : BaseApiController
 
         user.UserPhotos.Add(photo);
 
+        //GetUser should return user with photos?? now it does not ??
         if (await _uow.Complete()) 
         {
             return CreatedAtAction(nameof(GetUser), new {username = user.UserName}, _mapper.Map<PhotoDto>(photo));

@@ -35,11 +35,13 @@ import { ConfirmDialogComponent } from './modals/confirm-dialog/confirm-dialog.c
 import { UserFamiliesListComponent } from './user-families/user-families-list/user-families-list.component';
 import { FamilyMemberListComponent } from './family/family-member-list/family-member-list.component';
 import { FamilyListsComponent } from './family/family-lists/family-lists.component';
-import { FamilyPhotosComponent } from './family/family-photos/family-photos.component';
 import { AddFamilyComponent } from './user-families/add-family/add-family.component';
 import { FamilyCardComponent } from './user-families/family-card/family-card.component';
 import { FamilyHomeComponent } from './family/family-home/family-home.component';
 import { FamilyMemberCardComponent } from './family-member/family-member-card/family-member-card.component';
+import { InvitationsComponent } from './invitations/invitations/invitations.component';
+import { InvitationReceivedCardComponent } from './invitations/invitation-received-card/invitation-received-card.component';
+import { InvitationSentCardComponent } from './invitations/invitation-sent-card/invitation-sent-card.component';
 
 @NgModule({
   declarations: [
@@ -67,11 +69,13 @@ import { FamilyMemberCardComponent } from './family-member/family-member-card/fa
     UserFamiliesListComponent,
     FamilyMemberListComponent,
     FamilyListsComponent,
-    FamilyPhotosComponent,
     AddFamilyComponent,
     FamilyCardComponent,
     FamilyHomeComponent,
-    FamilyMemberCardComponent
+    FamilyMemberCardComponent,
+    InvitationsComponent,
+    InvitationReceivedCardComponent,
+    InvitationSentCardComponent
   ],
   imports: [
     BrowserModule,

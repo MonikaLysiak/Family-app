@@ -42,9 +42,27 @@ public class FamilyRepository : IFamilyRepository
             familyParams.PageSize);
     }
 
+    public async Task<FamilyDto> GetFamilyDetailsAsync(int familyId)
+    {
+        var query = _context.Families.AsQueryable();
+
+        query = query.Where(x => x.Id == familyId);
+
+        query = query.Include(x => x.FamilyPhotos);
+
+        return await query.AsNoTracking().ProjectTo<FamilyDto>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+    }
+
     public async Task<Family> GetFamilyByIdAsync(int familyId)
     {
         return await _context.Families.FindAsync(familyId);
+    }
+
+    public async Task<Family> GetFamilyWithPhotosByIdAsync(int familyId)
+    {
+        return await _context.Families
+            .Include(p => p.FamilyPhotos)
+            .SingleOrDefaultAsync(x => x.Id == familyId);
     }
 
     public async Task<bool> IsFamilyMember(int familyId, string username)

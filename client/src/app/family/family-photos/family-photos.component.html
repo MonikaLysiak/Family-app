@@ -1,1 +1,3 @@
-<p>family-photos works!</p>
+<gallery *ngIf="family.familyPhotos.length > 0" [items]="images" class="gallery"></gallery>
+
+<app-family-photo-edytor [family]="family"></app-family-photo-edytor>

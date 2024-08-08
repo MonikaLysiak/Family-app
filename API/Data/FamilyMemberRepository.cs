@@ -25,6 +25,8 @@ public class FamilyMemberRepository : IFamilyMemberRepository
 
         test = test.Include(uf => uf.User);
 
+        test = test.Include(uf => uf.User.UserPhotos);
+
         test = familyMemberParams.OrderBy switch
         {
             "created" => test.OrderByDescending(x => x.User.Created),

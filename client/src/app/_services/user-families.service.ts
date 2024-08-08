@@ -61,7 +61,7 @@ export class UserFamiliesService {
     return;
   }
 
-  getFamily(familyId: string) {
+  getFamily(familyId: number) {
     const family = [...this.familyCache.values()]
       .reduce((arr, elem) => arr.concat(elem.result), [])
       .find((family: Family) => family.id == familyId);

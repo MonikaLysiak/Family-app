@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
 import { TabDirective, TabsModule, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { TimeagoModule } from 'ngx-timeago';
-import { Member } from 'src/app/_models/member';
 import { MessageService } from 'src/app/_services/message.service';
 import { Message } from 'src/app/_models/message';
 import { PresenceService } from 'src/app/_services/presence.service';
@@ -66,7 +65,7 @@ export class FamilyMemberDetailsComponent implements OnInit, OnDestroy {
 
   getImages() {
     if (!this.familyMember) return;
-    for (const photo of this.familyMember?.photos) {
+    for (const photo of this.familyMember?.userPhotos) {
       this.images.push(new ImageItem({src: photo.url, thumb: photo.url}));
     }
   }

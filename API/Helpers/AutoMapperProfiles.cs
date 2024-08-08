@@ -23,7 +23,8 @@ public class AutoMapperProfiles : Profile
             .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.User.Gender))
             .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.User.DateOfBirth.CalculateAge()));
 
-        CreateMap<Family, FamilyDto>();
+        CreateMap<Family, FamilyDto>()
+            .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.FamilyPhotos.FirstOrDefault(x => x.IsMain).Url));
 
         CreateMap<UserPhoto, PhotoDto>();
         CreateMap<FamilyPhoto, PhotoDto>();

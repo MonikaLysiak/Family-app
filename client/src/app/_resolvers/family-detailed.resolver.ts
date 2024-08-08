@@ -6,5 +6,5 @@ import { inject } from '@angular/core';
 export const familyDetailedResolver: ResolveFn<boolean> = (route, state) => {
   const familyService = inject(UserFamiliesService);
 
-  return familyService.getFamily(route.paramMap.get('familyId')!);
+  return familyService.getFamily(Number(route.paramMap.get('familyId')));
 };

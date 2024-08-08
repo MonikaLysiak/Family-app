@@ -21,4 +21,6 @@ public class AppUser : IdentityUser<int>
     public ICollection<Message> MessagesSent { get; set; }
 
     public ICollection<AppUserRole> UserRoles { get; set; }
+
+    public ICollection<FamilyPhoto> FamilyPhots { get; set; }
 }

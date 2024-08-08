@@ -22,6 +22,7 @@ import { FamilyHomeComponent } from './family/family-home/family-home.component'
 import { FamilyMemberCardComponent } from './family-member/family-member-card/family-member-card.component';
 import { familyMemberDetailedResolver } from './_resolvers/family-member-detailed.resolver';
 import { FamilyMemberDetailsComponent } from './family-member/family-member-details/family-member-details.component';
+import { familyDetailedResolver } from './_resolvers/family-detailed.resolver';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -30,8 +31,7 @@ const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {path: 'families', component: UserFamiliesListComponent},
-      {path: 'families/:familyId', component: FamilyHomeComponent},
-      {path: 'userProfile', component: MemberEditComponent, canDeactivate: [preventUnsavedChangesGuard]}, //to be changed
+      {path: 'families/:familyId', component: FamilyHomeComponent, resolve: {family: familyDetailedResolver}},
       {path: 'familyMembers', component: FamilyMemberListComponent},
       {path: 'familyMembers/:familyMemberId', component: FamilyMemberDetailsComponent, resolve: {familyMember: familyMemberDetailedResolver}},
       {path: 'familyLists', component: FamilyListsComponent},

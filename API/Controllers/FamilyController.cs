@@ -14,14 +14,16 @@ public class FamilyController : BaseApiController
 {
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
+    private readonly IPhotoService _photoService;
 
-    public FamilyController(IMapper mapper, IUnitOfWork uow)
+    public FamilyController(IUnitOfWork uow, IMapper mapper, IPhotoService photoService)
     {
         _uow = uow;
         _mapper = mapper;
+        _photoService = photoService;
     }
 
-    [HttpPost("{familyName}")]
+    [HttpPost("add-family/{familyName}")]
     public async Task<ActionResult<FamilyDto>> CreateFamily(string familyName)
     {
         var username = User.GetUsername();
@@ -65,6 +67,19 @@ public class FamilyController : BaseApiController
 
         return Ok(families);
     }
+
+    [HttpGet("{familyId}")]
+    public async Task<ActionResult<MemberDto>> GetFamilyDetails(int familyId)
+    {
+        var currentUserId = User.GetUserId();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, currentUserId))
+            return BadRequest("You are not a member of this family");
+
+        var family = await _uow.FamilyRepository.GetFamilyDetailsAsync(familyId);
+
+        return Ok(family);
+    }
     
     [HttpGet("members")]
     public async Task<ActionResult<MemberDto>> GetFamilyMembers([FromQuery]FamilyMemberParams familyMemberParams)
@@ -95,5 +110,98 @@ public class FamilyController : BaseApiController
         familyMember.Nickname = await _uow.FamilyMemberRepository.GetFamilyMemberNickname(familyId, familyMemberId);
 
         return Ok(familyMember);
+    }
+    
+    [HttpPost("add-photo/{familyId}")]
+    public async Task<ActionResult<PhotoDto>> AddFamilyPhoto(int familyId, IFormFile file)
+    {
+        var userId = User.GetUserId();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+            return BadRequest("You are not a member of this family");
+            
+        var family = await _uow.FamilyRepository.GetFamilyWithPhotosByIdAsync(familyId);
+
+        if (family == null) return NotFound();
+
+        var result = await _photoService.AddPhotoAsync(file);
+
+        if (result.Error != null) return BadRequest(result.Error.Message);
+
+        var photo = new FamilyPhoto
+        {
+            Url = result.SecureUrl.AbsoluteUri,
+            PublicId = result.PublicId,
+            AuthorId = userId
+        };
+
+        if (family.FamilyPhotos.Count == 0) photo.IsMain = true;
+
+        family.FamilyPhotos.Add(photo);
+
+        if (await _uow.Complete()) 
+        {
+            return CreatedAtAction(nameof(GetFamilyDetails), new {familyId = family.Id}, _mapper.Map<PhotoDto>(photo));
+        }
+
+        return BadRequest("Problem adding family photo");
+    }
+    
+    [HttpPut("set-main-photo/{familyId}/{photoId}")]
+    public async Task<ActionResult> SetMainFamilyPhoto(int familyId, int photoId)
+    {
+        var userId = User.GetUserId();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+            return BadRequest("You are not a member of this family");
+
+        var family = await _uow.FamilyRepository.GetFamilyWithPhotosByIdAsync(familyId);
+
+        if (family == null) return NotFound();
+
+        var photo = family.FamilyPhotos.FirstOrDefault(x => x.Id == photoId);
+
+        if (photo == null) return NotFound();
+
+        if (photo.IsMain) return BadRequest("this is already your main photo");
+
+        var currentMain = family.FamilyPhotos.FirstOrDefault(x => x.IsMain);
+        if (currentMain !=null) currentMain.IsMain = false;
+        photo.IsMain = true;
+
+        if (await _uow.Complete()) return NoContent();
+
+        return BadRequest("Problem setting the main photo");
+    }
+
+    [HttpDelete("delete-photo/{familyId}/{photoId}")]
+    public async Task<ActionResult> DeleteFamilyPhoto(int familyId, int photoId)
+    {
+        var userId = User.GetUserId();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+            return BadRequest("You are not a member of this family");
+
+        var family = await _uow.FamilyRepository.GetFamilyWithPhotosByIdAsync(familyId);
+
+        if (family == null) return NotFound();
+
+        var photo = family.FamilyPhotos.FirstOrDefault(x => x.Id == photoId);
+
+        if (photo == null) return NotFound();
+
+        if (photo.IsMain) return BadRequest("You cannot delete family's main photo");
+
+        if (photo.PublicId != null)
+        {
+            var result = await _photoService.DeletePhotoAsync(photo.PublicId);
+            if (result.Error != null) return BadRequest(result.Error.Message);
+        }
+
+        family.FamilyPhotos.Remove(photo);
+
+        if (await _uow.Complete()) return Ok();
+
+        return BadRequest("Problem deleting photo");
     }
 }

@@ -38,8 +38,8 @@
     <div class="col-8">
         <tabset class="familyMember-tabset" #familyMemberTabs>
             <tab heading="Photos" #photoTab="tab" (selectTab)="onTabActivated($event)">
-                <gallery *ngIf="photoTab.active && familyMember.photos.length > 0" [items]="images" class="gallery"></gallery>
-                <div *ngIf="photoTab.active && familyMember.photos.length == 0">
+                <gallery *ngIf="photoTab.active && familyMember.userPhotos.length > 0" [items]="images" class="gallery"></gallery>
+                <div *ngIf="photoTab.active && familyMember.userPhotos.length == 0">
                     No photos to show
                 </div>
             </tab>
