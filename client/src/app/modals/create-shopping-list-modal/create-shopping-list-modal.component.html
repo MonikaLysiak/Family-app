@@ -1,0 +1,77 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">New shopping list</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body" *ngIf="!addItemsMode">
+    <form [formGroup]="addShoppingListForm" (ngSubmit)="addShoppingListForm.valid && addShoppingList()" autocomplete="off">
+        <h2 class="text-center text-primary">Create new family</h2>
+        <hr>
+
+        <app-text-input [formControl]="$any(addShoppingListForm.controls['shoppingListName'])" [label]="'shoppingListName'">
+        </app-text-input>
+
+        <div class="row" *ngIf="validationErrors">
+            <ul class="text-denger">
+                <li *ngFor="let error of validationErrors">
+                    {{error}}
+                </li>
+            </ul>
+        </div>
+
+        <div class="text-center">
+            <button [disabled]="!addShoppingListForm.valid" class="btn btn-success me-2" type="submit">Add Family</button>
+            <!-- <button class="btn btn-defoult" type="button" (click)="cancel()">Cancel</button> -->
+        </div>
+    </form>
+</div>
+
+<div class="modal-body" *ngIf="addItemsMode">
+    <form [formGroup]="addItemForm" (ngSubmit)="addItemForm.valid && addItem()" autocomplete="off">
+        <h2 class="text-center text-primary">Add Item</h2>
+        <hr>
+
+        <app-text-input [formControl]="$any(addItemForm.controls['item'])" [label]="'item'">
+        </app-text-input>
+
+        <div class="row" *ngIf="validationErrors">
+            <ul class="text-denger">
+                <li *ngFor="let error of validationErrors">
+                    {{error}}
+                </li>
+            </ul>
+        </div>
+
+        <div class="text-center">
+            <button [disabled]="!addItemForm.valid" class="btn btn-success me-2" type="submit">Add Item</button>
+            <!-- <button class="btn btn-defoult" type="button" (click)="cancel()">Cancel</button> -->
+        </div>
+    </form>
+
+    <div class="row" *ngIf="items">
+        <ul
+        #scrollMe
+        style="overflow: scroll; height: 500px;"
+        [scrollTop]="scrollMe.scrollHeight"
+        *ngIf="items.length > 0" class="chat">
+            <li *ngFor="let item of items">
+                <div>
+                    <span class="chat-img float-end">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </span>
+                    <div class="chat-body">
+                        <p>{{item}}</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button *ngIf="addItemsMode" class="btn btn-success" (click)="confirm()">{{btnOkText}}</button>
+    <button class="btn btn-danger" (click)="decline()">{{btnCancelText}}</button>
+</div>

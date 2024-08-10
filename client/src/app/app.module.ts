@@ -43,6 +43,7 @@ import { InvitationsComponent } from './invitations/invitations/invitations.comp
 import { InvitationReceivedCardComponent } from './invitations/invitation-received-card/invitation-received-card.component';
 import { InvitationSentCardComponent } from './invitations/invitation-sent-card/invitation-sent-card.component';
 import { AddInvitationComponent } from './invitations/add-invitation/add-invitation.component';
+import { CreateShoppingListModalComponent } from './modals/create-shopping-list-modal/create-shopping-list-modal.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { AddInvitationComponent } from './invitations/add-invitation/add-invitat
     InvitationsComponent,
     InvitationReceivedCardComponent,
     InvitationSentCardComponent,
-    AddInvitationComponent
+    AddInvitationComponent,
+    CreateShoppingListModalComponent
   ],
   imports: [
     BrowserModule,

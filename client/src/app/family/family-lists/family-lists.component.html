@@ -1,1 +1,37 @@
-<p>family-lists works!</p>
+<div *ngIf="familyLists.length > 0">
+    <div class="text-center mt-3">
+        <h2>Family lists:</h2>
+    </div>
+    
+    <div class="row">
+        <div class="col-2" *ngFor="let list of familyLists">
+            <!-- <app-family-list-card [familyList]="list"></app-family-list-card> -->
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-center" *ngIf="pagination">
+        <pagination
+            [boundaryLinks]="true" 
+            [totalItems]="pagination.totalItems" 
+            [itemsPerPage]="pagination.itemsPerPage"
+            [maxSize]="10"
+            [(ngModel)]="pagination.currentPage"
+            (pageChanged)="pageChanged($event)"
+            previousText="&lsaquo;" 
+            nextText="&rsaquo;" 
+            firstText="&laquo;"
+            lastText="&raquo;">
+        </pagination>
+    </div>
+</div>
+
+<div *ngIf="familyLists?.length == 0">
+    <div style="text-align: center;">
+        <h1>There are no lists</h1>
+        <p class="lead">Create list for your family</p>
+    </div>
+</div>
+
+<div class="text-center">
+    <button (click)="createList()" class="btn btn-primary btn-lg me-2">Create list</button>
+</div>

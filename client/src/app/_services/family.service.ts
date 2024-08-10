@@ -28,4 +28,8 @@ export class FamilyService {
   deletePhoto(familyId: number, photoId: number) {
     return this.http.delete(this.baseUrl + 'family/delete-photo/' + familyId + '/' + photoId);
   }
+
+  updateFamilyList(items: any[]){
+    
+  }
 }
