@@ -9,7 +9,7 @@ import { InvitationService } from 'src/app/_services/invitation.service';
   styleUrls: ['./invitations.component.css']
 })
 export class InvitationsComponent implements OnInit {
-  invitations: Invitation[] | undefined;
+  invitations: Invitation[] = [];
   predicate = 'received';
   pageNumber = 1;
   pageSize = 5;
@@ -24,7 +24,7 @@ export class InvitationsComponent implements OnInit {
   loadInvitations() {
     this.invitationService.getInvitations(this.predicate, this.pageNumber, this.pageSize).subscribe({
       next: response => {
-        this.invitations = response.result;
+        if (response.result) this.invitations = response.result;
         this.pagination = response.pagination;
       }
     })

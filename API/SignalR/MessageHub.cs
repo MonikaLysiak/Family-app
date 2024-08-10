@@ -41,7 +41,7 @@ public class MessageHub : Hub
 
         await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
 
-        var messages = await _uow.MessageRepository.GetMessageThread(familyId);
+        var messages = await _uow.MessageRepository.GetFamilyMessageThread(familyId);
 
         if (_uow.HasChanges()) await _uow.Complete();
 

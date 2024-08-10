@@ -38,7 +38,7 @@
             </tr>
         </thead>
         <tbody class="align-middle">
-            <tr [hidden]="loading" *ngFor="let message of messages"
+            <!-- <tr [hidden]="loading" *ngFor="let message of messages"
                 routerLink="{{container === 'Outbox' 
                     ? '/members/' + message.recipientUsername 
                     : '/members/' + message.senderUsername}}"
@@ -64,7 +64,7 @@
                 <td>
                     <button (click)="$event.stopPropagation()" (click)="deleteMessage(message.id)" class="btn btn-danger">Delete</button>
                 </td>
-            </tr>
+            </tr> -->
         </tbody>
     </table>
 </div>

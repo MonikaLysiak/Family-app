@@ -48,6 +48,16 @@ export class AccountService {
     this.currentUserSource.next(user);
     this.presenceService.createHubConnection(user);
   }
+  
+  getCurrentUser() : User | undefined{
+    var user;
+    this.currentUser$.pipe(take(1)).subscribe(user => 
+      {
+        if (user)
+          user = user;
+      });
+    return user;
+  }
 
   // check if cant be , model, and then not from Query??
   // check the options and how to best recieve data in controller

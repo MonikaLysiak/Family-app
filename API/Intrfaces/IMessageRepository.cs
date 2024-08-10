@@ -12,7 +12,7 @@ public interface IMessageRepository
 
     //to be deleted (past functionality does not apply anymore)
     Task<PagedList<MessageDto>> GetMessagesForFamily(MessageParams messageParams);
-    Task<IEnumerable<MessageDto>> GetMessageThread(int familyId);
+    Task<IEnumerable<MessageDto>> GetFamilyMessageThread(int familyId);
     void AddGroup(Group group);
     void RemoveConnection(Connection connection);
     Task<Connection> GetConnection(string connectionId);

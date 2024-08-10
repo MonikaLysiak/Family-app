@@ -73,7 +73,7 @@ public class MessageRepository : IMessageRepository
         return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
     }
 
-    public async Task<IEnumerable<MessageDto>> GetMessageThread(int familyId)
+    public async Task<IEnumerable<MessageDto>> GetFamilyMessageThread(int familyId)
     {
         var query = _context.Messages
             .Where(

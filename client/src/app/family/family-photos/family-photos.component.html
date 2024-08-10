@@ -1,3 +1,10 @@
-<gallery *ngIf="family.familyPhotos.length > 0" [items]="images" class="gallery"></gallery>
-
-<app-family-photo-edytor [family]="family"></app-family-photo-edytor>
+<div class="col-8">
+    <tabset class="member-tabset">
+        <tab heading="Gallery">
+            <gallery *ngIf="family.familyPhotos.length > 0" [items]="images" class="gallery"></gallery>
+        </tab>
+        <tab heading="Edit Photos">
+            <app-family-photo-edytor [family]="family"></app-family-photo-edytor>
+        </tab>
+    </tabset>
+</div>

@@ -6,7 +6,6 @@ import { Message } from '../_models/message';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { User } from '../_models/user';
 import { BehaviorSubject, take } from 'rxjs';
-import { Group } from '../_models/group';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +19,9 @@ export class MessageService {
 
   constructor(private http: HttpClient) { }
 
-  createHubConnection(user: User, otherUsername: string){
+  createHubConnection(user: User, familyId: number){
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(this.hubUrl + 'message?user=' + otherUsername, {
+      .withUrl(this.hubUrl + 'message?familyId=' + familyId, {
         accessTokenFactory: () => user.token
       })
       .withAutomaticReconnect()
@@ -32,21 +31,6 @@ export class MessageService {
 
     this.hubConnection.on('ReceiveMessageThread', messages => {
       this.messageThreadSource.next(messages);
-    })
-
-    this.hubConnection.on('UpdatedGroup', (group: Group) => {
-      if (group.connections.some(x => x.username === otherUsername)) {
-        this.messageThread$.pipe(take(1)).subscribe({
-          next: messages => {
-            messages.forEach(message => {
-              if (!message.dateRead) {
-                message.dateRead = new Date(Date.now())
-              }
-            })
-            this.messageThreadSource.next([...messages]);
-          }
-        })
-      }
     })
 
     this.hubConnection.on('NewMessage', message => {
@@ -75,8 +59,12 @@ export class MessageService {
     return this.http.get<Message[]>(this.baseUrl + 'messages/thread/' + username);
   }
 
-  async sendMessage(username: string, content: string) {
-    return this.hubConnection?.invoke('SendMessage', {recipientUsername: username, content: content})
+  getFamilyMessageThread(familyId: number) {
+    return this.http.get<Message[]>(this.baseUrl + 'messages/thread/' + familyId);
+  }
+
+  async sendMessage(familyId: number, content: string) {
+    return this.hubConnection?.invoke('SendMessage', {familyId: familyId, content: content})
       .catch(error => console.log(error));
   }
 

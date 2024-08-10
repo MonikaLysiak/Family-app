@@ -66,6 +66,17 @@ public class MessagesController : BaseApiController
         return messages;
     }
 
+    [HttpGet("thread/{familyId}")]
+    public async Task<ActionResult<PagedList<MessageDto>>> GetFamilyMessageThread(int familyId)
+    {
+        var userId = User.GetUserId();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+            return BadRequest("You are not a member of this family");
+
+        return Ok(await _uow.MessageRepository.GetFamilyMessageThread(familyId));
+    }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteMessage(int id)
     {

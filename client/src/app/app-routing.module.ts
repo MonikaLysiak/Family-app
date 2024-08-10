@@ -23,6 +23,7 @@ import { familyMemberDetailedResolver } from './_resolvers/family-member-detaile
 import { FamilyMemberDetailsComponent } from './family-member/family-member-details/family-member-details.component';
 import { familyDetailedResolver } from './_resolvers/family-detailed.resolver';
 import { InvitationsComponent } from './invitations/invitations/invitations.component';
+import { FamilyChatComponent } from './family/family-chat/family-chat.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -37,6 +38,7 @@ const routes: Routes = [
       {path: 'familyMembers/:familyMemberId', component: FamilyMemberDetailsComponent, resolve: {familyMember: familyMemberDetailedResolver}},
       {path: 'familyLists', component: FamilyListsComponent},
       {path: 'familyPhotos', component: FamilyPhotosComponent},
+      {path: 'familyChat', component: FamilyChatComponent},
       {path: 'messages', component: MessagesComponent},
       {path: 'members/:username', component: MemberDetailComponent, resolve: {member: memberDetailedResolver}},
       {path: 'member/edit', component: MemberEditComponent, canDeactivate: [preventUnsavedChangesGuard]},

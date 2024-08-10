@@ -27,22 +27,12 @@
                     <p>{{familyMember.created | date: 'longDate'}}</p>
                 </div>
             </div>
-            <div class="card-footer">
-                <div class="btn-group d-flex">
-                    <button class="btn btn-primary">Line</button>
-                    <button (click)="selectTab('Messages')" class="btn btn-success">Messages</button>
-                </div>
-            </div>
         </div>
     </div>
     <div class="col-8">
-        <tabset class="familyMember-tabset" #familyMemberTabs>
-            <tab heading="Photos" #photoTab="tab" (selectTab)="onTabActivated($event)">
-                <gallery *ngIf="photoTab.active && familyMember.userPhotos.length > 0" [items]="images" class="gallery"></gallery>
-                <div *ngIf="photoTab.active && familyMember.userPhotos.length == 0">
-                    No photos to show
-                </div>
-            </tab>
-        </tabset>
+        <gallery *ngIf="familyMember.userPhotos.length > 0" [items]="images" class="gallery"></gallery>
+        <div *ngIf="familyMember.userPhotos.length == 0">
+            No photos to show
+        </div>
     </div>
 </div>
