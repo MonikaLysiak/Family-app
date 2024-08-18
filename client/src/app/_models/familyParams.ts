@@ -1,6 +1,6 @@
 
 export class FamilyParams {
     pageNumber = 1;
-    pageSize = 6;
+    pageSize = 4;
     orderBy = 'created';
 }

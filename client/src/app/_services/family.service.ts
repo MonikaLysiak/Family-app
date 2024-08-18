@@ -4,7 +4,8 @@ import { environment } from 'src/environments/environment';
 import { FamilyMember } from '../_models/family-member';
 import { HttpClient } from '@angular/common/http';
 import { AccountService } from './account.service';
-import { take } from 'rxjs';
+import { map, take } from 'rxjs';
+import { User } from '../_models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +32,9 @@ export class FamilyService {
 
   updateFamilyList(items: any[]){
     
+  }
+
+  changeNickname(nickname: string){
+    return this.http.put(this.baseUrl + 'family/set-nickname/' + nickname + '/' + this.accountService.getCurrentFamilyId(), {});
   }
 }

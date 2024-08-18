@@ -97,7 +97,8 @@ public class InvitationsController : BaseApiController
             UserId = user.Id,
             User = user,
             FamilyId = family.Id,
-            Family = family
+            Family = family,
+            Nickname = user.Name
         };
 
         user.UserFamilies.Add(userFamily);

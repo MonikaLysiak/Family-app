@@ -17,7 +17,7 @@ import { MessageService } from 'src/app/_services/message.service';
 
 export class FamilyChatComponent implements OnDestroy {
   @ViewChild('messageForm') messageForm?: NgForm
-  @Input() username?: string;
+  username = '';
   messageContent = '';
   messages: Message[] = [];
 
@@ -26,8 +26,10 @@ export class FamilyChatComponent implements OnDestroy {
   ngOnInit(): void {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
-        if (user)
+        if (user){
           this.messageService.createHubConnection(user, this.accountService.getCurrentFamilyId());
+          this.username = user.username;
+        }
       }
     })
   }

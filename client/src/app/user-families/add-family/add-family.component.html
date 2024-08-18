@@ -1,5 +1,5 @@
 <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && addFamily()" autocomplete="off">
-    <h2 class="text-center text-primary">Create new family</h2>
+    <h2 class="text-center text-primary mt-3">Create new family</h2>
     <hr>
 
     <app-text-input [formControl]="$any(registerForm.controls['familyName'])" [label]="'familyName'">
@@ -13,8 +13,8 @@
         </ul>
     </div>
 
-    <div class="text-center">
+    <div class="text-center mt-3">
         <button [disabled]="!registerForm.valid" class="btn btn-success me-2" type="submit">Add Family</button>
-        <button class="btn btn-defoult" type="button" (click)="cancel()">Cancel</button>
+        <button class="btn btn-danger" (click)="cancel()">Cancel</button>
     </div>
 </form>

@@ -9,9 +9,6 @@ public interface IMessageRepository
     void AddMessage(Message message);
     void DeleteMessage(Message message);
     Task<Message> GetMessage(int id);
-
-    //to be deleted (past functionality does not apply anymore)
-    Task<PagedList<MessageDto>> GetMessagesForFamily(MessageParams messageParams);
     Task<IEnumerable<MessageDto>> GetFamilyMessageThread(int familyId);
     void AddGroup(Group group);
     void RemoveConnection(Connection connection);

@@ -22,6 +22,8 @@ public class UnitOfWork : IUnitOfWork
     public IFamilyRepository FamilyRepository => new FamilyRepository(_context, _mapper);
 
     public IFamilyMemberRepository FamilyMemberRepository => new FamilyMemberRepository(_context, _mapper);
+    
+    public IListsRepository ListsRepository => new ListsRepository(_context, _mapper);
 
     public async Task<bool> Complete()
     {

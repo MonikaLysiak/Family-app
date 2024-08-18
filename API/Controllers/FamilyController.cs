@@ -43,7 +43,8 @@ public class FamilyController : BaseApiController
         var userFamily = new AppUserFamily
         {
             UserId = user.Id,
-            FamilyId = family.Id
+            FamilyId = family.Id,
+            Nickname = user.Name
         };
 
         user.UserFamilies.Add(userFamily);
@@ -51,7 +52,11 @@ public class FamilyController : BaseApiController
         // should i remove the second add ??
         family.UserFamilies.Add(userFamily);
         
-        if (await _uow.Complete()) return Ok(_mapper.Map<FamilyDto>(family));
+        if (await _uow.Complete()) {
+            var familyDto = _mapper.Map<FamilyDto>(family);
+            familyDto.UserNickname = userFamily.Nickname;
+            return Ok(familyDto);
+        }
 
         return BadRequest("Failed add user to family");
     }
@@ -69,7 +74,7 @@ public class FamilyController : BaseApiController
     }
 
     [HttpGet("{familyId}")]
-    public async Task<ActionResult<MemberDto>> GetFamilyDetails(int familyId)
+    public async Task<ActionResult<FamilyDto>> GetFamilyDetails(int familyId)
     {
         var currentUserId = User.GetUserId();
 
@@ -77,6 +82,8 @@ public class FamilyController : BaseApiController
             return BadRequest("You are not a member of this family");
 
         var family = await _uow.FamilyRepository.GetFamilyDetailsAsync(familyId);
+
+        family.UserNickname = await _uow.FamilyMemberRepository.GetFamilyMemberNicknameAsync(familyId, currentUserId);
 
         return Ok(family);
     }
@@ -107,7 +114,7 @@ public class FamilyController : BaseApiController
             
         var familyMember = await _uow.UserRepository.GetMemberAsync(familyMemberId);
 
-        familyMember.Nickname = await _uow.FamilyMemberRepository.GetFamilyMemberNickname(familyId, familyMemberId);
+        familyMember.Nickname = await _uow.FamilyMemberRepository.GetFamilyMemberNicknameAsync(familyId, familyMemberId);
 
         return Ok(familyMember);
     }
@@ -203,5 +210,24 @@ public class FamilyController : BaseApiController
         if (await _uow.Complete()) return Ok();
 
         return BadRequest("Problem deleting photo");
+    }
+
+    [HttpPut("set-nickname/{nickname}/{familyId}")]
+    public async Task<ActionResult> SetFamilyMemberNickname(string nickname, int familyId)
+    {
+        var userId = User.GetUserId();
+
+        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+            return BadRequest("You are not a member of this family");
+
+        var familyUser = await _uow.FamilyMemberRepository.GetAppUserFamilyAsync(familyId, userId);
+
+        if (familyUser == null) return NotFound();
+
+        familyUser.Nickname = nickname;
+
+        if (await _uow.Complete()) return NoContent();
+
+        return BadRequest("Problem setting nickname");
     }
 }

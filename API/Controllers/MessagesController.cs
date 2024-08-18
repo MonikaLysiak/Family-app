@@ -50,22 +50,6 @@ public class MessagesController : BaseApiController
         return BadRequest("Failed to send message");
     }
 
-    [HttpGet]
-    public async Task<ActionResult<PagedList<MessageDto>>> GetMessagesForFamily([FromQuery] MessageParams messageParams)
-    {
-        var userId = User.GetUserId();
-
-        if (!await _uow.FamilyRepository.IsFamilyMember(messageParams.FamilyId, userId))
-            return BadRequest("You are not a member of this family");
-
-        var messages = await _uow.MessageRepository.GetMessagesForFamily(messageParams);
-
-        Response.AddPaginationHeader(new PaginationHeader(messages.CurrentPage, messages.PageSize,
-            messages.TotalCount, messages.TotalPages));
-
-        return messages;
-    }
-
     [HttpGet("thread/{familyId}")]
     public async Task<ActionResult<PagedList<MessageDto>>> GetFamilyMessageThread(int familyId)
     {

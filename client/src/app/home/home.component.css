@@ -1,0 +1,20 @@
+.section {
+height: 100vh;
+margin-top: 100px;
+}
+.background-photo-container {
+margin: 0px;
+position: fixed;
+z-index: -1;
+padding: 0;
+}
+.background-photo {
+min-height: 100vh;
+min-width: 100vw;
+margin: 0;
+padding: 0;
+}
+
+.shadow-custom {
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.37);
+}

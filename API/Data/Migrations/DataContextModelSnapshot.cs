@@ -215,20 +215,17 @@ namespace API.Data.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorUsername")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("FamilyId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -238,7 +235,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("FamilyId");
 
-                    b.ToTable("FamilyLists");
+                    b.ToTable("Lists");
                 });
 
             modelBuilder.Entity("API.Entities.FamilyPhoto", b =>
@@ -309,6 +306,31 @@ namespace API.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Invitations");
+                });
+
+            modelBuilder.Entity("API.Entities.ListItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FamilyListId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsChecked")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FamilyListId");
+
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("API.Entities.Message", b =>
@@ -571,6 +593,17 @@ namespace API.Data.Migrations
                     b.Navigation("InviterUser");
                 });
 
+            modelBuilder.Entity("API.Entities.ListItem", b =>
+                {
+                    b.HasOne("API.Entities.FamilyList", "familyList")
+                        .WithMany("ListItems")
+                        .HasForeignKey("FamilyListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("familyList");
+                });
+
             modelBuilder.Entity("API.Entities.Message", b =>
                 {
                     b.HasOne("API.Entities.Family", "Family")
@@ -673,6 +706,11 @@ namespace API.Data.Migrations
                     b.Navigation("Messages");
 
                     b.Navigation("UserFamilies");
+                });
+
+            modelBuilder.Entity("API.Entities.FamilyList", b =>
+                {
+                    b.Navigation("ListItems");
                 });
 
             modelBuilder.Entity("API.Entities.Group", b =>

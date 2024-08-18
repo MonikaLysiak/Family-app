@@ -5,4 +5,5 @@ export interface Family {
     photoUrl: string;
     name: string;
     familyPhotos: Photo[];
+    userNickname: string;
 }

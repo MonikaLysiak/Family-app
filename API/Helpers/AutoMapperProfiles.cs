@@ -26,6 +26,8 @@ public class AutoMapperProfiles : Profile
         CreateMap<Family, FamilyDto>()
             .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.FamilyPhotos.FirstOrDefault(x => x.IsMain).Url));
 
+        CreateMap<FamilyList, FamilyListDto>();
+
         CreateMap<UserPhoto, PhotoDto>();
         CreateMap<FamilyPhoto, PhotoDto>();
         //CreateMap<FamilyMemberUpdateDto, AppUser>();

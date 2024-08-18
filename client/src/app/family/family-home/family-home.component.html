@@ -1,11 +1,41 @@
-<div class="container mt-5" style="text-align: center;" *ngIf="family">
-    <h1>{{family.name}}</h1>
-
+<div class="container mt-3" style="text-align: center;" *ngIf="family">
+    <h1 class="mb-3">{{family.name}}</h1>
     <div class="row" >
         <div class="col-5">
-            <div class="card">
-                <img src="{{family.photoUrl || './assets/user.png'}}" alt="{{family.name}}" class="card-img-top img-thumbnail">
+            <img src="{{family.photoUrl || './assets/user.png'}}" alt="{{family.name}}" class="img-thumbnail p-0 m-0 border border-primary border-5 rounded shadow">
+        </div>
+        <div class="col-7">
+            <div class="mt-5 d-flex justify-content-center">
+                <ul class="list-inline member-icons animate text-center">
+                    <li class="list-inline-item me-4 mb-3 shadow">
+                        <button routerLink="/familyMembers" class="btn btn-primary"><fa-icon [icon]="faPeopleRoof" size="6x"></fa-icon></button>
+                    </li>
+                    <li class="list-inline-item me-4 mb-3 shadow">
+                        <button routerLink="/familyLists" class="btn btn-primary"><fa-icon [icon]="faRectangleList" size="6x"></fa-icon></button>
+                    </li>
+                    <li class="list-inline-item me-4 mb-3 shadow">
+                        <button routerLink="/familyPhotos" class="btn btn-primary"><fa-icon [icon]="faImages" size="6x"></fa-icon></button>
+                    </li>
+                    <li class="list-inline-item me-4 mb-3 shadow">
+                        <button routerLink="/familyChat" class="btn btn-primary"><fa-icon [icon]="faComments" size="6x"></fa-icon></button>
+                    </li>
+                </ul>
             </div>
+            <form [formGroup]="changeNicknameForm" (ngSubmit)="changeNicknameForm.valid && changeNickname()" autocomplete="off" class="d-flex justify-content-center align-items-center mt-4">
+                <h3 class="text-primary me-3">Your nickname is: </h3>
+                
+                <app-text-input [formControl]="$any(changeNicknameForm.controls['nickname'])" [label]="'nickname'"></app-text-input>
+                
+                <button [disabled]="!changeNicknameForm.valid || this.changeNicknameForm.controls['nickname'].value == family.userNickname" class="btn btn-success ms-2" type="submit">Edit</button>
+                
+                <div class="row" *ngIf="validationErrors">
+                    <ul class="text-denger">
+                        <li *ngFor="let error of validationErrors">
+                            {{error}}
+                        </li>
+                    </ul>
+                </div>
+            </form>
         </div>
     </div>
 </div>

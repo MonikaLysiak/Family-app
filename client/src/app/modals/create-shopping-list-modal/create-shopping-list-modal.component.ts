@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { FamilyList } from 'src/app/_models/family-list';
 import { ListService } from 'src/app/_services/list.service';
 
 @Component({
@@ -18,8 +19,10 @@ export class CreateShoppingListModalComponent implements OnInit {
   addShoppingListForm: FormGroup = new FormGroup({});
   addItemForm: FormGroup = new FormGroup({});
   validationErrors: string[] | undefined;
-  items: any[] = [];
+  items: string[] = [];
   addItemsMode = false;
+  shoppingListName: string = '';
+  categoryId = 1;
 
   constructor(public bsModalRef: BsModalRef, private listService: ListService, private fb: FormBuilder, private router: Router) { }
 
@@ -49,20 +52,19 @@ export class CreateShoppingListModalComponent implements OnInit {
   }
   
   addShoppingList() {
-    this.listService.addShoppingList(this.addShoppingListForm.controls['shoppingListName'].value);
+    this.shoppingListName = this.addShoppingListForm.controls['shoppingListName'].value;
     this.addItemsMode = true;
     this.initializeAddItemsForm();
-    // .subscribe({
-    //   next: () => {
-    //     this.router.navigateByUrl('/familyMembers')
-    //   },
-    //   error: error => {
-    //     this.validationErrors = error
-    //   }
-    // })
   }
 
   addItem() {
     this.items.push(this.addItemForm.controls['item'].value);
+  }
+
+  deleteItem(item: string) {
+    const index = this.items.indexOf(item);
+    if (index > -1) {
+      this.items.splice(index, 1);
+    }
   }
 }

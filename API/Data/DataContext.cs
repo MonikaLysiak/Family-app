@@ -21,7 +21,7 @@ public class DataContext : IdentityDbContext<AppUser, AppRole, int,
 
     public DbSet<Family> Families { get; set; }
 
-    public DbSet<FamilyList> FamilyLists { get; set; }
+    public DbSet<FamilyList> Lists { get; set; }
 
     public DbSet<AppUserFamily> AppUsersFamilies { get; set; }
 

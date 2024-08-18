@@ -7,6 +7,7 @@ public interface IUnitOfWork
     IInvitationsRepository InvitationsRepository { get; }
     IFamilyRepository FamilyRepository { get; }
     IFamilyMemberRepository FamilyMemberRepository { get; }
+    IListsRepository ListsRepository { get; }
     
     Task<bool> Complete();
     bool HasChanges();

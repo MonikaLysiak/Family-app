@@ -35,7 +35,7 @@ public class MessageHub : Hub
         if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
             throw new HubException("You are not a member of this family");
 
-        var groupName = familyId.ToString();
+        var groupName = GetGroupName(familyId);
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         var group = await AddToGroup(groupName);
 
@@ -77,10 +77,12 @@ public class MessageHub : Hub
             Content = createMessageDto.Content
         };
 
-        var groupName = createMessageDto.FamilyId.ToString();
+        var groupName = GetGroupName(createMessageDto.FamilyId);
 
         var group = await _uow.MessageRepository.GetMessageGroup(groupName);
 
+        //below should not work, how does it work, it should be username
+        // it might be to track if the user has read the messege, maby it should be deleted entirely
         var connections = await PresenceTracker.GetConnectionsForUser(createMessageDto.FamilyId.ToString()); // , username ?? check this method again
         
         // make it so that all members of the family get notification except of the sender user
@@ -127,5 +129,9 @@ public class MessageHub : Hub
         if (await _uow.Complete()) return group;
 
         throw new HubException("Failed to remove from group");
+    }
+
+    private string GetGroupName(int familyId) {
+        return "chat" + familyId;
     }
 }

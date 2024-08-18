@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Pagination } from 'src/app/_models/pagination';
-import { FamilyService } from 'src/app/_services/family.service';
+import { AccountService } from 'src/app/_services/account.service';
+import { ListService } from 'src/app/_services/list.service';
 import { CreateShoppingListModalComponent } from 'src/app/modals/create-shopping-list-modal/create-shopping-list-modal.component';
 
 @Component({
@@ -10,7 +11,7 @@ import { CreateShoppingListModalComponent } from 'src/app/modals/create-shopping
   templateUrl: './family-lists.component.html',
   styleUrls: ['./family-lists.component.css']
 })
-export class FamilyListsComponent {
+export class FamilyListsComponent implements OnInit {
   familyLists: any[] = [];
   pagination?: Pagination;
   pageNumber = 1;
@@ -19,18 +20,22 @@ export class FamilyListsComponent {
   loading = false;
   bsModalRef: BsModalRef<CreateShoppingListModalComponent> = new BsModalRef<CreateShoppingListModalComponent>();
   
-  constructor(private familyService: FamilyService, private modalService: BsModalService, private toastr: ToastrService) {}
+  constructor(private accountService: AccountService, private listService: ListService, private modalService: BsModalService, private toastr: ToastrService) {}
+  
+  ngOnInit(): void {
+    this.loadFamilyLists();
+  }
 
   loadFamilyLists() {
-    // this.loading = true
-    // this.familyService.getFamilyLists(this.pageNumber, this.pageSize, this.orderBy).subscribe({
-    //   next: response => {
-    //     if (!response.result) return;
-    //     this.familyLists = response.result;
-    //     this.pagination = response.pagination;
-    //     this.loading = false;
-    //   }
-    // })
+    this.loading = true
+    this.listService.getFamilyLists(this.accountService.getCurrentFamilyId(), this.pageNumber, this.pageSize, this.orderBy).subscribe({
+      next: response => {
+        if (!response.result) return;
+        this.familyLists = response.result;
+        this.pagination = response.pagination;
+        this.loading = false;
+      }
+    })
   }
 
   pageChanged(event: any) {
@@ -55,9 +60,12 @@ export class FamilyListsComponent {
     this.bsModalRef = this.modalService.show(CreateShoppingListModalComponent, config);
     this.bsModalRef.onHide?.subscribe({
       next: () => {
+        const shoppingListName = this.bsModalRef.content?.shoppingListName;
+        const categoryId = this.bsModalRef.content?.categoryId;
         const items = this.bsModalRef.content?.items;
-        if (items && items.length === 0) {
-          this.familyService.updateFamilyList(items!);
+        
+        if (shoppingListName && categoryId && items) {
+          this.listService.addShoppingList(this.accountService.getCurrentFamilyId(), shoppingListName, categoryId, items);
         }
       }
     })

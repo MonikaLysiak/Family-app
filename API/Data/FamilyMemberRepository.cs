@@ -1,4 +1,5 @@
 using API.DTOs;
+using API.Entities;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
@@ -39,8 +40,13 @@ public class FamilyMemberRepository : IFamilyMemberRepository
             familyMemberParams.PageSize);
     }
 
-    public async Task<string> GetFamilyMemberNickname(int familyId, int userId)
+    public async Task<string> GetFamilyMemberNicknameAsync(int familyId, int userId)
     {
         return (await _context.AppUsersFamilies.FindAsync(familyId, userId)).Nickname;
+    }
+
+    public async Task<AppUserFamily> GetAppUserFamilyAsync(int familyId, int userId)
+    {
+        return await _context.AppUsersFamilies.FindAsync(familyId, userId);
     }
 }

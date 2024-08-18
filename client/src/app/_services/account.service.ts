@@ -73,6 +73,7 @@ export class AccountService {
 
   //why this way? should i chnge it to simple property??
   setCurrentFamily(family: Family | null){
+    localStorage.setItem('family', JSON.stringify(family))
     this.currentFamilySource.next(family);
   }
 
@@ -99,6 +100,7 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+    localStorage.removeItem('family');
     this.currentFamilySource.next(null);
     this.presenceService.stopHubConnection();
   }

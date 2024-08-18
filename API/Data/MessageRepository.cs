@@ -59,20 +59,6 @@ public class MessageRepository : IMessageRepository
             .FirstOrDefaultAsync(x => x.Name == groupName);
     }
 
-    //to be deleted (past functionality does not apply anymore)
-    public async Task<PagedList<MessageDto>> GetMessagesForFamily(MessageParams messageParams)
-    {
-        var query = _context.Messages
-            .OrderByDescending(x => x.MessageSent)
-            .AsQueryable();
-
-        query = query.Where(u => u.FamilyId == messageParams.FamilyId && u.SenderDeleted == false);
-
-        var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
-
-        return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
-    }
-
     public async Task<IEnumerable<MessageDto>> GetFamilyMessageThread(int familyId)
     {
         var query = _context.Messages

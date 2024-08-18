@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from './_services/account.service';
 import { User } from './_models/user';
+import { Family } from './_models/family';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
       this.setCurrentUser();
+      this.setCurrentUserFamily();
   }
 
   setCurrentUser() {
@@ -23,4 +25,10 @@ export class AppComponent implements OnInit{
     this.accountService.setCurrentUser(user);
   }
 
+  setCurrentUserFamily() {
+    const familyString = localStorage.getItem('family');
+    if(!familyString) return;
+    const family: Family = JSON.parse(familyString);
+    this.accountService.setCurrentFamily(family);
+  }
 }

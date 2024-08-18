@@ -44,6 +44,7 @@ import { InvitationReceivedCardComponent } from './invitations/invitation-receiv
 import { InvitationSentCardComponent } from './invitations/invitation-sent-card/invitation-sent-card.component';
 import { AddInvitationComponent } from './invitations/add-invitation/add-invitation.component';
 import { CreateShoppingListModalComponent } from './modals/create-shopping-list-modal/create-shopping-list-modal.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { CreateShoppingListModalComponent } from './modals/create-shopping-list-
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    FontAwesomeModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
