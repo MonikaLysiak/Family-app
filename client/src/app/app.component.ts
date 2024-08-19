@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AccountService } from './_services/account.service';
 import { User } from './_models/user';
 import { Family } from './_models/family';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,10 @@ import { Family } from './_models/family';
 export class AppComponent implements OnInit{
   title = 'Family app';
 
-  constructor(private accountService: AccountService) {}
+  constructor(private accountService: AccountService, public translateService: TranslateService) {
+    translateService.addLangs(['en', 'pl']);
+    translateService.setDefaultLang('pl');
+  }
 
   ngOnInit(): void {
       this.setCurrentUser();

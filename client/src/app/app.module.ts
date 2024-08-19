@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,6 +46,8 @@ import { AddInvitationComponent } from './invitations/add-invitation/add-invitat
 import { CreateShoppingListModalComponent } from './modals/create-shopping-list-modal/create-shopping-list-modal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FamilyListCardComponent } from './family-lists/family-list-card/family-list-card.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 @NgModule({
   declarations: [
@@ -92,7 +94,14 @@ import { FamilyListCardComponent } from './family-lists/family-list-card/family-
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
@@ -103,3 +112,7 @@ import { FamilyListCardComponent } from './family-lists/family-list-card/family-
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}

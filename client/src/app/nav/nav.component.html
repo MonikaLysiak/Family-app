@@ -37,32 +37,33 @@
           </li>
         </ul>
 
-        <div class="dropdown" *ngIf="(accountService.currentUser$| async) as user" dropdown>
-            <img src="{{user.photoUrl || './assets/user.png'}}" alt="user photo">
-            <a class="dropdown-toggle text-light text-decoration-none ms-2" dropdownToggle>Welcome {{user.name}}</a>
-            <div class="dropdown-menu" *dropdownMenu>
-                <a class="dropdown-item" routerLink="/member/edit">Edit Profile</a>
-                <a class="dropdown-item" (click)="logout()">Logout</a>
-            </div>
-        </div>
-
         <form *ngIf="!(accountService.currentUser$ | async)" #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" autocomplete="off">
           <input 
-                name="username"
+                name="{{'username' | translate}}"
                 [(ngModel)]="model.username"
                 class="form-control me-2" 
                 type="text" 
-                placeholder="Username">
+                placeholder="{{'username' | translate}}">
 
           <input 
-                name="password"
+                name="{{'password' | translate}}"
                 [(ngModel)]="model.password"
                 class="form-control me-2" 
                 type="password" 
-                placeholder="Password">
+                placeholder="{{'password' | translate}}">
 
           <button class="btn btn-success" type="submit">Login</button>
         </form>
 
+        <div *ngIf="!(accountService.currentUser$ | async)" class="dropdown ms-5 d-flex" dropdown>
+          <span class="text-light text-decoration-none ms-2" (click)="$event.stopPropagation()">
+            <select class="form-control" #selectedLang (change)="switchLang(selectedLang.value)">
+              <option *ngFor="let language of translateService.getLangs()" [value]="language"
+                [selected]="language === translateService.currentLang">
+                {{ language }}
+              </option>
+            </select>
+          </span>
+        </div>
     </div>
 </nav>
