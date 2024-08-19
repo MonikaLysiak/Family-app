@@ -48,6 +48,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FamilyListCardComponent } from './family-lists/family-list-card/family-list-card.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { EditShoppingListModalComponent } from './modals/edit-shopping-list-modal/edit-shopping-list-modal.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
     InvitationSentCardComponent,
     AddInvitationComponent,
     CreateShoppingListModalComponent,
-    FamilyListCardComponent
+    FamilyListCardComponent,
+    EditShoppingListModalComponent
   ],
   imports: [
     BrowserModule,

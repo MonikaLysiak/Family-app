@@ -22,11 +22,11 @@
                 </ul>
             </div>
             <form [formGroup]="changeNicknameForm" (ngSubmit)="changeNicknameForm.valid && changeNickname()" autocomplete="off" class="d-flex justify-content-center align-items-center mt-4">
-                <h3 class="text-primary me-3">Your nickname is: </h3>
+                <h3 class="text-primary me-3">{{'yourNicknameIs' | translate}}: </h3>
                 
                 <app-text-input [formControl]="$any(changeNicknameForm.controls['nickname'])" [label]="'nickname'"></app-text-input>
                 
-                <button [disabled]="!changeNicknameForm.valid || this.changeNicknameForm.controls['nickname'].value == family.userNickname" class="btn btn-success ms-2" type="submit">Edit</button>
+                <button [disabled]="!changeNicknameForm.valid || this.changeNicknameForm.controls['nickname'].value == family.userNickname" class="btn btn-success ms-2" type="submit">{{'edit' | translate}}</button>
                 
                 <div class="row" *ngIf="validationErrors">
                     <ul class="text-denger">

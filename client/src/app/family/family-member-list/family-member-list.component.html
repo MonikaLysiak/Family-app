@@ -1,6 +1,6 @@
 <div *ngIf="!addFamilyMemberMode" class="container w-75">
     <div *ngIf="familyMembers.length > 0">
-        <h2 class="text-center m-3">Family members</h2>
+        <h2 class="text-center m-3">{{'familyMembers' | translate}}</h2>
         
         <div class="row d-flex justify-content-center">
             <div class="col-2" *ngFor="let member of familyMembers">
@@ -26,13 +26,13 @@
 
     <div *ngIf="familyMembers?.length == 0">
         <div style="text-align: center;">
-            <h1>You are currently the only member of this Family</h1>
-            <p class="lead">Invite more members</p>
+            <h1>{{'youAreCurrentlyTheOnlyMemberOfThisFamily' | translate}}</h1>
+            <p class="lead">{{'inviteMoreMembers' | translate}}</p>
         </div>
     </div>
     
     <div class="text-center">
-        <button (click)="addFamilyMemberToggle()" class="btn btn-primary btn-lg me-2">Invite new family member</button>
+        <button (click)="addFamilyMemberToggle()" class="btn btn-primary btn-lg me-2">{{'inviteNewFamilyMember' | translate}}</button>
     </div>
 </div>
 

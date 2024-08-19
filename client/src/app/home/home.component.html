@@ -4,20 +4,17 @@
 
 <div class="container w-75">
     <div *ngIf="!registerMode" style="text-align: center;">
-        <h1 class="p-3">Welcome to Family App</h1>
+        <h1 class="p-3">{{'welcomeToFamilyApp' | translate}}</h1>
         <div class="card bg-light mb-3 mt-5 shadow border" style="max-width: 100rem;">
             <div class="card-body">
-              <p class="card-text">Simplify your family’s daily life with Family App! 
-                Create and manage your family group, invite members, and stay connected through our family chat and shared photo gallery. 
-                Keep everyone in sync with editable lists like shopping or to-dos, and manage invitations with ease. 
-                Customize your profile, set nicknames, and enjoy a seamless, organized family experience.</p>
+              <p class="card-text">{{'familyAppDescription' | translate}}</p>
             </div>
           </div>
 
         <div class="text-center mt-5">
-            <button *ngIf="(accountService.currentUser$ | async)" routerLink="/families" class="btn btn-primary btn-lg me-2 shadow-custom">Go to families</button>
-            <button *ngIf="(accountService.currentUser$ | async)" routerLink="/member/edit" class="btn btn-primary btn-lg shadow-custom">Your profile</button>
-            <button *ngIf="!(accountService.currentUser$ | async)" (click)="registerToggle()" class="btn btn-primary btn-lg me-2">Register</button>
+            <button *ngIf="(accountService.currentUser$ | async)" routerLink="/families" class="btn btn-primary btn-lg me-2 shadow-custom">{{'goToFamilies' | translate}}</button>
+            <button *ngIf="(accountService.currentUser$ | async)" routerLink="/member/edit" class="btn btn-primary btn-lg shadow-custom">{{'yourProfile' | translate}}</button>
+            <button *ngIf="!(accountService.currentUser$ | async)" (click)="registerToggle()" class="btn btn-primary btn-lg me-2">{{'register' | translate}}</button>
         </div>
     </div>
 

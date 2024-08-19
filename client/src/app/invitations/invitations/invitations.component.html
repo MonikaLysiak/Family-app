@@ -1,20 +1,20 @@
 <div class="container w-75">
 
     <div class="text-center mt-3">
-        <h2>{{predicate === 'received' ? 'Invitations You got' : 'Invitations You sent'}}</h2>
+        <h2>{{predicate === 'received' ? 'invitationsYouGot' : 'invitationsYouSent' | translate}}</h2>
     </div>
     
     <div class="container mt-3">
         <div class="d-flex">
             <div class="btn-group" name="predicate">
-                <button class="btn btn-primary" btnRadio="received" [(ngModel)]="predicate" (click)="loadInvitations()">Invitations received</button>
-                <button class="btn btn-primary" btnRadio="sent" [(ngModel)]="predicate" (click)="loadInvitations()">Invitations sent</button>
+                <button class="btn btn-primary" btnRadio="received" [(ngModel)]="predicate" (click)="loadInvitations()">{{'invitationsReceived' | translate}}</button>
+                <button class="btn btn-primary" btnRadio="sent" [(ngModel)]="predicate" (click)="loadInvitations()">{{'invitationsSent' | translate}}</button>
             </div>
         </div>
     
         <div class="row mt-3 d-flex justify-content-center" *ngIf="predicate == 'received'" >
             <div class="text-center mt-3" *ngIf="invitations.length == 0">
-                <h4>You haven't received any invitations</h4>
+                <h4>{{'noUnansweredInvitations' | translate}}</h4>
             </div>
             <div class="col-4" *ngFor="let invitation of invitations">
                 <app-invitation-received-card [invitation]="invitation"></app-invitation-received-card>
@@ -22,7 +22,7 @@
         </div>
         <div class="row mt-3 row d-flex justify-content-center" *ngIf="predicate == 'sent'" >
             <div class="text-center mt-3" *ngIf="invitations.length == 0">
-                <h4>You have no unanswered invitations</h4>
+                <h4>{{'noReceivedInvitations' | translate}}</h4>
             </div>
             <div class="col-4" *ngFor="let invitation of invitations">
                 <app-invitation-sent-card [invitation]="invitation"></app-invitation-sent-card>

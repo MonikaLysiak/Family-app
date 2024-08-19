@@ -1,0 +1,52 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{'editShoppingList' | translate}}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="editShoppingListForm" (ngSubmit)="editShoppingListForm.valid && addItem()" autocomplete="off">
+        <h2 class="text-center text-primary">{{'addItem' | translate}}</h2>
+        <hr>
+
+        <app-text-input [formControl]="$any(editShoppingListForm.controls['item'])" [label]="'item'">
+        </app-text-input>
+
+        <div class="row" *ngIf="validationErrors">
+            <ul class="text-denger">
+                <li *ngFor="let error of validationErrors">
+                    {{error}}
+                </li>
+            </ul>
+        </div>
+
+        <div class="text-center mt-2">
+            <button [disabled]="!editShoppingListForm.valid" class="btn btn-success me-2" type="submit">{{'addItem' | translate}}</button>
+        </div>
+    </form>
+
+    <div class="row" *ngIf="items">
+        <ul
+        #scrollMe
+        style="overflow: scroll; height: 500px;"
+        [scrollTop]="scrollMe.scrollHeight"
+        *ngIf="items.length > 0" class="chat">
+            <li *ngFor="let item of items">
+                <div>
+                    <span class="chat-img float-end">
+                        <i (click)="deleteItem(item)" class="fa fa-trash" aria-hidden="true"></i>
+                    </span>
+                    <div [ngClass]="{'text-decoration-line-through': item.isChecked}" class="chat-body" (click)="checkItem(item)">
+                        <p>{{item.content}}</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-success" (click)="save()">{{btnOkText}}</button>
+    <button class="btn btn-danger" (click)="cancel()">{{btnCancelText}}</button>
+</div>

@@ -1,9 +1,9 @@
 <div class="container w-75">
     <tabset class="member-tabset">
-        <tab heading="Gallery" class="container w-50">
+        <tab heading="{{'gallery' | translate}}" class="container w-50">
             <gallery *ngIf="family.familyPhotos.length > 0" [items]="images" class="gallery"></gallery>
         </tab>
-        <tab heading="Edit Photos">
+        <tab heading="{{'editPhotos' | translate}}">
             <app-family-photo-edytor [family]="family"></app-family-photo-edytor>
         </tab>
     </tabset>

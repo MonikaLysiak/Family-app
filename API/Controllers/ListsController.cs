@@ -60,6 +60,30 @@ public class ListsController : BaseApiController
         return BadRequest("Failed to create family list");
     }
 
+    [HttpPost("edit")]
+    public async Task<ActionResult<FamilyListDto>> EditFamilyList(FamilyListDto editedList)
+    {
+        //must add family id and check if the user can edit this list
+        var familyList = await _uow.ListsRepository.GetList(editedList.Id);
+
+        if (familyList == null) return NotFound("There is no user of that id");
+
+        familyList.ListItems = new List<ListItem>();
+
+        foreach (var listItem in editedList.ListItems)
+        {
+            familyList.ListItems.Add(new ListItem {
+                Content = listItem.Content,
+                IsChecked = listItem.IsChecked,
+                FamilyListId = familyList.Id
+            });
+        }
+
+        if (await _uow.Complete()) return Ok(_mapper.Map<FamilyListDto>(familyList));
+
+        return BadRequest("Failed to edit family list");
+    }
+
     [HttpGet]
     public async Task<ActionResult<PagedList<FamilyListDto>>> GetFamilyLists([FromQuery]FamilyListsParams familyListsParams)
     {

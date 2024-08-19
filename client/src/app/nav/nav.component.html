@@ -1,14 +1,14 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary" style="position: fixed; top: 0; width: 100vw; height: 70px;">
     <div class="container">
-      <a class="navbar-brand" (click)="accountService.setCurrentFamily(null)" routerLink="/" routerLinkActive="active">Family App</a>
+      <a class="navbar-brand" (click)="accountService.setCurrentFamily(null)" routerLink="/" routerLinkActive="active">{{'familyApp' | translate}}</a>
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <ng-container *ngIf="accountService.currentUser$ | async">
             <ng-container *ngIf="!(accountService.currentFamily$ | async)">
               <li class="nav-item">
-                <a class="nav-link" routerLink="/families" routerLinkActive="active">Your Familes</a>
+                <a class="nav-link" routerLink="/families" routerLinkActive="active">{{'yourFamilies' | translate}}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" routerLink="/invitations" routerLinkActive="active">Invitations</a>
+                <a class="nav-link" routerLink="/invitations" routerLinkActive="active">{{'invitations' | translate}}</a>
               </li>
             </ng-container>
             <ng-container *ngIf="accountService.currentFamily$ | async">
@@ -16,26 +16,35 @@
                 <a class="nav-link" routerLink="/families/{{(accountService.currentFamily$ | async)?.id}}" routerLinkActive="active">{{(accountService.currentFamily$ | async)?.name}}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" routerLink="/familyMembers" routerLinkActive="active">Family Members</a>
+                <a class="nav-link" routerLink="/familyMembers" routerLinkActive="active">{{'familyMembers' | translate}}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" routerLink="/familyLists" routerLinkActive="active">Lists</a>
+                <a class="nav-link" routerLink="/familyLists" routerLinkActive="active">{{'lists' | translate}}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" routerLink="/familyPhotos" routerLinkActive="active">Photos</a>
+                <a class="nav-link" routerLink="/familyPhotos" routerLinkActive="active">{{'photos' | translate}}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" routerLink="/familyChat" routerLinkActive="active">Chat</a>
+                <a class="nav-link" routerLink="/familyChat" routerLinkActive="active">{{'chat' | translate}}</a>
               </li>
             </ng-container>
             <li *appHasRole="['Admin', 'Moderator']" class="nav-item">
-              <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin</a>
+              <a class="nav-link" routerLink="/admin" routerLinkActive="active">{{'admin' | translate}}</a>
             </li>
           </ng-container>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/errors" routerLinkActive="active">Errors</a>
+            <a class="nav-link" routerLink="/errors" routerLinkActive="active">{{'errors' | translate}}</a>
           </li>
         </ul>
+
+        <div class="dropdown" *ngIf="(accountService.currentUser$| async) as user" dropdown>
+          <img src="{{user.photoUrl || './assets/user.png'}}" alt="user photo">
+          <a class="dropdown-toggle text-light text-decoration-none ms-2" dropdownToggle>{{'welcome' | translate}} {{user.name}}</a>
+          <div class="dropdown-menu" *dropdownMenu>
+              <a class="dropdown-item" routerLink="/member/edit">{{'editProfile' | translate}}</a>
+              <a class="dropdown-item" (click)="logout()">{{'logout' | translate}}</a>
+          </div>
+        </div>
 
         <form *ngIf="!(accountService.currentUser$ | async)" #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" autocomplete="off">
           <input 
@@ -55,7 +64,7 @@
           <button class="btn btn-success" type="submit">Login</button>
         </form>
 
-        <div *ngIf="!(accountService.currentUser$ | async)" class="dropdown ms-5 d-flex" dropdown>
+        <div class="dropdown ms-5 d-flex" dropdown>
           <span class="text-light text-decoration-none ms-2" (click)="$event.stopPropagation()">
             <select class="form-control" #selectedLang (change)="switchLang(selectedLang.value)">
               <option *ngFor="let language of translateService.getLangs()" [value]="language"

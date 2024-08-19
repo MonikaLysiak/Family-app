@@ -6,13 +6,14 @@ import { AccountService } from 'src/app/_services/account.service';
 import { FamilyPhotoEdytorComponent } from '../family-photo-edytor/family-photo-edytor.component';
 import { take } from 'rxjs';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-family-photos',
   templateUrl: './family-photos.component.html',
   styleUrls: ['./family-photos.component.css'],
   standalone: true,
-  imports: [CommonModule, GalleryModule, FamilyPhotoEdytorComponent, TabsModule]
+  imports: [CommonModule, GalleryModule, FamilyPhotoEdytorComponent, TabsModule, TranslateModule]
 })
 export class FamilyPhotosComponent {
   images: GalleryItem[] = [];

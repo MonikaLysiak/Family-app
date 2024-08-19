@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { FamilyList } from '../_models/family-list';
 import { environment } from 'src/environments/environment';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
+import { ListItem } from '../_models/list-item';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,13 @@ export class ListService {
     params = params.append('OrderBy', orderBy);
     params = params.append('FamilyId', familyId);
     return getPaginatedResult<FamilyList[]>(this.baseUrl + 'lists', params, this.http);
+  }
+
+  editList(listId: number, listItems: ListItem[]){
+    const requestBody = {
+      id: listId,
+      listItems: listItems
+    };
+    return this.http.post<FamilyList>(this.baseUrl + 'lists/edit', requestBody).subscribe(r=>{});
   }
 }

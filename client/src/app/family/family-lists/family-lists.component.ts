@@ -46,10 +46,10 @@ export class FamilyListsComponent implements OnInit {
   }
 
   createList() {
-    this.openRolesModal();
+    this.openAddListModal();
   }
 
-  openRolesModal() {
+  openAddListModal() {
     const config = {
       class: 'modal-dialog-centered',
       initialState: {

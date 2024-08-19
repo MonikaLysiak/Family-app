@@ -6,13 +6,14 @@ import { take } from 'rxjs';
 import { Message } from 'src/app/_models/message';
 import { AccountService } from 'src/app/_services/account.service';
 import { MessageService } from 'src/app/_services/message.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-family-chat',
   standalone: true,
   templateUrl: './family-chat.component.html',
   styleUrls: ['./family-chat.component.css'],
-  imports: [CommonModule, TimeagoModule, FormsModule]
+  imports: [CommonModule, TimeagoModule, FormsModule, TranslateModule]
 })
 
 export class FamilyChatComponent implements OnDestroy {

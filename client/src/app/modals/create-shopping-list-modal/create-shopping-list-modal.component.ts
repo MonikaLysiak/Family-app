@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { FamilyList } from 'src/app/_models/family-list';
 import { ListService } from 'src/app/_services/list.service';
 
 @Component({

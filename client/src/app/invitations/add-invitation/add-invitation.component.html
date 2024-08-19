@@ -1,5 +1,5 @@
 <form class="container w-50" [formGroup]="addFamilyMemberForm" (ngSubmit)="addFamilyMemberForm.valid && inviteFamilyMember()" autocomplete="off">
-    <h2 class="text-center text-primary m-3">Invite new family member</h2>
+    <h2 class="text-center text-primary m-3">{{'inviteNewFamilyMember' | translate}}</h2>
 
     <app-text-input [formControl]="$any(addFamilyMemberForm.controls['username'])" [label]="'username'">
     </app-text-input>
@@ -13,7 +13,7 @@
     </div>
 
     <div class="text-center m-3">
-        <button [disabled]="!addFamilyMemberForm.valid" class="btn btn-success me-2" type="submit">Invite family member</button>
-        <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+        <button [disabled]="!addFamilyMemberForm.valid" class="btn btn-success me-2" type="submit">{{'inviteFamilyMember' | translate}}</button>
+        <button class="btn btn-danger" type="button" (click)="cancel()">{{'cancel' | translate}}</button>
     </div>
 </form>
