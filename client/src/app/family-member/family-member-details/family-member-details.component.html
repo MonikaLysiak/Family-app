@@ -1,38 +1,52 @@
-<div class="row">
-    <div class="col-4">
-        <div class="card">
-            <img src="{{familyMember.photoUrl || './assets/user.png'}}" alt="{{familyMember.nickname}}" class="card-img-top img-thumbnail">
-            <div class="card-body">
-                <div class="mb-2" *ngIf="(presenceService.onlineUsers$ | async)?.includes(familyMember.userName)">
-                    <i class="fa fa-user-circle text-success"></i> Online now
-                </div>
-                <div>
-                    <strong>Name:</strong>
-                    <p>{{familyMember.name}}</p>
-                </div>
-                <div>
-                    <strong>Surname:</strong>
-                    <p>{{familyMember.surname}}</p>
-                </div>
-                <div>
-                    <strong>Age:</strong>
-                    <p>{{familyMember.age}}</p>
-                </div>
-                <div>
-                    <strong>Last active:</strong>
-                    <p>{{familyMember.lastActive | timeago}}</p>
-                </div>
-                <div>
-                    <strong>Mamber since:</strong>
-                    <p>{{familyMember.created | date: 'longDate'}}</p>
+<div class="container mt-3 w-75">
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <img src="{{familyMember.photoUrl || './assets/user.png'}}" alt="{{familyMember.nickname}}" class="card-img-top img-thumbnail">
+                <div class="card-body row">
+                    <div class="mb-2" *ngIf="(presenceService.onlineUsers$ | async)?.includes(familyMember.userName)">
+                        <i class="fa fa-user-circle text-success"></i> Online now
+                    </div>
+                    <div class="col-6">
+                        <div>
+                            <strong>Nickname:</strong>
+                            <p>{{familyMember.nickname}}</p>
+                        </div>
+                        <div>
+                            <strong>Name:</strong>
+                            <p>{{familyMember.name}}</p>
+                        </div>
+                        <div>
+                            <strong>Surname:</strong>
+                            <p>{{familyMember.surname}}</p>
+                        </div>
+                        <div>
+                            <strong>Username:</strong>
+                            <p>{{familyMember.userName}}</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div>
+                            <strong>Age:</strong>
+                            <p>{{familyMember.age}}</p>
+                        </div>
+                        <div>
+                            <strong>Last active:</strong>
+                            <p>{{familyMember.lastActive | timeago}}</p>
+                        </div>
+                        <div>
+                            <strong>Mamber since:</strong>
+                            <p>{{familyMember.created | date: 'longDate'}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-8">
-        <gallery *ngIf="familyMember.userPhotos.length > 0" [items]="images" class="gallery"></gallery>
-        <div *ngIf="familyMember.userPhotos.length == 0">
-            No photos to show
+        <div class="col-8 container">
+            <gallery *ngIf="familyMember.userPhotos.length > 0" [items]="images" class="gallery"></gallery>
+            <div *ngIf="familyMember.userPhotos.length == 0">
+                No photos to show
+            </div>
         </div>
     </div>
 </div>

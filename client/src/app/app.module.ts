@@ -45,6 +45,7 @@ import { InvitationSentCardComponent } from './invitations/invitation-sent-card/
 import { AddInvitationComponent } from './invitations/add-invitation/add-invitation.component';
 import { CreateShoppingListModalComponent } from './modals/create-shopping-list-modal/create-shopping-list-modal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FamilyListCardComponent } from './family-lists/family-list-card/family-list-card.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     InvitationReceivedCardComponent,
     InvitationSentCardComponent,
     AddInvitationComponent,
-    CreateShoppingListModalComponent
+    CreateShoppingListModalComponent,
+    FamilyListCardComponent
   ],
   imports: [
     BrowserModule,

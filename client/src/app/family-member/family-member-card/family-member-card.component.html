@@ -3,10 +3,11 @@
         <img src="{{familyMember.photoUrl || './assets/user.png'}}" alt="{{familyMember.name}}" class="card-img-top">
     </div>
     <div class="cadr-body p-1">
-        <h6 class="card-title text-center mb-1">
-            <span [class.is-online]="(presenceService.onlineUsers$ | async)?.includes(familyMember.userName)">
-                {{familyMember.nickname}}
+        <h6 class="card-title d-flex justify-content-center align-items-center mb-1">
+            <span class="pt-1 pe-1" [class.is-online]="(presenceService.onlineUsers$ | async)?.includes(familyMember.userName)">
+                <fa-icon [icon]="faHeartPulse" size="xs"></fa-icon>
             </span>
+            {{familyMember.nickname}}
         </h6>
     </div>
 </div>

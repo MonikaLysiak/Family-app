@@ -75,6 +75,7 @@ public class ListsRepository : IListsRepository
                 m => m.FamilyId == familyId
             )
             .OrderByDescending(m => m.Created)
+            .Include(x => x.ListItems.OrderByDescending(m => m.Created).Take(5))
             .AsQueryable();
 
         return await query.ProjectTo<FamilyListDto>(_mapper.ConfigurationProvider).ToListAsync();

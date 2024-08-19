@@ -25,6 +25,8 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@microsoft/signalr": "^8.0.7",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "bootstrap": "^5.2.3",
     "bootswatch": "^5.3.3",
     "font-awesome": "^4.7.0",
