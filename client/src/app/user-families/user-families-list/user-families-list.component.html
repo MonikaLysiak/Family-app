@@ -5,7 +5,7 @@
         </div>
         
         <div class="row d-flex justify-content-center">
-            <div class="col-2" *ngFor="let family of families">
+            <div class="col-3" *ngFor="let family of families">
                 <app-family-card [family]="family"></app-family-card>
             </div>
         </div>
@@ -28,7 +28,7 @@
 
     <div *ngIf="families.length == 0">
         <div style="text-align: center;">
-            <h1 class="mt-3">{{'youAreCurrentlyTheOnlyMemberOfThisFamily' | translate}}</h1>
+            <h1 class="mt-3">{{'youHaveNoFamilies' | translate}}</h1>
             <p class="lead">{{'inviteMoreMembers' | translate}}</p>
         </div>
     </div>

@@ -53,8 +53,8 @@ export class FamilyListsComponent implements OnInit {
     const config = {
       class: 'modal-dialog-centered',
       initialState: {
-        btnOkText: 'Save shoping list items',
-        btnCancelText: 'Cancel'
+        btnOkText: 'Zapisz',
+        btnCancelText: 'Anuluj'
       }
     }
     this.bsModalRef = this.modalService.show(CreateShoppingListModalComponent, config);

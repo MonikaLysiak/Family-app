@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title pull-left">{{'editShoppingList' | translate}}</h4>
+    <h4 class="modal-title pull-left">{{'editList' | translate}}</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
         <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
@@ -10,7 +10,7 @@
         <h2 class="text-center text-primary">{{'addItem' | translate}}</h2>
         <hr>
 
-        <app-text-input [formControl]="$any(editShoppingListForm.controls['item'])" [label]="'item'">
+        <app-text-input [formControl]="$any(editShoppingListForm.controls['item'])" [label]="'element'">
         </app-text-input>
 
         <div class="row" *ngIf="validationErrors">
@@ -29,7 +29,7 @@
     <div class="row" *ngIf="items">
         <ul
         #scrollMe
-        style="overflow: scroll; height: 500px;"
+        style="overflow: scroll; height: 300px;"
         [scrollTop]="scrollMe.scrollHeight"
         *ngIf="items.length > 0" class="chat">
             <li *ngFor="let item of items">

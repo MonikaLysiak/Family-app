@@ -1,25 +1,25 @@
-<div class="card border-primary border-4 mb-3" *ngIf="invitation">
+<div class="card border-primary border-4 mb-3 d-flex" *ngIf="invitation">
     <div class="card-header text-center">Zaprosiłeś użytkownika: </div>
     <div class="card-body p-2 pt-1">
-        <div class="row me-3">
-          <img src="{{invitation.userPhotoUrl || './assets/user.png'}}" alt="{{invitation.name}}" class="card-img w-50">
+        <div class="row me-1">
+          <img src="{{invitation.userPhotoUrl || './assets/user.png'}}" alt="{{invitation.name}}" class="card-img m-0 e-0 w-50">
           <div class="w-50">
               <div class="d-flex justify-content-between">
-                  <p class="card-text">username: </p>
-                  <p class="card-text"><strong>{{invitation.userName}}</strong></p>
+                  <p class="card-text">{{'user' | translate}}: </p>
+                  <p class="card-text"><strong> {{invitation.userName}}</strong></p>
               </div>
               <div class="d-flex justify-content-between">
-                  <p class="card-text">name: </p>
-                  <p class="card-text"><strong>{{invitation.name}}</strong></p>
+                  <p class="card-text">{{'name' | translate}}: </p>
+                  <p class="card-text"><strong> {{invitation.name}}</strong></p>
               </div>
               <div class="d-flex justify-content-between">
-                  <p class="card-text">surname: </p>
-                  <p class="card-text"><strong>{{invitation.surname}}</strong></p>
+                  <p class="card-text">{{'surname' | translate}}: </p>
+                  <p class="card-text"><strong> {{invitation.surname}}</strong></p>
               </div>
           </div>
         </div>    
     </div>
-    <h5 class="card-title text-center">do rodziny <strong>{{invitation.familyName}}</strong></h5>
-    <img src="{{invitation.familyPhotoUrl || './assets/user.png'}}" alt="{{invitation.name}}" class="card-img ps-5 pe-5 mb-0">
-    <button type="button" (click)="deleteInvitation()" class="btn btn-danger m-2 ms-5 me-5">Delete invitation</button>
+    <h5 class="card-title text-center">do rodziny {{invitation.familyName}}</h5>
+    <img src="{{invitation.familyPhotoUrl || './assets/user.png'}}" alt="{{invitation.name}}" class="card-img mb-0" style="max-width: 200px; height: auto;  margin-left: 83px;">
+    <button type="button" (click)="deleteInvitation()" class="btn btn-danger m-2 ms-5 me-5">Usuń zaproszenie</button>
 </div>

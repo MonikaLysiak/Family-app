@@ -79,22 +79,6 @@ public class MessageHub : Hub
 
         var groupName = GetGroupName(createMessageDto.FamilyId);
 
-        var group = await _uow.MessageRepository.GetMessageGroup(groupName);
-
-        //below should not work, how does it work, it should be username
-        // it might be to track if the user has read the messege, maby it should be deleted entirely
-        var connections = await PresenceTracker.GetConnectionsForUser(createMessageDto.FamilyId.ToString()); // , username ?? check this method again
-        
-        // make it so that all members of the family get notification except of the sender user
-        // must change connections ??
-        // must change receiving methods in client??
-        // must add family name in notification ??
-        
-        if (connections != null)
-        {
-            await _presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived", new {username = sender.UserName, knownAs = sender.Name});
-        }
-
         _uow.MessageRepository.AddMessage(message);
 
         if (await _uow.Complete())

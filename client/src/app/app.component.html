@@ -2,9 +2,13 @@
     <h3>Loading...</h3>
 </ngx-spinner>
 
+<div *ngIf="router.url === '/'" class="container background-photo-container">
+    <img class="background-photo" src="./assets/pexels-pixabay-160994_medium.jpg">    
+</div>
+
 <app-nav></app-nav>
 
-<div style="padding-top: 70px;">
+<div class="container" style="padding-top: 70px;">
     <router-outlet></router-outlet>
 </div>
 

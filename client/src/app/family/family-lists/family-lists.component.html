@@ -6,7 +6,7 @@
             <div class="col-2">
                 <button (click)="createList()" class="btn btn-primary btn-lg me-2">{{'createList' | translate}}</button>
             </div>
-            <div class="col-2" *ngFor="let list of familyLists">
+            <div class="col-3" *ngFor="let list of familyLists">
                 <app-family-list-card [familyList]="list"></app-family-list-card>
             </div>
         </div>
@@ -34,7 +34,7 @@
         </div>
 
         <div class="text-center">
-            <button (click)="createList()" class="btn btn-primary btn-lg me-2">Create list</button>
+            <button (click)="createList()" class="btn btn-primary btn-lg me-2">{{'createList' | translate}}</button>
         </div>
     </div>
 </div>

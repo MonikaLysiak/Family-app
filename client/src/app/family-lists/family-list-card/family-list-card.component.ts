@@ -26,8 +26,8 @@ export class FamilyListCardComponent {
     const config = {
       class: 'modal-dialog-centered',
       initialState: {
-        btnOkText: 'Save shoping list',
-        btnCancelText: 'Cancel',
+        btnOkText: 'Zapisz',
+        btnCancelText: 'Anuluj',
         shoppingListId: this.familyList.id,
         items: this.familyList.listItems
       }

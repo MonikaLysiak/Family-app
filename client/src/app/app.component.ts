@@ -3,6 +3,7 @@ import { AccountService } from './_services/account.service';
 import { User } from './_models/user';
 import { Family } from './_models/family';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,8 @@ import { TranslateService } from '@ngx-translate/core';
 export class AppComponent implements OnInit{
   title = 'Family app';
 
-  constructor(private accountService: AccountService, public translateService: TranslateService) {
-    translateService.addLangs(['en', 'pl']);
+  constructor(private accountService: AccountService, public translateService: TranslateService, public router: Router) {
+    translateService.addLangs(['pl']);
     translateService.setDefaultLang('pl');
   }
 

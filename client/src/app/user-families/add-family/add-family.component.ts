@@ -21,7 +21,7 @@ export class AddFamilyComponent {
 
   initializeForm() {
     this.registerForm = this.fb.group({
-      familyName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]]
+      familyName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]]
     });
   }
   

@@ -40,7 +40,7 @@ export class CreateShoppingListModalComponent implements OnInit {
 
   initializeForm() {
     this.addShoppingListForm = this.fb.group({
-      shoppingListName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]]
+      shoppingListName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(25)]]
     });
   }
 

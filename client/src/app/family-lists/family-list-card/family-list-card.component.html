@@ -1,7 +1,7 @@
 <div class="card mb-3 border-primary border-2" (click)="editList()" *ngIf="familyList">
     <h4 class="card-header">{{familyList.name}}</h4>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item" *ngFor="let item of familyList.listItems">
+    <ul class="pt-2 mb-0">
+        <li class="pb-0" *ngFor="let item of familyList.listItems">
             <p [ngClass]="{'text-decoration-line-through': item.isChecked}">{{item.content}}</p>
         </li>
     </ul>

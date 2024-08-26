@@ -32,7 +32,7 @@ public class FamilyRepository : IFamilyRepository
         //add family created and fix below
         query = familyParams.OrderBy switch
         {
-            "created" => query.OrderByDescending(x => x.Name),
+            "created" => query.OrderByDescending(x => x.Created),
             _ => query.OrderByDescending(x => x.Name)
         };
 

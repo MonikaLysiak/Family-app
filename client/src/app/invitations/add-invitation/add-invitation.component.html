@@ -1,7 +1,7 @@
 <form class="container w-50" [formGroup]="addFamilyMemberForm" (ngSubmit)="addFamilyMemberForm.valid && inviteFamilyMember()" autocomplete="off">
     <h2 class="text-center text-primary m-3">{{'inviteNewFamilyMember' | translate}}</h2>
 
-    <app-text-input [formControl]="$any(addFamilyMemberForm.controls['username'])" [label]="'username'">
+    <app-text-input [formControl]="$any(addFamilyMemberForm.controls['username'])" [label]="'nazwa użytkownika'">
     </app-text-input>
 
     <div class="row" *ngIf="validationErrors">

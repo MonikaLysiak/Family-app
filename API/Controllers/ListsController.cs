@@ -63,7 +63,8 @@ public class ListsController : BaseApiController
     [HttpPost("edit")]
     public async Task<ActionResult<FamilyListDto>> EditFamilyList(FamilyListDto editedList)
     {
-        //must add family id and check if the user can edit this list
+        // ! must add family id and check if the user can edit this list
+        // !! also does not realy work dont know why?? does nt update anythng
         var familyList = await _uow.ListsRepository.GetList(editedList.Id);
 
         if (familyList == null) return NotFound("There is no user of that id");

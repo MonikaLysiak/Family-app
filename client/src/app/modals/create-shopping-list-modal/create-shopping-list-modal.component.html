@@ -6,10 +6,10 @@
 </div>
 <div class="modal-body" *ngIf="!addItemsMode">
     <form [formGroup]="addShoppingListForm" (ngSubmit)="addShoppingListForm.valid && addShoppingList()" autocomplete="off">
-        <h2 class="text-center text-primary">{{'createShoppingList' | translate}}</h2>
+        <h2 class="text-center text-primary">{{'createList' | translate}}</h2>
         <hr>
 
-        <app-text-input [formControl]="$any(addShoppingListForm.controls['shoppingListName'])" [label]="'shoppingListName'">
+        <app-text-input [formControl]="$any(addShoppingListForm.controls['shoppingListName'])" [label]="'nazwa listy'">
         </app-text-input>
 
         <div class="row" *ngIf="validationErrors">
@@ -21,14 +21,14 @@
         </div>
 
         <div class="text-center">
-            <button [disabled]="!addShoppingListForm.valid" class="btn btn-success me-2" type="submit">{{'addList' | translate}}</button>
+            <button [disabled]="!addShoppingListForm.valid" class="btn btn-success me-2 mt-2" type="submit">{{'addList' | translate}}</button>
         </div>
     </form>
 </div>
 
 <div class="modal-body" *ngIf="addItemsMode">
     <form [formGroup]="addItemForm" (ngSubmit)="addItemForm.valid && addItem()" autocomplete="off">
-        <h2 class="text-center text-primary">{{'addItem' | translate}}</h2>
+        <h5 class="text-center text-primary mt-2">{{'addItem' | translate}} do listy {{shoppingListName}}</h5>
         <hr>
 
         <app-text-input [formControl]="$any(addItemForm.controls['item'])" [label]="'item'">
@@ -43,14 +43,14 @@
         </div>
 
         <div class="text-center">
-            <button [disabled]="!addItemForm.valid" class="btn btn-success me-2" type="submit">{{'addItem' | translate}}</button>
+            <button [disabled]="!addItemForm.valid" class="btn btn-success mt-2 me-2" type="submit">{{'addItem' | translate}}</button>
         </div>
     </form>
 
     <div class="row" *ngIf="items">
         <ul
         #scrollMe
-        style="overflow: scroll; height: 500px;"
+        style="overflow: scroll; height: 300px;"
         [scrollTop]="scrollMe.scrollHeight"
         *ngIf="items.length > 0" class="chat">
             <li *ngFor="let item of items">
