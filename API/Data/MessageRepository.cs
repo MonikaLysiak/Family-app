@@ -66,6 +66,7 @@ public class MessageRepository : IMessageRepository
                 m => m.FamilyId == familyId && 
                 m.SenderDeleted == false
             )
+            .Include(x => x.Sender.UserPhotos)
             .OrderBy(m => m.MessageSent)
             .AsQueryable();
 

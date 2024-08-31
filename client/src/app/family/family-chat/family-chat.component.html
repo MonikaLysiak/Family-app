@@ -5,41 +5,28 @@
         </div>
         <ul 
             #scrollMe
-            style="overflow: scroll; height: 500px;"
+            class="chat"
             [scrollTop]="scrollMe.scrollHeight"
-            *ngIf="(messageService.messageThread$ | async)!.length > 0" class="chat">
-            <li *ngFor="let message of (messageService.messageThread$ | async)">
-                <div *ngIf="message.senderUsername != username">
-                    <span class="chat-img float-end">
-                        <img 
-                            class="rounded-circle"
-                            src="{{message.senderPhotoUrl || './assets/user.png'}}"
-                            alt="image of user">
-                    </span>
-                    <div class="chat-body">
-                        <div class="header">
-                            <small class="text-muted">
-                                <span class="fa fa-clock-o">{{message.messageSent | timeago}}</span>
-                            </small>
-                        </div>
-                        <p>{{message.content}}</p>
+            *ngIf="(messageService.messageThread$ | async)!.length > 0">
+            <li *ngFor="let message of (messageService.messageThread$ | async)" 
+                [ngClass]="{'message-left': message.senderUsername != username, 'message-right': message.senderUsername == username}">
+                
+                <!-- User image -->
+                <span class="chat-img">
+                    <img 
+                        class="rounded-circle"
+                        src="{{message.senderPhotoUrl || './assets/user.png'}}"
+                        alt="image of user">
+                </span>
+                
+                <!-- Message body -->
+                <div class="chat-body">
+                    <div class="header">
+                        <small class="text-muted">
+                            <span class="fa fa-clock-o">{{message.messageSent | timeago}}</span>
+                        </small>
                     </div>
-                </div>
-                <div *ngIf="message.senderUsername == username">
-                    <span class="chat-img">
-                        <img 
-                            class="rounded-circle"
-                            src="{{message.senderPhotoUrl || './assets/user.png'}}"
-                            alt="image of user">
-                    </span>
-                    <div class="chat-body float-end">
-                        <div class="header">
-                            <small class="text-muted">
-                                <span class="fa fa-clock-o">{{message.messageSent | timeago}}</span>
-                            </small>
-                        </div>
-                        <p>{{message.content}}</p>
-                    </div>
+                    <p>{{message.content}}</p>
                 </div>
             </li>
         </ul>

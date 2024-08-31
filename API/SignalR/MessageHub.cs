@@ -62,7 +62,7 @@ public class MessageHub : Hub
         if (!await _uow.FamilyRepository.IsFamilyMember(createMessageDto.FamilyId, userId))
             throw new HubException("You are not a member of this family");
 
-        var sender = await _uow.UserRepository.GetUserByIdAsync(userId);
+        var sender = await _uow.UserRepository.GetUserWithPhotosByIdAsync(userId);
         var family = await _uow.FamilyRepository.GetFamilyByIdAsync(createMessageDto.FamilyId) ?? throw new HubException("Not found user");
         
         var message = new Message

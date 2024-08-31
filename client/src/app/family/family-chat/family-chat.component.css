@@ -1,19 +1,90 @@
+/* Container styles */
 .card {
     border: none;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 20px;
 }
 
 .chat {
     list-style: none;
     margin: 0;
     padding: 0;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 .chat li {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px dotted #B3A9A9;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.chat-img {
+    margin: 0 10px;
 }
 
 .rounded-circle {
-    max-height: 50px;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+/* Styles for other users' messages */
+.message-left {
+    flex-direction: row;
+}
+
+.message-left .chat-body {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 10px 15px;
+    max-width: 70%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.message-left .chat-body .header {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #999;
+}
+
+/* Styles for the user's own messages */
+.message-right {
+    flex-direction: row-reverse;
+}
+
+.message-right .chat-body {
+    background-color: #f9cdcd;
+    border-radius: 10px;
+    padding: 10px 15px;
+    max-width: 70%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.message-right .chat-body .header {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #999;
+}
+
+/* Footer input styles */
+.card-footer {
+    background-color: #f5f5f5;
+    border-top: none;
+    padding: 15px 20px;
+}
+
+.input-group .form-control {
+    border-radius: 20px;
+    border: 1px solid #ddd;
+}
+
+.input-group .btn {
+    border-radius: 20px;
+    padding: 5px 15px;
 }
