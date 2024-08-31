@@ -37,4 +37,8 @@ export class ListService {
     };
     return this.http.post<FamilyList>(this.baseUrl + 'lists/edit', requestBody).subscribe(r=>{});
   }
+
+  deleteList(id: number){
+    return this.http.delete(this.baseUrl + 'lists/' + id).subscribe(r=>{});
+  }
 }

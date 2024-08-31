@@ -1,7 +1,8 @@
-<div class="card mb-3 border-primary border-2" (click)="editList()" *ngIf="familyList">
-    <h4 class="card-header">{{familyList.name}}</h4>
-    <ul class="pt-2 mb-0">
-        <li class="pb-0" *ngFor="let item of familyList.listItems">
+<div class="card mb-3 border-primary border-2" *ngIf="familyList">
+    <h4 class="card-header">{{familyList.name}} <span class="float-end" (click)="deleteList()"><i class="fa fa-trash" aria-hidden="true"></i>
+    </span></h4>
+    <ul class="pt-2 mb-0" (click)="editList()">
+        <li class="pb-0" *ngFor="let item of displayedItems">
             <p [ngClass]="{'text-decoration-line-through': item.isChecked}">{{item.content}}</p>
         </li>
     </ul>

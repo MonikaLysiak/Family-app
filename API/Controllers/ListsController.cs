@@ -106,9 +106,6 @@ public class ListsController : BaseApiController
 
         var list = await _uow.ListsRepository.GetList(id);
 
-        //unnecessary ?? to be deleted
-        if (list.AuthorId != userId) return Unauthorized();
-
         if (!await _uow.FamilyRepository.IsFamilyMember(list.FamilyId, userId))
             return BadRequest("You are not a member of this family");
 
