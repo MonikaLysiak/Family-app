@@ -62,8 +62,8 @@
     <div class="dropdown ms-5 d-flex" dropdown>
       <span class="text-light text-decoration-none ms-2" (click)="$event.stopPropagation()">
         <select class="form-control" #selectedLang (change)="switchLang(selectedLang.value)">
-          <option *ngFor="let language of translateService.getLangs()" [value]="language"
-            [selected]="language === translateService.currentLang">
+          <option *ngFor="let language of accountService.translateService.getLangs()" [value]="language"
+            [selected]="language === (accountService.currentLanguage$ | async)">
             {{ language }}
           </option>
         </select>

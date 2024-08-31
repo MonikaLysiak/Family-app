@@ -43,12 +43,13 @@ public class ListsController : BaseApiController
             Category = category,
             AuthorId = author.Id,
             FamilyId = family.Id,
-            CategoryId =createListDto.CategoryId
+            CategoryId = createListDto.CategoryId
         };
 
         foreach (var listItem in createListDto.ListItems)
         {
-            familyList.ListItems.Add(new ListItem {
+            familyList.ListItems.Add(new ListItem
+            {
                 Content = listItem
             });
         }
@@ -64,21 +65,23 @@ public class ListsController : BaseApiController
     public async Task<ActionResult<FamilyListDto>> EditFamilyList(FamilyListDto editedList)
     {
         // ! must add family id and check if the user can edit this list
-        // !! also does not realy work dont know why?? does nt update anythng
-        var familyList = await _uow.ListsRepository.GetList(editedList.Id);
+        // !! also does not realy work dont know why?? does not update anything
+        var familyList = await _uow.ListsRepository.GetListWithItems(editedList.Id);
 
         if (familyList == null) return NotFound("There is no user of that id");
 
-        familyList.ListItems = new List<ListItem>();
+        familyList.ListItems.Clear();
 
-        foreach (var listItem in editedList.ListItems)
+        familyList.ListItems = [];
+
+        var newItems = editedList.ListItems.Select(listItem => new ListItem
         {
-            familyList.ListItems.Add(new ListItem {
-                Content = listItem.Content,
-                IsChecked = listItem.IsChecked,
-                FamilyListId = familyList.Id
-            });
-        }
+            Content = listItem.Content,
+            IsChecked = listItem.IsChecked,
+            FamilyListId = familyList.Id
+        }).ToList();
+
+        familyList.ListItems.AddRange(newItems);
 
         if (await _uow.Complete()) return Ok(_mapper.Map<FamilyListDto>(familyList));
 
@@ -86,7 +89,7 @@ public class ListsController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedList<FamilyListDto>>> GetFamilyLists([FromQuery]FamilyListsParams familyListsParams)
+    public async Task<ActionResult<PagedList<FamilyListDto>>> GetFamilyLists([FromQuery] FamilyListsParams familyListsParams)
     {
         var userId = User.GetUserId();
 

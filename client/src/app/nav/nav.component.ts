@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -12,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class NavComponent implements OnInit{
   model: any = {};
 
-  constructor(public accountService: AccountService, private router: Router, public translateService: TranslateService) {}
+  constructor(public accountService: AccountService, private router: Router) {}
 
   ngOnInit(): void {
   }
@@ -32,6 +31,6 @@ export class NavComponent implements OnInit{
   }
 
   switchLang(lang: string) {
-    this.translateService.use(lang);
+    this.accountService.setCurrentLanguage(lang);
   }
 }

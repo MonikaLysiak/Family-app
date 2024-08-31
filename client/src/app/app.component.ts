@@ -13,14 +13,22 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit{
   title = 'Family app';
 
-  constructor(private accountService: AccountService, public translateService: TranslateService, public router: Router) {
-    translateService.addLangs(['pl']);
-    translateService.setDefaultLang('pl');
+  constructor(private accountService: AccountService, public router: Router) {
+    accountService.translateService.addLangs(['pl', 'en']);
+    accountService.translateService.setDefaultLang('en');
+  }
+
+  setCurrentLanguage() {
+    let language = localStorage.getItem('language');
+    if(!language) language = 'en';
+    const lang: string = JSON.parse(language);
+    this.accountService.setCurrentLanguage(lang);
   }
 
   ngOnInit(): void {
       this.setCurrentUser();
       this.setCurrentUserFamily();
+      this.setCurrentLanguage();
   }
 
   setCurrentUser() {

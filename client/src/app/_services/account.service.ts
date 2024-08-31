@@ -5,6 +5,7 @@ import { User } from '../_models/user';
 import { environment } from 'src/environments/environment';
 import { PresenceService } from './presence.service';
 import { Family } from '../_models/family';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,16 @@ export class AccountService {
   private currentFamilySource = new BehaviorSubject<Family | null>(null);
   currentFamily$ = this.currentFamilySource.asObservable();
 
-  constructor(private http: HttpClient, private presenceService: PresenceService) { }
+  private currentLanguageSource = new BehaviorSubject<string | null>(null);
+  currentLanguage$ = this.currentLanguageSource.asObservable();
+
+  constructor(private http: HttpClient, private presenceService: PresenceService, public translateService: TranslateService) { }
+  
+  setCurrentLanguage(language: string){
+    this.translateService.use(language);
+    this.currentLanguageSource.next(language);
+    localStorage.setItem('language', JSON.stringify(language));
+  }
 
   login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(

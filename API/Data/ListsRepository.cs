@@ -67,7 +67,6 @@ public class ListsRepository : IListsRepository
             .FirstOrDefaultAsync(x => x.Name == groupName);
     }
 
-
     public async Task<IEnumerable<FamilyListDto>> GetFamilyLists(int familyId)
     {
         var query = _context.Lists
