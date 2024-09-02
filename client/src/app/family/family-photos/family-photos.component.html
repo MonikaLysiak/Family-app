@@ -3,7 +3,7 @@
         <tab heading="{{'gallery' | translate}}" class="container w-50">
             <gallery *ngIf="family.familyPhotos.length > 0" [items]="images" class="gallery"></gallery>
         </tab>
-        <tab heading="{{'editPhotos' | translate}}">
+        <tab heading="{{'editPhotos' | translate}}" class="container">
             <app-family-photo-edytor [family]="family"></app-family-photo-edytor>
         </tab>
     </tabset>

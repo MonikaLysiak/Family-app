@@ -30,7 +30,6 @@ public class FamilyController : BaseApiController
 
         var user = await _uow.UserRepository.GetUserByUsernameAsync(username);
 
-        // add Create property for family
         var family = new Family
         {
             Name = familyName
@@ -48,8 +47,6 @@ public class FamilyController : BaseApiController
         };
 
         user.UserFamilies.Add(userFamily);
-        // why not two ads in invitations / likes ??
-        // should i remove the second add ??
         family.UserFamilies.Add(userFamily);
         
         if (await _uow.Complete()) {

@@ -1,73 +1,56 @@
-<div class="row" *ngIf="member">
-    <div class="col-4">
-        <h1>Your profile</h1>
-    </div>
-    <div class="col-8">
-        <div class="alert alert-info pb-0" *ngIf="editForm.dirty">
-            <p><strong>Information: </strong>You have made changes. Any unsaved changes will be lost</p>
+<div class="w-75 mx-auto">
+    <div class="row" *ngIf="member">
+        <!-- Profile Heading -->
+        <div class="col-12 text-center mb-4">
+            <h1 class="display-4">Your Profile</h1> <!-- Larger, centered heading -->
         </div>
-    </div>
-    <div class="col-4">
-        <div class="card">
-            <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.nickname}}" class="card-img-top img-thumbnail">
-            <div class="card-body">
-                <div>
-                    <strong>Location:</strong>
-                    <!-- <p>{{member.city}}, {{member.country}}</p> -->
-                </div>
-                <div>
-                    <strong>Age:</strong>
-                    <p>{{member.age}}</p>
-                </div>
-                <div>
-                    <strong>Last active:</strong>
-                    <p>{{member.lastActive | timeago}}</p>
-                </div>
-                <div>
-                    <strong>Mamber since:</strong>
-                    <p>{{member.created | date: 'longDate'}}</p>
-                </div>
-            </div>
-            <div class="card-footer">
-                <button type="submit" [disabled]="!editForm.dirty" form="editForm" class="btn btn-success col-12">Save changes</button>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-8">
-        <tabset class="member-tabset">
-            <tab heading="About {{member.nickname}}">
-                <form #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
-                    <h4 class="mt-2">Description</h4>
-                    <textarea class="form-control"
-                        [(ngModel)]="member.gender"
-                        name="introduction"
-                        rows="6"
-                    ></textarea>
-                    <!-- <h4 class="mt-2">Looking for</h4>
-                    <textarea class="form-control"
-                        [(ngModel)]="member.lookingFor"
-                        name="lookingFor"
-                        rows="6"
-                    ></textarea>
-                    <h4 class="mt-2">Interests</h4>
-                    <textarea class="form-control"
-                        [(ngModel)]="member.interests"
-                        name="interests"
-                        rows="6"
-                    ></textarea> -->
-                </form>
-                <h4 class="mt-2">Location Details: </h4>
-                <!-- <div class="d-flex flex-row aligh-items-center">
-                    <label for="city">City: </label>
-                    <input type="text" [(ngModel)]="member.city" name="city" class="form-control mx-2">
-                    <label for="country">Country: </label>
-                    <input type="text" [(ngModel)]="member.country" name="country" class="form-control mx-2">
-                </div> -->
-            </tab>
-            <tab heading="Edit Photos">
-                <app-photo-edytor [member]="member"></app-photo-edytor>
-            </tab>
-        </tabset>
+        <!-- Profile Information -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card text-center">
+                <!-- Profile Image -->
+                <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.nickname}}" class="card-img-top img-thumbnail mx-auto mt-3" style="max-width: 150px; max-height: 150px;">
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-6 text-left">
+                            <div>
+                                <strong>Imię:</strong>
+                                <p>{{member.name}}</p>
+                            </div>
+                            <div>
+                                <strong>Nazwisko:</strong>
+                                <p>{{member.surname}}</p>
+                            </div>
+                            <div>
+                                <strong>Nazwa użytkownika:</strong>
+                                <p>{{member.userName}}</p>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="col-6 text-left">
+                            <div>
+                                <strong>Wiek:</strong>
+                                <p>{{member.age}}</p>
+                            </div>
+                            <div>
+                                <strong>Data dołączenia:</strong>
+                                <p>{{member.created | date: 'longDate'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Photos Tab -->
+        <div class="col-lg-8 col-md-6">
+            <tabset class="member-tabset">
+                <tab heading="Edit Photos">
+                    <app-photo-edytor [member]="member"></app-photo-edytor>
+                </tab>
+            </tabset>
+        </div>
     </div>
 </div>
