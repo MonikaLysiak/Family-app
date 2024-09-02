@@ -1,0 +1,17 @@
+"filename", "language", "TypeScript", "Database", "HTML", "C#", "CSS", "comment", "blank", "total"
+"c:\Users\k1212\Documents\FamilyApp\API\Controllers\FamilyController.cs", "C#", 0, 0, 0, 0, 0, -3, 0, -3
+"c:\Users\k1212\Documents\FamilyApp\API\Controllers\ListsController.cs", "C#", 0, 0, 0, 0, 0, -1, 0, -1
+"c:\Users\k1212\Documents\FamilyApp\API\Controllers\MessagesController.cs", "C#", 0, 0, 0, 0, 0, -7, -1, -8
+"c:\Users\k1212\Documents\FamilyApp\API\Controllers\UsersController.cs", "C#", 0, 0, 0, -5, 0, -3, -1, -9
+"c:\Users\k1212\Documents\FamilyApp\API\Data\FamilyRepository.cs", "C#", 0, 0, 0, 0, 0, -1, 0, -1
+"c:\Users\k1212\Documents\FamilyApp\API\Data\MessageRepository.cs", "C#", 0, 0, 0, -1, 0, 0, 0, -1
+"c:\Users\k1212\Documents\FamilyApp\API\Data\UserRepository.cs", "C#", 0, 0, 0, -4, 0, 0, -2, -6
+"c:\Users\k1212\Documents\FamilyApp\API\familyapp.db", "Database", 0, -2, 0, 0, 0, 0, 0, -2
+"c:\Users\k1212\Documents\FamilyApp\client\src\app\app-routing.module.ts", "TypeScript", -3, 0, 0, 0, 0, 0, 0, -3
+"c:\Users\k1212\Documents\FamilyApp\client\src\app\members\member-detail\member-detail.component.css", "CSS", 0, 0, 0, 0, -14, 0, -3, -17
+"c:\Users\k1212\Documents\FamilyApp\client\src\app\members\member-detail\member-detail.component.html", "HTML", 0, 0, -43, 0, 0, -11, -1, -55
+"c:\Users\k1212\Documents\FamilyApp\client\src\app\members\member-detail\member-detail.component.ts", "TypeScript", -75, 0, 0, 0, 0, -1, -11, -87
+"c:\Users\k1212\Documents\FamilyApp\client\src\app\members\member-edit\member-edit.component.html", "HTML", 0, 0, -2, 0, 0, -19, 0, -21
+"c:\Users\k1212\Documents\FamilyApp\client\src\app\register\register.component.html", "HTML", 0, 0, -2, 0, 0, 0, 0, -2
+"c:\Users\k1212\Documents\FamilyApp\client\src\app\register\register.component.ts", "TypeScript", -1, 0, 0, 0, 0, 0, 0, -1
+"Total", "-", -79, -2, -47, -10, -14, -46, -19, -217

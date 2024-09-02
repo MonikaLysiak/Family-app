@@ -29,7 +29,6 @@ public class FamilyRepository : IFamilyRepository
 
         query = query.Where(x => x.UserFamilies.Any(uf => uf.UserId == familyParams.CurrentUserId));
 
-        //add family created and fix below
         query = familyParams.OrderBy switch
         {
             "created" => query.OrderByDescending(x => x.Created),

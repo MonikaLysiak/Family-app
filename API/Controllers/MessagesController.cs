@@ -74,15 +74,7 @@ public class MessagesController : BaseApiController
             return BadRequest("You are not a member of this family");
 
         message.SenderDeleted = true;
-
-        //not going to delete messages entirely, only not showing (delete maby when admin or family owner deletes it to ??)
-        //maby make functionaliy of retriving messages ??
-        //maby show that a message has been deleted ??
-        // if (message.SenderDeleted)
-        // {
-        //     _uow.MessageRepository.DeleteMessage(message);
-        // }
-
+        
         if (await _uow.Complete()) return Ok();
 
         return BadRequest("Problem deleting message");

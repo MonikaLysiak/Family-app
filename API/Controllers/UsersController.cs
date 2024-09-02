@@ -26,15 +26,7 @@ public class UsersController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
     {
-        var gender = await _uow.UserRepository.GetUserGender(User.GetUsername());
         userParams.CurrentUsername = User.GetUsername();
-
-        // make this an enum or delete entirely
-        // must change filters and sorting and add seeking of username etc.
-        if (string.IsNullOrEmpty(userParams.Gender))
-        {
-            userParams.Gender = gender == "male" ? "female" : "male";
-        }
 
         var users = await _uow.UserRepository.GetMembersAsync(userParams);
 
@@ -84,7 +76,6 @@ public class UsersController : BaseApiController
 
         user.UserPhotos.Add(photo);
 
-        //GetUser should return user with photos?? now it does not ??
         if (await _uow.Complete()) 
         {
             return CreatedAtAction(nameof(GetUser), new {username = user.UserName}, _mapper.Map<PhotoDto>(photo));
