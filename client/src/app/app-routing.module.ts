@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { MemberListComponent } from './members/member-list/member-list.component';
-import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { authGuard } from './_guards/auth.guard';
 import { TestErrorComponent } from './errors/test-error/test-error.component';
@@ -22,6 +21,7 @@ import { FamilyMemberDetailsComponent } from './family-member/family-member-deta
 import { familyDetailedResolver } from './_resolvers/family-detailed.resolver';
 import { InvitationsComponent } from './invitations/invitations/invitations.component';
 import { FamilyChatComponent } from './family/family-chat/family-chat.component';
+import { RecipesComponent } from './family/family-recipes/family-recipes.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -39,7 +39,7 @@ const routes: Routes = [
       {path: 'familyChat', component: FamilyChatComponent},
       {path: 'messages', component: MessagesComponent},
       {path: 'member/edit', component: MemberEditComponent, canDeactivate: [preventUnsavedChangesGuard]},
-      {path: 'lists', component: ListsComponent},
+      {path: 'familyRecipes', component: RecipesComponent},
       {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]},
       {path: 'members', component: MemberListComponent}
     ]

@@ -8,15 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class FamilyRepository : IFamilyRepository
+public class FamilyRepository(DataContext context, IMapper mapper) : IFamilyRepository
 {
-    private readonly DataContext _context;
-    private readonly IMapper _mapper;
-    public FamilyRepository(DataContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+    private readonly DataContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
     public void AddFamily(Family family)
     {

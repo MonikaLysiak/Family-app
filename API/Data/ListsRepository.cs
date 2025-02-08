@@ -7,18 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class ListsRepository : IListsRepository
+public class ListsRepository(DataContext context, IMapper mapper) : IListsRepository
 {
-    private readonly DataContext _context;
-    private readonly IMapper _mapper;
+    private readonly DataContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
-    public ListsRepository(DataContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-    
-    // same in messeges repo, maby add hepler or service later on ?? or ConnectionRepo ??
+    // same in messeges repo, mayby add hepler or service later on ?? or ConnectionRepo ??
     // also must add messeges / lists to group name so that there wont be same name for both (as for now it is only an Id)
     public void AddGroup(Group group)
     {
@@ -35,13 +29,13 @@ public class ListsRepository : IListsRepository
         _context.Lists.Remove(familyList);
     }
 
-    // same in messeges repo, maby add hepler or service later on ?? or ConnectionRepo ??
+    // same in messeges repo, mayby add hepler or service later on ?? or ConnectionRepo ??
     public async Task<Connection> GetConnection(string connectionId)
     {
         return await _context.Connections.FindAsync(connectionId);
     }
 
-    // same in messeges repo, maby add hepler or service later on ?? or ConnectionRepo ??
+    // same in messeges repo, mayby add hepler or service later on ?? or ConnectionRepo ??
     public async Task<Group> GetGroupForConnection(string connectionId)
     {
         return await _context.Groups
@@ -84,7 +78,7 @@ public class ListsRepository : IListsRepository
         return await _context.Categories.FindAsync(categoryId);
     }
     
-    // same in messeges repo, maby add hepler or service later on ?? or ConnectionRepo ??
+    // same in messeges repo, mayby add hepler or service later on ?? or ConnectionRepo ??
     public void RemoveConnection(Connection connection)
     {
         _context.Connections.Remove(connection);

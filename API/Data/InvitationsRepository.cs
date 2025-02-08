@@ -6,13 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class InvitationsRepository : IInvitationsRepository
+public class InvitationsRepository(DataContext context) : IInvitationsRepository
 {
-    private readonly DataContext _context;
-    public InvitationsRepository(DataContext context)
-    {
-        _context = context;
-    }
+    private readonly DataContext _context = context;
 
     public async Task<Invitation> GetUserInvitationAsync(int familyId, int targetUserId)
     {

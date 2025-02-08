@@ -56,7 +56,7 @@ export class FamilyPhotoEdytorComponent {
     })
   }
 
-  // maby change family in account service to not have photos
+  // mayby change family in account service to not have photos
   // and then have there currentFamily and here use both currentFamily and family
   // then updating currentFamily only when changing main photo
 

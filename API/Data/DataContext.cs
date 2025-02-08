@@ -23,6 +23,8 @@ public class DataContext : IdentityDbContext<AppUser, AppRole, int,
 
     public DbSet<FamilyList> Lists { get; set; }
 
+    public DbSet<Recipe> Recipes { get; set; }
+
     public DbSet<AppUserFamily> AppUsersFamilies { get; set; }
 
     public DbSet<Category> Categories { get; set; }

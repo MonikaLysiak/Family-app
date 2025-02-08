@@ -8,16 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class FamilyMemberRepository : IFamilyMemberRepository
+public class FamilyMemberRepository(DataContext context, IMapper mapper) : IFamilyMemberRepository
 {
-    private readonly DataContext _context;
-    private readonly IMapper _mapper;
-    public FamilyMemberRepository(DataContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-    
+    private readonly DataContext _context = context;
+    private readonly IMapper _mapper = mapper;
+
     public async Task<PagedList<MemberDto>> GetFamilyMembersAsync(FamilyMemberParams familyMemberParams)
     {
         var test = _context.AppUsersFamilies.AsQueryable();

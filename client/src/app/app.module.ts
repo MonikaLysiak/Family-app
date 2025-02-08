@@ -10,7 +10,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { MemberListComponent } from './members/member-list/member-list.component';
-import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { SharedModule } from './_models/shared.module';
 import { TestErrorComponent } from './errors/test-error/test-error.component';
@@ -49,6 +48,7 @@ import { FamilyListCardComponent } from './family-lists/family-list-card/family-
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { EditShoppingListModalComponent } from './modals/edit-shopping-list-modal/edit-shopping-list-modal.component';
+import { RecipesComponent } from './family/family-recipes/family-recipes.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +57,6 @@ import { EditShoppingListModalComponent } from './modals/edit-shopping-list-moda
     HomeComponent,
     RegisterComponent,
     MemberListComponent,
-    ListsComponent,
     MessagesComponent,
     TestErrorComponent,
     NotFoundComponent,
@@ -86,7 +85,8 @@ import { EditShoppingListModalComponent } from './modals/edit-shopping-list-moda
     AddInvitationComponent,
     CreateShoppingListModalComponent,
     FamilyListCardComponent,
-    EditShoppingListModalComponent
+    EditShoppingListModalComponent,
+    RecipesComponent
   ],
   imports: [
     BrowserModule,

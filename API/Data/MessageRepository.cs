@@ -7,16 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class MessageRepository : IMessageRepository
+public class MessageRepository(DataContext context, IMapper mapper) : IMessageRepository
 {
-    private readonly DataContext _context;
-    private readonly IMapper _mapper;
-
-    public MessageRepository(DataContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+    private readonly DataContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
     public void AddGroup(Group group)
     {

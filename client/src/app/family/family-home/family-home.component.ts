@@ -3,10 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
 import { Family } from 'src/app/_models/family';
 import { AccountService } from 'src/app/_services/account.service';
-import {faPeopleRoof} from'@fortawesome/free-solid-svg-icons'
-import {faRectangleList} from'@fortawesome/free-solid-svg-icons'
-import {faImages} from'@fortawesome/free-solid-svg-icons'
-import {faComments} from'@fortawesome/free-solid-svg-icons'
+import { faPeopleRoof } from'@fortawesome/free-solid-svg-icons'
+import { faRectangleList } from'@fortawesome/free-solid-svg-icons'
+import { faCutlery } from '@fortawesome/free-solid-svg-icons';
+import { faImages } from'@fortawesome/free-solid-svg-icons'
+import { faComments } from'@fortawesome/free-solid-svg-icons'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FamilyService } from 'src/app/_services/family.service';
 
@@ -20,6 +21,7 @@ export class FamilyHomeComponent implements OnInit {
 
   faPeopleRoof = faPeopleRoof;
   faRectangleList = faRectangleList;
+  faCutlery = faCutlery;
   faImages = faImages;
   faComments = faComments;
   

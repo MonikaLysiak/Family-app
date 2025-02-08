@@ -1,0 +1,74 @@
+import { Component, OnInit } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
+import { Pagination } from 'src/app/_models/pagination';
+import { AccountService } from 'src/app/_services/account.service';
+import { ListService } from 'src/app/_services/list.service';
+import { CreateShoppingListModalComponent } from 'src/app/modals/create-shopping-list-modal/create-shopping-list-modal.component';
+
+@Component({
+  selector: 'app-recipes',
+  templateUrl: './family-recipes.component.html',
+  styleUrls: ['./family-recipes.component.css']
+})
+
+export class RecipesComponent {
+  familyLists: any[] = [];
+  pagination?: Pagination;
+  pageNumber = 1;
+  pageSize = 5;
+  orderBy = 'created'
+  loading = false;
+  bsModalRef: BsModalRef<CreateShoppingListModalComponent> = new BsModalRef<CreateShoppingListModalComponent>();
+  
+  constructor(private accountService: AccountService, private listService: ListService, private modalService: BsModalService, private toastr: ToastrService) {}
+  
+  ngOnInit(): void {
+    this.loadFamilyLists();
+  }
+
+  loadFamilyLists() {
+    this.loading = true
+    this.listService.getFamilyLists(this.accountService.getCurrentFamilyId(), this.pageNumber, this.pageSize, this.orderBy).subscribe({
+      next: response => {
+        if (!response.result) return;
+        this.familyLists = response.result;
+        this.pagination = response.pagination;
+        this.loading = false;
+      }
+    })
+  }
+
+  pageChanged(event: any) {
+    if (this.pageNumber !== event.page) {
+      this.pageNumber = event.page;
+      this.loadFamilyLists();
+    }
+  }
+
+  createList() {
+    this.openAddListModal();
+  }
+
+  openAddListModal() {
+    const config = {
+      class: 'modal-dialog-centered',
+      initialState: {
+        btnOkText: 'Zapisz',
+        btnCancelText: 'Anuluj'
+      }
+    }
+    this.bsModalRef = this.modalService.show(CreateShoppingListModalComponent, config);
+    this.bsModalRef.onHide?.subscribe({
+      next: () => {
+        const shoppingListName = this.bsModalRef.content?.shoppingListName;
+        const categoryId = this.bsModalRef.content?.categoryId;
+        const items = this.bsModalRef.content?.items;
+        
+        if (shoppingListName && categoryId && items) {
+          this.listService.addShoppingList(this.accountService.getCurrentFamilyId(), shoppingListName, categoryId, items);
+        }
+      }
+    })
+  }
+}

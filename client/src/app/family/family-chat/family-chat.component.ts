@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { TimeagoModule } from 'ngx-timeago';
 import { take } from 'rxjs';
@@ -16,8 +16,9 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [CommonModule, TimeagoModule, FormsModule, TranslateModule]
 })
 
-export class FamilyChatComponent implements OnDestroy {
+export class FamilyChatComponent implements OnDestroy, AfterViewChecked {
   @ViewChild('messageForm') messageForm?: NgForm
+  @ViewChild('scrollMe') private chatContainer!: ElementRef;
   username = '';
   messageContent = '';
   messages: Message[] = [];
@@ -33,6 +34,18 @@ export class FamilyChatComponent implements OnDestroy {
         }
       }
     })
+  }
+  
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  private scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.log('Scroll error:', err);
+    }
   }
 
   sendMessage() {
