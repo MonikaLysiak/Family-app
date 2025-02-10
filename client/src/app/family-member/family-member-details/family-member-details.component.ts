@@ -9,7 +9,6 @@ import { PresenceService } from 'src/app/_services/presence.service';
 import { AccountService } from 'src/app/_services/account.service';
 import { take } from 'rxjs';
 import { User } from 'src/app/_models/user';
-import { MemberMessagesComponent } from 'src/app/members/member-messages/member-messages.component';
 import { FamilyMember } from 'src/app/_models/family-member';
 
 @Component({
@@ -17,7 +16,7 @@ import { FamilyMember } from 'src/app/_models/family-member';
   templateUrl: './family-member-details.component.html',
   styleUrls: ['./family-member-details.component.css'],
   standalone: true,
-  imports: [CommonModule, TabsModule, GalleryModule, TimeagoModule, MemberMessagesComponent]
+  imports: [CommonModule, TabsModule, GalleryModule, TimeagoModule]
 })
 
 export class FamilyMemberDetailsComponent implements OnInit {

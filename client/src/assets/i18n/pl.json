@@ -69,5 +69,11 @@
     "send": "Wyślij",
     "welcome": "Cześć",
     "editProfile": "Edytuj profil",
-    "logout": "Wyloguj"
+    "logout": "Wyloguj",
+    "signUp": "Zarejestruj się",
+    "iAm": "Jestem",
+    "male": "Mężczyzną",
+    "female": "Kobietą",
+    "dateOfBirth": "Data urodzenia",
+    "confirmPassword": "Potwierdź hasło"
  }

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { MemberListComponent } from './members/member-list/member-list.component';
 import { MessagesComponent } from './messages/messages.component';
 import { authGuard } from './_guards/auth.guard';
 import { TestErrorComponent } from './errors/test-error/test-error.component';
@@ -40,8 +39,7 @@ const routes: Routes = [
       {path: 'messages', component: MessagesComponent},
       {path: 'member/edit', component: MemberEditComponent, canDeactivate: [preventUnsavedChangesGuard]},
       {path: 'familyRecipes', component: RecipesComponent},
-      {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]},
-      {path: 'members', component: MemberListComponent}
+      {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]}
     ]
   },
   {path: 'errors', component: TestErrorComponent},

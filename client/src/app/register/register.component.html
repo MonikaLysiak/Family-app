@@ -1,43 +1,55 @@
-<div class="container">
-    <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
-        <h2 class="text-center text-primary mt-2">Sign up</h2>
+<div class="container d-flex justify-content-center">
+    <form [formGroup]="registerForm" 
+          (ngSubmit)="registerForm.valid && register()" 
+          autocomplete="off" 
+          class="w-100 p-5 shadow-lg rounded bg-white">
+
+        <h2 class="text-center text-primary mb-3">{{'signUp' | translate}}</h2>
         <hr>
-    
-        <div class="mb-3">
-            <label style="margin-right: 10px;">I am a:</label>
-            <label class="form-check-label">
-                <input type="radio" class="form-check-input" value="male" formControlName="gender"> Male
-            </label>
-            <label class="form-check-label">
-                <input type="radio" class="form-check-input ms-3" value="female" formControlName="gender"> Female
-            </label>
+
+        <div class="mb-4 text-center">
+            <label class="fw-bold d-block mb-2">{{'iAm' | translate}}:</label>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" value="male" formControlName="gender" id="male">
+                <label for="male" class="form-check-label">{{'male' | translate}}</label>
+            </div>
+            <div class="form-check form-check-inline ms-3">
+                <input type="radio" class="form-check-input" value="female" formControlName="gender" id="female">
+                <label for="female" class="form-check-label">{{'female' | translate}}</label>
+            </div>
         </div>
-    
-        <app-text-input [formControl]="$any(registerForm.controls['username'])" [label]="'Username'">
-        </app-text-input>
-        <app-text-input [formControl]="$any(registerForm.controls['name'])" [label]="'Name'">
-        </app-text-input>
-        <app-date-picker [formControl]="$any(registerForm.controls['dateOfBirth'])" [label]="'Date Of Birth'" [maxDate]="maxDate">
-        </app-date-picker>
-        <app-text-input [formControl]="$any(registerForm.controls['surname'])" [label]="'Surname'">
-        </app-text-input>
-        <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'Password'" [type]="'password'">
-        </app-text-input>
-        <app-text-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'Confirm Password'"
-            [type]="'password'">
-        </app-text-input>
-    
-        <div class="row" *ngIf="validationErrors">
-            <ul class="text-denger">
+
+        <div class="mb-3">
+            <app-text-input [formControl]="$any(registerForm.controls['username'])" [label]="'username' | translate"></app-text-input>
+        </div>
+        <div class="mb-3">
+            <app-text-input [formControl]="$any(registerForm.controls['name'])" [label]="'name' | translate"></app-text-input>
+        </div>
+        <div class="mb-3">
+            <app-date-picker [formControl]="$any(registerForm.controls['dateOfBirth'])" [label]="'dateOfBirth' | translate" [maxDate]="maxDate"></app-date-picker>
+        </div>
+        <div class="mb-3">
+            <app-text-input [formControl]="$any(registerForm.controls['surname'])" [label]="'surname' | translate"></app-text-input>
+        </div>
+        <div class="mb-3">
+            <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'password' | translate" [type]="'password'"></app-text-input>
+        </div>
+        <div class="mb-4">
+            <app-text-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'confirmPassword' | translate" [type]="'password'"></app-text-input>
+        </div>
+
+        <div class="alert alert-danger mt-3 p-2" *ngIf="validationErrors">
+            <ul class="mb-0">
                 <li *ngFor="let error of validationErrors">
                     {{error}}
                 </li>
             </ul>
         </div>
-    
-        <div class="text-center mt-2">
-            <button [disabled]="!registerForm.valid" class="btn btn-success me-2" type="submit">Register</button>
-            <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+
+        <div class="text-center mt-4">
+            <button [disabled]="!registerForm.valid" class="btn btn-success px-4 me-3" type="submit">{{'register' | translate}}</button>
+            <button class="btn btn-outline-danger px-4" type="button" (click)="escape()">{{'cancel' | translate}}</button>
         </div>
+
     </form>
 </div>

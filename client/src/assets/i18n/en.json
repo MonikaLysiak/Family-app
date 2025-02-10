@@ -1,6 +1,6 @@
 {
     "username": "Username",
-    "password": "password",
+    "password": "Password",
     "familyApp": "Family App",
     "yourFamilies": "Your Familes",
     "invitations": "Invitations",
@@ -63,5 +63,11 @@
     "send": "Send",
     "welcome": "Welcome",
     "editProfile": "Edit profile",
-    "logout": "Logout"
+    "logout": "Logout",
+    "signUp": "Sign up",
+    "iAm": "I am a",
+    "male": "Male",
+    "female": "Female",
+    "dateOfBirth": "Date of birth",
+    "confirmPassword": "Confirm password"
  }

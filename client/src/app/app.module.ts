@@ -9,14 +9,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
-import { MemberListComponent } from './members/member-list/member-list.component';
 import { MessagesComponent } from './messages/messages.component';
 import { SharedModule } from './_models/shared.module';
 import { TestErrorComponent } from './errors/test-error/test-error.component';
 import { ErrorInterceptor } from './_interceptors/error.interceptor';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
-import { MemberCardComponent } from './members/member-card/member-card.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
@@ -56,12 +54,10 @@ import { RecipesComponent } from './family/family-recipes/family-recipes.compone
     NavComponent,
     HomeComponent,
     RegisterComponent,
-    MemberListComponent,
     MessagesComponent,
     TestErrorComponent,
     NotFoundComponent,
     ServerErrorComponent,
-    MemberCardComponent,
     MemberEditComponent,
     PhotoEdytorComponent,
     TextInputComponent,

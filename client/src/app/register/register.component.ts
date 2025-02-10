@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit{
 
     this.accountService.register(values).subscribe({
       next: () => {
-        this.router.navigateByUrl('')
+        this.escape();
       },
       error: error => {
         this.validationErrors = error
@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit{
     })
   }
 
-  cancel() {
+  escape() {
     this.cancelRegister.emit(false);
   }
 
