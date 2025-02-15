@@ -59,13 +59,13 @@ public class FamilyRepository(DataContext context, IMapper mapper) : IFamilyRepo
             .SingleOrDefaultAsync(x => x.Id == familyId);
     }
 
-    public async Task<bool> IsFamilyMember(int familyId, string username)
+    public async Task<bool> IsFamilyMemberAsync(int familyId, string username)
     {
         return await _context.AppUsersFamilies
             .AnyAsync(uf => uf.FamilyId == familyId && uf.User.UserName == username);
     }
     
-    public async Task<bool> IsFamilyMember(int familyId, int userId)
+    public async Task<bool> IsFamilyMemberAsync(int familyId, int userId)
     {
         return await _context.AppUsersFamilies
             .AnyAsync(uf => uf.FamilyId == familyId && uf.UserId == userId);

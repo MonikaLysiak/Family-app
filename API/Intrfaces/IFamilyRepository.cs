@@ -11,6 +11,6 @@ public interface IFamilyRepository
     Task<FamilyDto> GetFamilyDetailsAsync(int id);
     public Task<Family> GetFamilyByIdAsync(int familyId);
     public Task<Family> GetFamilyWithPhotosByIdAsync(int familyId);
-    public Task<bool> IsFamilyMember(int familyId, string username);
-    public Task<bool> IsFamilyMember(int familyId, int userId);
+    public Task<bool> IsFamilyMemberAsync(int familyId, string username);
+    public Task<bool> IsFamilyMemberAsync(int familyId, int userId);
 }

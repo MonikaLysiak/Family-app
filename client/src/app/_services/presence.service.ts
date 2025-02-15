@@ -39,7 +39,7 @@ export class PresenceService {
       })
     })
 
-    this.hubConnection.on('GetOnlineUsers', usernames => {
+    this.hubConnection.on('GetOnlineUsersAsync', usernames => {
       this.onlineUsersSource.next(usernames);
     })
 

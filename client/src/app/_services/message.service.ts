@@ -60,7 +60,7 @@ export class MessageService {
   }
 
   async sendMessage(familyId: number, content: string) {
-    return this.hubConnection?.invoke('SendMessage', {familyId: familyId, content: content})
+    return this.hubConnection?.invoke('SendMessageAsync', {familyId: familyId, content: content})
       .catch(error => console.log(error));
   }
 

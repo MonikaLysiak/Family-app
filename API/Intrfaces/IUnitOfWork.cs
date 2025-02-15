@@ -9,6 +9,6 @@ public interface IUnitOfWork
     IFamilyMemberRepository FamilyMemberRepository { get; }
     IListsRepository ListsRepository { get; }
     
-    Task<bool> Complete();
+    Task<bool> CompleteAsync();
     bool HasChanges();
 }

@@ -8,11 +8,12 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit{
+export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
   registerForm: FormGroup = new FormGroup({});
   maxDate: Date = new Date();
   validationErrors: string[] | undefined;
+  emailSent: boolean = false; // New property to track email confirmation message
 
   constructor(private accountService: AccountService, private fb: FormBuilder, private router: Router) {}
 
@@ -28,32 +29,39 @@ export class RegisterComponent implements OnInit{
       name: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       surname: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      confirmEmail: ['', [Validators.required, Validators.email, this.matchValues('email')]],
       password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]]
     });
+
     this.registerForm.controls['password'].valueChanges.subscribe({
       next: () => this.registerForm.controls['confirmPassword'].updateValueAndValidity()
-    })
+    });
+
+    this.registerForm.controls['email'].valueChanges.subscribe({
+      next: () => this.registerForm.controls['confirmEmail'].updateValueAndValidity()
+    });
   }
 
   matchValues(matchTo: string): ValidatorFn {
     return (control: AbstractControl) => {
-      return control.value === control.parent?.get(matchTo)?.value ? null : {notMatching: true}
-    }
+      return control.value === control.parent?.get(matchTo)?.value ? null : { notMatching: true };
+    };
   }
 
   register() {
     const dob = this.getDateOnly(this.registerForm.controls['dateOfBirth'].value);
-    const values = {...this.registerForm.value, dateOfBirth: dob};
+    const values = { ...this.registerForm.value, dateOfBirth: dob };
 
     this.accountService.register(values).subscribe({
       next: () => {
-        this.escape();
+        this.emailSent = true; // Show the confirmation message
       },
       error: error => {
-        this.validationErrors = error
+        this.validationErrors = error;
       }
-    })
+    });
   }
 
   escape() {
@@ -63,7 +71,6 @@ export class RegisterComponent implements OnInit{
   private getDateOnly(dob: string | undefined) {
     if (!dob) return;
     let theDob = new Date(dob);
-    return new Date(theDob.setMinutes(theDob.getMinutes()-theDob.getTimezoneOffset())).toISOString().slice(0,10);
+    return new Date(theDob.setMinutes(theDob.getMinutes() - theDob.getTimezoneOffset())).toISOString().slice(0, 10);
   }
-
 }

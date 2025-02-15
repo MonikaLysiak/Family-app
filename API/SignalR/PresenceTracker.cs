@@ -4,7 +4,7 @@ public class PresenceTracker
 {
     private static readonly Dictionary<string, List<string>> OnlineUsers = new Dictionary<string, List<string>>();
 
-    public Task<bool> UserConnected(string username, string connectionId)
+    public Task<bool> UserConnectedAsync(string username, string connectionId)
     {
         bool isOnline = false;
         lock(OnlineUsers)
@@ -23,7 +23,7 @@ public class PresenceTracker
         return Task.FromResult(isOnline);
     }
 
-    public Task<bool> UserDisconnected(string username, string connectionId)
+    public Task<bool> UserDisconnectedAsync(string username, string connectionId)
     {
         bool isOffline = false;
         lock(OnlineUsers)
@@ -42,7 +42,7 @@ public class PresenceTracker
         return Task.FromResult(isOffline);
     }
 
-    public Task<string[]> GetOnlineUsers()
+    public Task<string[]> GetOnlineUsersAsync()
     {
         string[] onlineUsers;
         lock(OnlineUsers)
@@ -51,18 +51,5 @@ public class PresenceTracker
         }
 
         return Task.FromResult(onlineUsers);
-    }
-
-    // what this does?
-    public static Task<List<string>> GetConnectionsForUser(string username)
-    {
-        List<string> connectionIds;
-
-        lock (OnlineUsers)
-        {
-            connectionIds = OnlineUsers.GetValueOrDefault(username);
-        }
-
-        return Task.FromResult(connectionIds);
     }
 }

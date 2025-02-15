@@ -8,16 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class InvitationsController : BaseApiController
+public class InvitationsController(IUnitOfWork uow, IMapper mapper) : BaseApiController
 {
-    private readonly IUnitOfWork _uow;
-    private readonly IMapper _mapper;
-
-    public InvitationsController(IUnitOfWork uow, IMapper mapper)
-    {
-        _uow = uow;
-        _mapper = mapper;
-    }
+    private readonly IUnitOfWork _uow = uow;
+    private readonly IMapper _mapper = mapper;
 
     [HttpPost("{username}/{familyId}")]
     public async Task<ActionResult> AddInvitation(string username, int familyId)
@@ -32,7 +26,7 @@ public class InvitationsController : BaseApiController
         if (sourceUser.UserName == username)
             return BadRequest("You cannot invite yourself");
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, sourceUserId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, sourceUserId))
             return BadRequest("You are not a member of this family");
 
         var userLike = await _uow.InvitationsRepository.GetUserInvitationAsync(familyId, likedUser.Id);
@@ -49,7 +43,7 @@ public class InvitationsController : BaseApiController
 
         sourceUser.InvitationsSent.Add(userLike);
 
-        if (await _uow.Complete()) return Ok();
+        if (await _uow.CompleteAsync()) return Ok();
 
         return BadRequest("Failed to invite the user");
     }
@@ -83,7 +77,7 @@ public class InvitationsController : BaseApiController
         if (invitation.InviteeUserId != userId)
             return BadRequest("It is not your invitation");
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(invitation.FamilyId, invitation.InviterUserId)){
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(invitation.FamilyId, invitation.InviterUserId)){
             await _uow.InvitationsRepository.DeleteInvitationAsync(invitationId);
             return BadRequest("This user has not longer the authority to invite to this family");
         }
@@ -105,7 +99,7 @@ public class InvitationsController : BaseApiController
         family.UserFamilies.Add(userFamily); //supposedly not neccessery to add to both but better and clearer
         user.InvitationsReceived.Remove(invitation);
         
-        if (await _uow.Complete()) return Ok(_mapper.Map<MemberDto>(user));
+        if (await _uow.CompleteAsync()) return Ok(_mapper.Map<MemberDto>(user));
 
         return BadRequest("Failed add user to family");
     }

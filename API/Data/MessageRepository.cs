@@ -27,12 +27,12 @@ public class MessageRepository(DataContext context, IMapper mapper) : IMessageRe
         _context.Messages.Remove(message);
     }
 
-    public async Task<Connection> GetConnection(string connectionId)
+    public async Task<Connection> GetConnectionAsync(string connectionId)
     {
         return await _context.Connections.FindAsync(connectionId);
     }
 
-    public async Task<Group> GetGroupForConnection(string connectionId)
+    public async Task<Group> GetGroupForConnectionAsync(string connectionId)
     {
         return await _context.Groups
             .Include(x => x.Connections)
@@ -40,19 +40,19 @@ public class MessageRepository(DataContext context, IMapper mapper) : IMessageRe
             .FirstOrDefaultAsync();
     }
 
-    public async Task<Message> GetMessage(int id)
+    public async Task<Message> GetMessageAsync(int id)
     {
         return await _context.Messages.FindAsync(id);
     }
 
-    public async Task<Group> GetMessageGroup(string groupName)
+    public async Task<Group> GetMessageGroupAsync(string groupName)
     {
         return await _context.Groups
             .Include(x => x.Connections)
             .FirstOrDefaultAsync(x => x.Name == groupName);
     }
 
-    public async Task<IEnumerable<MessageDto>> GetFamilyMessageThread(int familyId)
+    public async Task<IEnumerable<MessageDto>> GetFamilyMessageThreadAsync(int familyId)
     {
         var query = _context.Messages
             .Where(

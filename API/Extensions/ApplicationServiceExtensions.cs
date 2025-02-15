@@ -19,11 +19,13 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ITokenService, TokenService>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+        services.Configure<SmtpSettings>(config.GetSection("SMTP"));
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<LogUserActivity>();
         services.AddSignalR();
         services.AddSingleton<PresenceTracker>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddSingleton<IEmailService, EmailService>();
 
         return services;
     }

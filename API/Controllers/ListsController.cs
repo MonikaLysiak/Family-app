@@ -1,4 +1,3 @@
-using API.Controllers;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
@@ -9,23 +8,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class ListsController : BaseApiController
+public class ListsController(IMapper mapper, IUnitOfWork uow) : BaseApiController
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _uow;
-
-    public ListsController(IMapper mapper, IUnitOfWork uow)
-    {
-        _mapper = mapper;
-        _uow = uow;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _uow = uow;
 
     [HttpPost]
     public async Task<ActionResult<FamilyListDto>> CreateFamilyList(CreateListDto createListDto)
     {
         var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(createListDto.FamilyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(createListDto.FamilyId, userId))
             return BadRequest("You are not a member of this family");
 
         var author = await _uow.UserRepository.GetUserByIdAsync(userId);
@@ -56,7 +49,7 @@ public class ListsController : BaseApiController
 
         _uow.ListsRepository.AddList(familyList);
 
-        if (await _uow.Complete()) return Ok(_mapper.Map<FamilyListDto>(familyList));
+        if (await _uow.CompleteAsync()) return Ok(_mapper.Map<FamilyListDto>(familyList));
 
         return BadRequest("Failed to create family list");
     }
@@ -65,7 +58,7 @@ public class ListsController : BaseApiController
     public async Task<ActionResult<FamilyListDto>> EditFamilyList(FamilyListDto editedList)
     {
         // ! must add family id and check if the user can edit this list
-        var familyList = await _uow.ListsRepository.GetListWithItems(editedList.Id);
+        var familyList = await _uow.ListsRepository.GetListWithItemsAsync(editedList.Id);
 
         if (familyList == null) return NotFound("There is no user of that id");
 
@@ -82,7 +75,7 @@ public class ListsController : BaseApiController
 
         familyList.ListItems.AddRange(newItems);
 
-        if (await _uow.Complete()) return Ok(_mapper.Map<FamilyListDto>(familyList));
+        if (await _uow.CompleteAsync()) return Ok(_mapper.Map<FamilyListDto>(familyList));
 
         return BadRequest("Failed to edit family list");
     }
@@ -92,10 +85,10 @@ public class ListsController : BaseApiController
     {
         var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyListsParams.FamilyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyListsParams.FamilyId, userId))
             return BadRequest("You are not a member of this family");
 
-        return Ok(await _uow.ListsRepository.GetFamilyLists(familyListsParams.FamilyId));
+        return Ok(await _uow.ListsRepository.GetFamilyListsAsync(familyListsParams.FamilyId));
     }
 
     [HttpDelete("{id}")]
@@ -103,14 +96,14 @@ public class ListsController : BaseApiController
     {
         var userId = User.GetUserId();
 
-        var list = await _uow.ListsRepository.GetList(id);
+        var list = await _uow.ListsRepository.GetListAsync(id);
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(list.FamilyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(list.FamilyId, userId))
             return BadRequest("You are not a member of this family");
 
         _uow.ListsRepository.DeleteList(list);
 
-        if (await _uow.Complete()) return Ok();
+        if (await _uow.CompleteAsync()) return Ok();
 
         return BadRequest("Problem deleting family list");
     }

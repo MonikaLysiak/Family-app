@@ -75,5 +75,9 @@
     "male": "Mężczyzną",
     "female": "Kobietą",
     "dateOfBirth": "Data urodzenia",
-    "confirmPassword": "Potwierdź hasło"
+    "confirmPassword": "Potwierdź hasło",
+    "email": "E-mail",
+    "confirmEmail": "Potwierdź e-mail",
+    "confirmationEmailSent": "Email potwierdzający został wysłany",
+    "pleaseCheckEmail": "Sprawdź swoją skrzynkę pocztową"
  }

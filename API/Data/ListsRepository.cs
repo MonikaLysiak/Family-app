@@ -30,13 +30,13 @@ public class ListsRepository(DataContext context, IMapper mapper) : IListsReposi
     }
 
     // same in messeges repo, mayby add hepler or service later on ?? or ConnectionRepo ??
-    public async Task<Connection> GetConnection(string connectionId)
+    public async Task<Connection> GetConnectionAsync(string connectionId)
     {
         return await _context.Connections.FindAsync(connectionId);
     }
 
     // same in messeges repo, mayby add hepler or service later on ?? or ConnectionRepo ??
-    public async Task<Group> GetGroupForConnection(string connectionId)
+    public async Task<Group> GetGroupForConnectionAsync(string connectionId)
     {
         return await _context.Groups
             .Include(x => x.Connections)
@@ -44,24 +44,24 @@ public class ListsRepository(DataContext context, IMapper mapper) : IListsReposi
             .FirstOrDefaultAsync();
     }
 
-    public async Task<FamilyList> GetList(int id)
+    public async Task<FamilyList> GetListAsync(int id)
     {
         return await _context.Lists.FindAsync(id);
     }
 
-    public async Task<FamilyList> GetListWithItems(int id)
+    public async Task<FamilyList> GetListWithItemsAsync(int id)
     {
         return await _context.Lists.Where(x => x.Id == id).Include(x => x.ListItems).FirstOrDefaultAsync();
     }
 
-    public async Task<Group> GetListGroup(string groupName)
+    public async Task<Group> GetListGroupAsync(string groupName)
     {
         return await _context.Groups
             .Include(x => x.Connections)
             .FirstOrDefaultAsync(x => x.Name == groupName);
     }
 
-    public async Task<IEnumerable<FamilyListDto>> GetFamilyLists(int familyId)
+    public async Task<IEnumerable<FamilyListDto>> GetFamilyListsAsync(int familyId)
     {
         var query = _context.Lists
             .Where(

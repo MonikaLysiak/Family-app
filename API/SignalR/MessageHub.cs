@@ -10,18 +10,11 @@ using Microsoft.AspNetCore.SignalR;
 namespace API.SignalR;
 
 [Authorize]
-public class MessageHub : Hub
+public class MessageHub(IUnitOfWork uow, IMapper mapper, IHubContext<PresenceHub> presenceHub) : Hub
 {
-    private readonly IUnitOfWork _uow;
-    private readonly IMapper _mapper;
-    private readonly IHubContext<PresenceHub> _presenceHub;
-
-    public MessageHub(IUnitOfWork uow, IMapper mapper, IHubContext<PresenceHub> presenceHub)
-    {
-        _uow = uow;
-        _mapper = mapper;
-        _presenceHub = presenceHub;
-    }
+    private readonly IUnitOfWork _uow = uow;
+    private readonly IMapper _mapper = mapper;
+    private readonly IHubContext<PresenceHub> _presenceHub = presenceHub;
 
     public override async Task OnConnectedAsync()
     {
@@ -32,34 +25,34 @@ public class MessageHub : Hub
 
         var userId = Context.User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, userId))
             throw new HubException("You are not a member of this family");
 
         var groupName = GetGroupName(familyId);
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-        var group = await AddToGroup(groupName);
+        var group = await AddToGroupAsync(groupName);
 
         await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
 
-        var messages = await _uow.MessageRepository.GetFamilyMessageThread(familyId);
+        var messages = await _uow.MessageRepository.GetFamilyMessageThreadAsync(familyId);
 
-        if (_uow.HasChanges()) await _uow.Complete();
+        if (_uow.HasChanges()) await _uow.CompleteAsync();
 
         await Clients.Caller.SendAsync("ReceiveMessageThread", messages);
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-        var group = await RemoveFromMessageGroup();
+        var group = await RemoveFromMessageGroupAsync();
         await Clients.Group(group.Name).SendAsync("UpdatedGroup");
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task SendMessage(CreateMessageDto createMessageDto)
+    public async Task SendMessageAsync(CreateMessageDto createMessageDto)
     {
         var userId = Context.User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(createMessageDto.FamilyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(createMessageDto.FamilyId, userId))
             throw new HubException("You are not a member of this family");
 
         var sender = await _uow.UserRepository.GetUserWithPhotosByIdAsync(userId);
@@ -81,15 +74,15 @@ public class MessageHub : Hub
 
         _uow.MessageRepository.AddMessage(message);
 
-        if (await _uow.Complete())
+        if (await _uow.CompleteAsync())
         {
             await Clients.Group(groupName).SendAsync("NewMessage", _mapper.Map<MessageDto>(message));
         }
     }
 
-    private async Task<Group> AddToGroup(string groupName)
+    private async Task<Group> AddToGroupAsync(string groupName)
     {
-        var group = await _uow.MessageRepository.GetMessageGroup(groupName);
+        var group = await _uow.MessageRepository.GetMessageGroupAsync(groupName);
         var connection = new Connection(Context.ConnectionId, Context.User.GetUsername());
 
         if (group == null)
@@ -100,22 +93,22 @@ public class MessageHub : Hub
 
         group.Connections.Add(connection);
 
-        if (await _uow.Complete()) return group;
+        if (await _uow.CompleteAsync()) return group;
 
         throw new HubException("Failed to add to group");
     }
 
-    private async Task<Group> RemoveFromMessageGroup()
+    private async Task<Group> RemoveFromMessageGroupAsync()
     {
-        var group = await _uow.MessageRepository.GetGroupForConnection(Context.ConnectionId);
+        var group = await _uow.MessageRepository.GetGroupForConnectionAsync(Context.ConnectionId);
         var connection = group.Connections.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
         _uow.MessageRepository.RemoveConnection(connection);
-        if (await _uow.Complete()) return group;
+        if (await _uow.CompleteAsync()) return group;
 
         throw new HubException("Failed to remove from group");
     }
 
-    private string GetGroupName(int familyId) {
+    private static string GetGroupName(int familyId) {
         return "chat" + familyId;
     }
 }

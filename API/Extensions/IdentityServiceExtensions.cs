@@ -14,10 +14,18 @@ public static class IdentityServiceExtensions
         services.AddIdentityCore<AppUser>(opt =>
         {
             opt.Password.RequireNonAlphanumeric = false;
+            // maby add rules for safer passwords
+
+            opt.Lockout.MaxFailedAccessAttempts = 5;
+            opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+
+            opt.User.RequireUniqueEmail = true;
+            opt.SignIn.RequireConfirmedEmail = true;
         })
             .AddRoles<AppRole>()
             .AddRoleManager<RoleManager<AppRole>>()
-            .AddEntityFrameworkStores<DataContext>();
+            .AddEntityFrameworkStores<DataContext>()
+            .AddDefaultTokenProviders();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>

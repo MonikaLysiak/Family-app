@@ -4,17 +4,11 @@ using API.Errors;
 
 namespace API.Middleware;
 
-public class ExceptionMiddleware
+public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
 {
-    public readonly RequestDelegate _next;
-    public readonly ILogger<ExceptionMiddleware> _logger;
-    public readonly IHostEnvironment _env;
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
-    {
-        _next = next;
-        _logger = logger;
-        _env = env;
-    }
+    public readonly RequestDelegate _next = next;
+    public readonly ILogger<ExceptionMiddleware> _logger = logger;
+    public readonly IHostEnvironment _env = env;
 
     public async Task InvokeAsync(HttpContext context) //has to be called that
     {

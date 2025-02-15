@@ -9,16 +9,10 @@ using Microsoft.AspNetCore.SignalR;
 namespace API.SignalR;
 
 [Authorize]
-public class ListsHub : Hub
+public class ListsHub(IUnitOfWork uow, IMapper mapper) : Hub
 {
-    private readonly IUnitOfWork _uow;
-    private readonly IMapper _mapper;
-
-    public ListsHub(IUnitOfWork uow, IMapper mapper)
-    {
-        _uow = uow;
-        _mapper = mapper;
-    }
+    private readonly IUnitOfWork _uow = uow;
+    private readonly IMapper _mapper = mapper;
 
     public override async Task OnConnectedAsync()
     {
@@ -32,41 +26,41 @@ public class ListsHub : Hub
 
         var userId = Context.User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, userId))
             throw new HubException("You are not a member of this family");
 
         var groupName = GetGroupName(familyId, listId);
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-        var group = await AddToGroup(groupName);
+        var group = await AddToGroupAsync(groupName);
 
         await Clients.Group(groupName).SendAsync("UpdatedGroup", group);
 
-        var messages = await _uow.MessageRepository.GetFamilyMessageThread(familyId);
+        var messages = await _uow.MessageRepository.GetFamilyMessageThreadAsync(familyId);
 
-        if (_uow.HasChanges()) await _uow.Complete();
+        if (_uow.HasChanges()) await _uow.CompleteAsync();
 
         await Clients.Caller.SendAsync("ReceiveMessageThread", messages);
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-        var group = await RemoveFromFamilyListGroup();
+        var group = await RemoveFromFamilyListGroupAsync();
         await Clients.Group(group.Name).SendAsync("UpdatedGroup");
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task UpdateFamilyList(ListItemDto listItemDto)
+    public async Task UpdateFamilyListAsync(ListItemDto listItemDto)
     {
         var userId = Context.User.GetUserId();
 
-        var familyList = await _uow.ListsRepository.GetListWithItems(listItemDto.FamilyListId);
+        var familyList = await _uow.ListsRepository.GetListWithItemsAsync(listItemDto.FamilyListId);
 
         if (familyList == null)
             throw new HubException("There is no family list of that id");
 
         var listItem = familyList.ListItems.FirstOrDefault(x => x.Id == listItemDto.Id) ?? new ListItem();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyList.FamilyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyList.FamilyId, userId))
             throw new HubException("You are not a member of this family");
 
         var modifier = await _uow.UserRepository.GetUserByIdAsync(userId);
@@ -77,17 +71,17 @@ public class ListsHub : Hub
 
         var groupName = GetGroupName(familyList.FamilyId, listItemDto.FamilyListId);
 
-        var group = await _uow.ListsRepository.GetListGroup(groupName);
+        var group = await _uow.ListsRepository.GetListGroupAsync(groupName);
 
-        if (await _uow.Complete())
+        if (await _uow.CompleteAsync())
         {
             await Clients.Group(groupName).SendAsync("ListItemUpdated", _mapper.Map<ListItemDto>(listItem));
         }
     }
 
-    private async Task<Group> AddToGroup(string groupName)
+    private async Task<Group> AddToGroupAsync(string groupName)
     {
-        var group = await _uow.ListsRepository.GetListGroup(groupName);
+        var group = await _uow.ListsRepository.GetListGroupAsync(groupName);
         var connection = new Connection(Context.ConnectionId, Context.User.GetUsername());
 
         if (group == null)
@@ -98,17 +92,17 @@ public class ListsHub : Hub
 
         group.Connections.Add(connection);
 
-        if (await _uow.Complete()) return group;
+        if (await _uow.CompleteAsync()) return group;
 
         throw new HubException("Failed to add to group");
     }
 
-    private async Task<Group> RemoveFromFamilyListGroup()
+    private async Task<Group> RemoveFromFamilyListGroupAsync()
     {
-        var group = await _uow.ListsRepository.GetGroupForConnection(Context.ConnectionId);
+        var group = await _uow.ListsRepository.GetGroupForConnectionAsync(Context.ConnectionId);
         var connection = group.Connections.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
         _uow.ListsRepository.RemoveConnection(connection);
-        if (await _uow.Complete()) return group;
+        if (await _uow.CompleteAsync()) return group;
 
         throw new HubException("Failed to remove from group");
     }

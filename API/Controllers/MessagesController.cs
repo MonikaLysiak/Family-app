@@ -9,23 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API;
 
-public class MessagesController : BaseApiController
+public class MessagesController(IMapper mapper, IUnitOfWork uow) : BaseApiController
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _uow;
-
-    public MessagesController(IMapper mapper, IUnitOfWork uow)
-    {
-        _mapper = mapper;
-        _uow = uow;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _uow = uow;
 
     [HttpPost]
     public async Task<ActionResult<MessageDto>> CreateMessage(CreateMessageDto createMessageDto)
     {
         var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(createMessageDto.FamilyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(createMessageDto.FamilyId, userId))
             return BadRequest("You are not a member of this family");
 
         var sender = await _uow.UserRepository.GetUserByIdAsync(userId);
@@ -45,7 +39,7 @@ public class MessagesController : BaseApiController
 
         _uow.MessageRepository.AddMessage(message);
 
-        if (await _uow.Complete()) return Ok(_mapper.Map<MessageDto>(message));
+        if (await _uow.CompleteAsync()) return Ok(_mapper.Map<MessageDto>(message));
 
         return BadRequest("Failed to send message");
     }
@@ -55,10 +49,10 @@ public class MessagesController : BaseApiController
     {
         var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, userId))
             return BadRequest("You are not a member of this family");
 
-        return Ok(await _uow.MessageRepository.GetFamilyMessageThread(familyId));
+        return Ok(await _uow.MessageRepository.GetFamilyMessageThreadAsync(familyId));
     }
 
     [HttpDelete("{id}")]
@@ -66,16 +60,16 @@ public class MessagesController : BaseApiController
     {
         var userId = User.GetUserId();
 
-        var message = await _uow.MessageRepository.GetMessage(id);
+        var message = await _uow.MessageRepository.GetMessageAsync(id);
 
         if (message.SenderId != userId) return Unauthorized();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(message.FamilyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(message.FamilyId, userId))
             return BadRequest("You are not a member of this family");
 
         message.SenderDeleted = true;
         
-        if (await _uow.Complete()) return Ok();
+        if (await _uow.CompleteAsync()) return Ok();
 
         return BadRequest("Problem deleting message");
     }

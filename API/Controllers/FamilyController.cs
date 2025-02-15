@@ -37,7 +37,7 @@ public class FamilyController : BaseApiController
 
         _uow.FamilyRepository.AddFamily(family);
 
-        if (!await _uow.Complete()) return BadRequest("Failed to create family");
+        if (!await _uow.CompleteAsync()) return BadRequest("Failed to create family");
         
         var userFamily = new AppUserFamily
         {
@@ -49,7 +49,7 @@ public class FamilyController : BaseApiController
         user.UserFamilies.Add(userFamily);
         family.UserFamilies.Add(userFamily);
         
-        if (await _uow.Complete()) {
+        if (await _uow.CompleteAsync()) {
             var familyDto = _mapper.Map<FamilyDto>(family);
             familyDto.UserNickname = userFamily.Nickname;
             return Ok(familyDto);
@@ -75,7 +75,7 @@ public class FamilyController : BaseApiController
     {
         var currentUserId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, currentUserId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, currentUserId))
             return BadRequest("You are not a member of this family");
 
         var family = await _uow.FamilyRepository.GetFamilyDetailsAsync(familyId);
@@ -90,7 +90,7 @@ public class FamilyController : BaseApiController
     {
         var currentUserId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyMemberParams.FamilyId, currentUserId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyMemberParams.FamilyId, currentUserId))
             return BadRequest("You are not a member of this family");
             
         var familyMembers = await _uow.FamilyMemberRepository.GetFamilyMembersAsync(familyMemberParams);
@@ -103,10 +103,10 @@ public class FamilyController : BaseApiController
     {
         var currentUserId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, currentUserId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, currentUserId))
             return BadRequest("You are not a member of this family");
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, familyMemberId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, familyMemberId))
             return BadRequest("This user is not a member of this family");
             
         var familyMember = await _uow.UserRepository.GetMemberAsync(familyMemberId);
@@ -121,7 +121,7 @@ public class FamilyController : BaseApiController
     {
         var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, userId))
             return BadRequest("You are not a member of this family");
             
         var family = await _uow.FamilyRepository.GetFamilyWithPhotosByIdAsync(familyId);
@@ -143,7 +143,7 @@ public class FamilyController : BaseApiController
 
         family.FamilyPhotos.Add(photo);
 
-        if (await _uow.Complete()) 
+        if (await _uow.CompleteAsync()) 
         {
             return CreatedAtAction(nameof(GetFamilyDetails), new {familyId = family.Id}, _mapper.Map<PhotoDto>(photo));
         }
@@ -156,7 +156,7 @@ public class FamilyController : BaseApiController
     {
         var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, userId))
             return BadRequest("You are not a member of this family");
 
         var family = await _uow.FamilyRepository.GetFamilyWithPhotosByIdAsync(familyId);
@@ -173,7 +173,7 @@ public class FamilyController : BaseApiController
         if (currentMain !=null) currentMain.IsMain = false;
         photo.IsMain = true;
 
-        if (await _uow.Complete()) return NoContent();
+        if (await _uow.CompleteAsync()) return NoContent();
 
         return BadRequest("Problem setting the main photo");
     }
@@ -183,7 +183,7 @@ public class FamilyController : BaseApiController
     {
         var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, userId))
             return BadRequest("You are not a member of this family");
 
         var family = await _uow.FamilyRepository.GetFamilyWithPhotosByIdAsync(familyId);
@@ -204,7 +204,7 @@ public class FamilyController : BaseApiController
 
         family.FamilyPhotos.Remove(photo);
 
-        if (await _uow.Complete()) return Ok();
+        if (await _uow.CompleteAsync()) return Ok();
 
         return BadRequest("Problem deleting photo");
     }
@@ -214,7 +214,7 @@ public class FamilyController : BaseApiController
     {
         var userId = User.GetUserId();
 
-        if (!await _uow.FamilyRepository.IsFamilyMember(familyId, userId))
+        if (!await _uow.FamilyRepository.IsFamilyMemberAsync(familyId, userId))
             return BadRequest("You are not a member of this family");
 
         var familyUser = await _uow.FamilyMemberRepository.GetAppUserFamilyAsync(familyId, userId);
@@ -223,7 +223,7 @@ public class FamilyController : BaseApiController
 
         familyUser.Nickname = nickname;
 
-        if (await _uow.Complete()) return NoContent();
+        if (await _uow.CompleteAsync()) return NoContent();
 
         return BadRequest("Problem setting nickname");
     }

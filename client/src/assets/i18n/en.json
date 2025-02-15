@@ -69,5 +69,9 @@
     "male": "Male",
     "female": "Female",
     "dateOfBirth": "Date of birth",
-    "confirmPassword": "Confirm password"
+    "confirmPassword": "Confirm password",
+    "email": "E-mail",
+    "confirmEmail": "Confirm e-mail",
+    "confirmationEmailSent": "Confirmation email sent",
+    "pleaseCheckEmail": "Please check your email"
  }

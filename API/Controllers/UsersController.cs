@@ -10,19 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [Authorize]
-public class UsersController : BaseApiController
+public class UsersController(IUnitOfWork uow, IMapper mapper, IPhotoService photoService) : BaseApiController
 {
-    private readonly IUnitOfWork _uow;
-    private readonly IMapper _mapper;
-    private readonly IPhotoService _photoService;
+    private readonly IUnitOfWork _uow = uow;
+    private readonly IMapper _mapper = mapper;
+    private readonly IPhotoService _photoService = photoService;
 
-    public UsersController(IUnitOfWork uow, IMapper mapper, IPhotoService photoService)
-    {
-        _uow = uow;
-        _mapper = mapper;
-        _photoService = photoService;
-    }
-    
     [HttpGet]
     public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
     {
@@ -50,7 +43,7 @@ public class UsersController : BaseApiController
 
         _mapper.Map(memberUpdateDto, user);
 
-        if (await _uow.Complete()) return NoContent();
+        if (await _uow.CompleteAsync()) return NoContent();
 
         return BadRequest("Failed to update user");
     }
@@ -76,7 +69,7 @@ public class UsersController : BaseApiController
 
         user.UserPhotos.Add(photo);
 
-        if (await _uow.Complete()) 
+        if (await _uow.CompleteAsync()) 
         {
             return CreatedAtAction(nameof(GetUser), new {username = user.UserName}, _mapper.Map<PhotoDto>(photo));
         }
@@ -101,7 +94,7 @@ public class UsersController : BaseApiController
         if (currentMain !=null) currentMain.IsMain = false;
         photo.IsMain = true;
 
-        if (await _uow.Complete()) return NoContent();
+        if (await _uow.CompleteAsync()) return NoContent();
 
         return BadRequest("Problem setting the main photo");
     }
@@ -125,7 +118,7 @@ public class UsersController : BaseApiController
 
         user.UserPhotos.Remove(photo);
 
-        if (await _uow.Complete()) return Ok();
+        if (await _uow.CompleteAsync()) return Ok();
 
         return BadRequest("Problem deleting photo");
     }

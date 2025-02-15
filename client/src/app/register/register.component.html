@@ -1,8 +1,8 @@
 <div class="container d-flex justify-content-center">
-    <form [formGroup]="registerForm" 
+    <form *ngIf="!emailSent" [formGroup]="registerForm" 
           (ngSubmit)="registerForm.valid && register()" 
           autocomplete="off" 
-          class="w-100 p-5 shadow-lg rounded bg-white">
+          class="w-100 p-3 mt-1 shadow-lg rounded bg-white">
 
         <h2 class="text-center text-primary mb-3">{{'signUp' | translate}}</h2>
         <hr>
@@ -31,6 +31,14 @@
         <div class="mb-3">
             <app-text-input [formControl]="$any(registerForm.controls['surname'])" [label]="'surname' | translate"></app-text-input>
         </div>
+
+        <div class="mb-3">
+            <app-text-input [formControl]="$any(registerForm.controls['email'])" [label]="'email' | translate" [type]="'email'"></app-text-input>
+        </div>
+        <div class="mb-3">
+            <app-text-input [formControl]="$any(registerForm.controls['confirmEmail'])" [label]="'confirmEmail' | translate" [type]="'email'"></app-text-input>
+        </div>
+
         <div class="mb-3">
             <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'password' | translate" [type]="'password'"></app-text-input>
         </div>
@@ -50,6 +58,10 @@
             <button [disabled]="!registerForm.valid" class="btn btn-success px-4 me-3" type="submit">{{'register' | translate}}</button>
             <button class="btn btn-outline-danger px-4" type="button" (click)="escape()">{{'cancel' | translate}}</button>
         </div>
-
     </form>
+
+    <div *ngIf="emailSent" class="text-center">
+        <h4 class="text-success">{{'confirmationEmailSent' | translate}}</h4>
+        <p>{{'pleaseCheckEmail' | translate}}</p>
+    </div>
 </div>

@@ -3,16 +3,11 @@ using AutoMapper;
 
 namespace API.Data;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(DataContext context, IMapper mapper) : IUnitOfWork
 {
-    private readonly DataContext _context;
-    private readonly IMapper _mapper;
+    private readonly DataContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
-    public UnitOfWork(DataContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
     public IUserRepository UserRepository => new UserRepository(_context, _mapper);
 
     public IMessageRepository MessageRepository => new MessageRepository(_context, _mapper);
@@ -25,7 +20,7 @@ public class UnitOfWork : IUnitOfWork
     
     public IListsRepository ListsRepository => new ListsRepository(_context, _mapper);
 
-    public async Task<bool> Complete()
+    public async Task<bool> CompleteAsync()
     {
         return await _context.SaveChangesAsync() > 0;
     }
