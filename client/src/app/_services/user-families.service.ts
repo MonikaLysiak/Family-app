@@ -3,7 +3,7 @@ import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 import { environment } from 'src/environments/environment';
 import { Family } from '../_models/family';
 import { User } from '../_models/user';
-import { FamilyParams } from '../_models/familyParams';
+import { FamilyParams } from '../_models/family-params';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AccountService } from './account.service';
 import { map, of, take } from 'rxjs';

@@ -5,16 +5,26 @@ using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [Authorize]
-public class UsersController(IUnitOfWork uow, IMapper mapper, IPhotoService photoService) : BaseApiController
+public class UsersController : BaseApiController
 {
-    private readonly IUnitOfWork _uow = uow;
-    private readonly IMapper _mapper = mapper;
-    private readonly IPhotoService _photoService = photoService;
+    private readonly IUnitOfWork _uow;
+    private readonly IMapper _mapper;
+    private readonly IPhotoService _photoService;
+    private readonly UserManager<AppUser> _userManager;
+
+    public UsersController(IUnitOfWork uow, IMapper mapper, IPhotoService photoService, UserManager<AppUser> userManager)
+    {
+        _uow = uow;
+        _mapper = mapper;
+        _photoService = photoService;
+        _userManager = userManager;
+    }
 
     [HttpGet]
     public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
@@ -121,5 +131,19 @@ public class UsersController(IUnitOfWork uow, IMapper mapper, IPhotoService phot
         if (await _uow.CompleteAsync()) return Ok();
 
         return BadRequest("Problem deleting photo");
+    }
+    
+    [HttpPost("setTwoFactorEnabled")]
+    public async Task<ActionResult> SetTwoFactorEnabled([FromBody] bool enabled)
+    {
+        var user = await _uow.UserRepository.GetUserByUsernameAsync(User.GetUsername());
+
+        if (user == null) return NotFound();
+
+        var result = await _userManager.SetTwoFactorEnabledAsync(user, enabled);
+
+        if (result.Succeeded) return Ok();
+
+        return BadRequest("Failed to anable two factor authentication");
     }
 }

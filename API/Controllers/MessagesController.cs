@@ -9,10 +9,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API;
 
-public class MessagesController(IMapper mapper, IUnitOfWork uow) : BaseApiController
+public class MessagesController : BaseApiController
 {
-    private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _uow = uow;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _uow;
+
+    public MessagesController(IMapper mapper, IUnitOfWork uow)
+    {
+        _mapper = mapper;
+        _uow = uow;
+    }
 
     [HttpPost]
     public async Task<ActionResult<MessageDto>> CreateMessage(CreateMessageDto createMessageDto)

@@ -51,4 +51,8 @@ export class MembersService {
   deletePhoto(photoId: number) {
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
+
+  setTwoFactorEnabled(enabled: boolean) {
+    return this.http.post(this.baseUrl + 'users/setTwoFactorEnabled', enabled);
+  }
 }

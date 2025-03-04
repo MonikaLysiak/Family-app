@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Register } from '../_models/register';
 
 @Component({
   selector: 'app-register',
@@ -10,10 +11,10 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
+  @Output() registrationSuccess = new EventEmitter();
   registerForm: FormGroup = new FormGroup({});
   maxDate: Date = new Date();
   validationErrors: string[] | undefined;
-  emailSent: boolean = false; // New property to track email confirmation message
 
   constructor(private accountService: AccountService, private fb: FormBuilder, private router: Router) {}
 
@@ -24,8 +25,7 @@ export class RegisterComponent implements OnInit {
 
   initializeForm() {
     this.registerForm = this.fb.group({
-      gender: ['male'],
-      username: ['', Validators.required],
+      userName: ['', Validators.required],
       name: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       surname: ['', Validators.required],
@@ -52,11 +52,11 @@ export class RegisterComponent implements OnInit {
 
   register() {
     const dob = this.getDateOnly(this.registerForm.controls['dateOfBirth'].value);
-    const values = { ...this.registerForm.value, dateOfBirth: dob };
+    const values = { ...this.registerForm.value, dateOfBirth: dob } as Register;
 
     this.accountService.register(values).subscribe({
       next: () => {
-        this.emailSent = true; // Show the confirmation message
+        this.registrationSuccess.emit(true);
       },
       error: error => {
         this.validationErrors = error;

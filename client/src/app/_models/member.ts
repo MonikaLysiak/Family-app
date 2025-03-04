@@ -8,7 +8,6 @@ export interface Member {
     nickname: string;
     created: Date;
     lastActive: Date;
-    gender: string;
     name: string;
     surname: string;
     photos: Photo[];

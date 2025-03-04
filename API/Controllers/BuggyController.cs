@@ -5,9 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class BuggyController(DataContext context) : BaseApiController
+public class BuggyController : BaseApiController
 {
-    private readonly DataContext _context = context;
+    private readonly DataContext _context;
+
+    public BuggyController(DataContext context)
+    {
+        _context = context;
+    }
 
     [Authorize]
     [HttpGet("auth")]

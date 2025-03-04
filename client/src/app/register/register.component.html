@@ -1,5 +1,5 @@
 <div class="container d-flex justify-content-center">
-    <form *ngIf="!emailSent" [formGroup]="registerForm" 
+    <form [formGroup]="registerForm" 
           (ngSubmit)="registerForm.valid && register()" 
           autocomplete="off" 
           class="w-100 p-3 mt-1 shadow-lg rounded bg-white">
@@ -7,20 +7,8 @@
         <h2 class="text-center text-primary mb-3">{{'signUp' | translate}}</h2>
         <hr>
 
-        <div class="mb-4 text-center">
-            <label class="fw-bold d-block mb-2">{{'iAm' | translate}}:</label>
-            <div class="form-check form-check-inline">
-                <input type="radio" class="form-check-input" value="male" formControlName="gender" id="male">
-                <label for="male" class="form-check-label">{{'male' | translate}}</label>
-            </div>
-            <div class="form-check form-check-inline ms-3">
-                <input type="radio" class="form-check-input" value="female" formControlName="gender" id="female">
-                <label for="female" class="form-check-label">{{'female' | translate}}</label>
-            </div>
-        </div>
-
         <div class="mb-3">
-            <app-text-input [formControl]="$any(registerForm.controls['username'])" [label]="'username' | translate"></app-text-input>
+            <app-text-input [formControl]="$any(registerForm.controls['userName'])" [label]="'username' | translate"></app-text-input>
         </div>
         <div class="mb-3">
             <app-text-input [formControl]="$any(registerForm.controls['name'])" [label]="'name' | translate"></app-text-input>
@@ -59,9 +47,4 @@
             <button class="btn btn-outline-danger px-4" type="button" (click)="escape()">{{'cancel' | translate}}</button>
         </div>
     </form>
-
-    <div *ngIf="emailSent" class="text-center">
-        <h4 class="text-success">{{'confirmationEmailSent' | translate}}</h4>
-        <p>{{'pleaseCheckEmail' | translate}}</p>
-    </div>
 </div>

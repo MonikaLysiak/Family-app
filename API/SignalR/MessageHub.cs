@@ -10,11 +10,16 @@ using Microsoft.AspNetCore.SignalR;
 namespace API.SignalR;
 
 [Authorize]
-public class MessageHub(IUnitOfWork uow, IMapper mapper, IHubContext<PresenceHub> presenceHub) : Hub
+public class MessageHub : Hub
 {
-    private readonly IUnitOfWork _uow = uow;
-    private readonly IMapper _mapper = mapper;
-    private readonly IHubContext<PresenceHub> _presenceHub = presenceHub;
+    private readonly IUnitOfWork _uow;
+    private readonly IMapper _mapper;
+
+    public MessageHub(IUnitOfWork uow, IMapper mapper, IHubContext<PresenceHub> presenceHub)
+    {
+        _uow = uow;
+        _mapper = mapper;
+    }
 
     public override async Task OnConnectedAsync()
     {

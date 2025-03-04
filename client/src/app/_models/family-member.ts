@@ -10,6 +10,5 @@ export interface FamilyMember {
     nickname: string;
     created: Date;
     lastActive: Date;
-    gender: string;
     userPhotos: Photo[];
   }

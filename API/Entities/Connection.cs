@@ -10,6 +10,6 @@ public class Connection
         Username = username;
     }
 
-    public string ConnectionId { get; set; }
-    public string Username { get; set; }
+    public string? ConnectionId { get; set; }
+    public string? Username { get; set; }
 }

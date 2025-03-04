@@ -1,20 +1,80 @@
 <div class="container w-75">
-    <div *ngIf="!registerMode" style="text-align: center;">
-        <h1 class="p-3">{{'welcomeToFamilyApp' | translate}}</h1>
-        <div class="card bg-light mb-3 mt-5 shadow border" style="max-width: 100rem;">
-            <div class="card-body">
-              <p class="card-text">{{'familyAppDescription' | translate}}</p>
+    <div *ngIf="!registerMode">
+        <div *ngIf="currentStatus === authStatus.NotLoggedIn || currentStatus === authStatus.LoggedIn"
+            style="text-align: center;">
+            <h1 class="p-3">{{'welcomeToFamilyApp' | translate}}</h1>
+            <div class="card bg-light mb-3 mt-5 shadow border" style="max-width: 100rem;">
+                <div class="card-body">
+                    <p class="card-text">{{'familyAppDescription' | translate}}</p>
+                </div>
             </div>
-          </div>
 
-        <div class="text-center mt-5">
-            <button *ngIf="(accountService.currentUser$ | async)" routerLink="/families" class="btn btn-primary btn-lg me-2 shadow-custom">{{'goToFamilies' | translate}}</button>
-            <button *ngIf="(accountService.currentUser$ | async)" routerLink="/member/edit" class="btn btn-primary btn-lg shadow-custom">{{'yourProfile' | translate}}</button>
-            <button *ngIf="!(accountService.currentUser$ | async)" (click)="registerToggle()" class="btn btn-primary btn-lg me-2">{{'register' | translate}}</button>
+            <div class="text-center mt-5">
+                <button *ngIf="currentStatus === authStatus.LoggedIn" routerLink="/families"
+                    class="btn btn-primary btn-lg me-2 shadow-custom">{{'goToFamilies' | translate}}</button>
+                <button *ngIf="currentStatus === authStatus.LoggedIn" routerLink="/member/edit"
+                    class="btn btn-primary btn-lg shadow-custom">{{'yourProfile' | translate}}</button>
+                <button *ngIf="currentStatus === authStatus.NotLoggedIn" (click)="register()"
+                    class="btn btn-primary btn-lg me-2">{{'register' | translate}}</button>
+            </div>
+        </div>
+
+        <!-- Registration Success Message -->
+        <div *ngIf="currentStatus === authStatus.EmailConfirmationSent" class="text-center p-3">
+            <h4 class="text-success">{{'confirmationEmailSent' | translate}}</h4>
+            <p>{{'pleaseCheckEmail' | translate}}</p>
+            <button class="btn btn-primary mt-3" (click)="backToHome()">{{'goBackHome' | translate}}</button>
+        </div>
+
+        <!-- Two Factor Required Message -->
+        <div *ngIf="currentStatus === authStatus.TwoFactorRequired" class="text-center p-3">
+            <h4 class="text-warning">{{'twoFactorRequired' | translate}}</h4>
+            <p>{{'pleaseEnterTwoFactorCode' | translate}}</p>
+        </div>
+
+        <!-- Two Factor Invalid Code Message -->
+        <div *ngIf="currentStatus === authStatus.InvalidTwoFactorCode" class="text-center p-3">
+            <h4 class="text-danger">{{'invalidTwoFactorCode' | translate}}</h4>
+            <p>{{'pleaseTryAgain' | translate}}</p>
+            <button class="btn btn-primary mt-3" (click)="backToHome()">{{'goBackHome' | translate}}</button>
+        </div>
+
+        <!-- Email Verified Message -->
+        <div *ngIf="currentStatus === authStatus.EmailConfirmed" class="text-center p-3">
+            <h4 class="text-success">{{'emailVerified' | translate}}</h4>
+            <p>{{'youCanNowLogin' | translate}}</p>
+        </div>
+
+        <!-- Email Not Verified Message -->
+        <div *ngIf="currentStatus === authStatus.InvalidConfirmationToken" class="text-center p-3">
+            <h4 class="text-danger">{{'emailNotVerified' | translate}}</h4>
+            <p>{{'pleaseCheckEmail' | translate}}</p>
+            <button class="btn btn-primary mt-3" (click)="resendEmail()">{{'resendEmail' | translate}}</button>
+        </div>
+
+        <!-- Account Locked Out Message -->
+        <div *ngIf="currentStatus === authStatus.LockedOut" class="text-center p-3">
+            <h4 class="text-danger">{{'accountLocked' | translate}}</h4>
+            <p>{{'pleaseTryAgainLater' | translate}}</p>
+            <button class="btn btn-primary mt-3" (click)="backToHome()">{{'goBackHome' | translate}}</button>
+        </div>
+
+        <!-- Invalid Credentials Message -->
+        <div *ngIf="currentStatus === authStatus.InvalidCredentials" class="text-center p-3">
+            <h4 class="text-danger">{{'invalidCredentials' | translate}}</h4>
+            <p>{{'pleaseCheckYourLoginDetails' | translate}}</p>
+            <button class="btn btn-primary mt-3" (click)="backToHome()">{{'goBackHome' | translate}}</button>
+        </div>
+
+        <!-- Email Already Confirmed Message -->
+        <div *ngIf="currentStatus === authStatus.EmailAlreadyConfirmed" class="text-center p-3">
+            <h4 class="text-success">{{'emailAlreadyConfirmed' | translate}}</h4>
+            <p>{{'youCanNowLogin' | translate}}</p>
         </div>
     </div>
 
     <div *ngIf="registerMode" class="container w-50">
-        <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
+        <app-register (cancelRegister)="cancelRegisterMode($event)"
+            (registrationSuccess)="showRegistrationSuccess()"></app-register>
     </div>
 </div>

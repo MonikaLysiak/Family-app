@@ -2,14 +2,18 @@ using System.Net;
 using System.Net.Mail;
 using API.Helpers;
 using API.Interfaces;
-using CloudinaryDotNet;
 using Microsoft.Extensions.Options;
 
 namespace API.Services;
 
-public class EmailService(IOptions<SmtpSettings> smtpSetings) : IEmailService
+public class EmailService : IEmailService
 {
-    private readonly IOptions<SmtpSettings> _smtpSetings = smtpSetings;
+    private readonly IOptions<SmtpSettings> _smtpSetings;
+
+    public EmailService(IOptions<SmtpSettings> smtpSetings)
+    {
+        _smtpSetings = smtpSetings;
+    }
 
     public async Task SendFromFamilyAppAsync(string to, string subject, string body)
     {

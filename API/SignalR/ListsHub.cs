@@ -9,10 +9,16 @@ using Microsoft.AspNetCore.SignalR;
 namespace API.SignalR;
 
 [Authorize]
-public class ListsHub(IUnitOfWork uow, IMapper mapper) : Hub
+public class ListsHub : Hub
 {
-    private readonly IUnitOfWork _uow = uow;
-    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _uow;
+    private readonly IMapper _mapper;
+
+    public ListsHub(IUnitOfWork uow, IMapper mapper)
+    {
+        _uow = uow;
+        _mapper = mapper;
+    }
 
     public override async Task OnConnectedAsync()
     {

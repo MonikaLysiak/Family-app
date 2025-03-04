@@ -2,7 +2,7 @@
     <div class="row" *ngIf="member">
         <!-- Profile Heading -->
         <div class="col-12 text-center mb-4">
-            <h1 class="display-4">Your Profile</h1> <!-- Larger, centered heading -->
+            <h1 class="display-4">Your Profile</h1>
         </div>
 
         <!-- Profile Information -->
@@ -37,6 +37,12 @@
                             <div>
                                 <strong>Data dołączenia:</strong>
                                 <p>{{member.created | date: 'longDate'}}</p>
+                            </div>
+                            <div class="text-center">
+                                <label>
+                                    <input type="checkbox" (change)="setTwoFactorEnabled($event)" />
+                                    Enable Two-Factor Authentication
+                                  </label>
                             </div>
                         </div>
                     </div>

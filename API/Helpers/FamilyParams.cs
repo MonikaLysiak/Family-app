@@ -4,5 +4,5 @@ public class FamilyParams : PaginationParams
 {
     public int CurrentUserId { get; set; }
     
-    public string OrderBy { get; set; } = "lastActive";
+    public string? OrderBy { get; set; } = "lastActive";
 }

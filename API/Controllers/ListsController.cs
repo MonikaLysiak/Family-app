@@ -8,10 +8,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class ListsController(IMapper mapper, IUnitOfWork uow) : BaseApiController
+public class ListsController : BaseApiController
 {
-    private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _uow = uow;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _uow;
+
+    public ListsController(IMapper mapper, IUnitOfWork uow)
+    {
+        _mapper = mapper;
+        _uow = uow;
+    }
 
     [HttpPost]
     public async Task<ActionResult<FamilyListDto>> CreateFamilyList(CreateListDto createListDto)

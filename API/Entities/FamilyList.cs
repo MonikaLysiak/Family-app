@@ -3,7 +3,7 @@
 public class FamilyList
 {
     public int Id { get; set; }
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
     
     public int FamilyId { get; set; }

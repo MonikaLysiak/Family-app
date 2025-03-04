@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { Login} from '../_models/login';
+import { AuthStatus } from '../_enums/auth-status';
 
 @Component({
   selector: 'app-nav',
@@ -9,18 +10,41 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit{
-  model: any = {};
+  model: Login = {} as Login;
+  authStatus = AuthStatus;
+  currentStatus: AuthStatus = AuthStatus.NotLoggedIn;
 
-  constructor(public accountService: AccountService, private router: Router) {}
+  constructor(public accountService: AccountService, private router: Router) {
+    this.accountService.currentAuthStatus$.subscribe(status => {
+      this.currentStatus = status;
+    });
+  }
 
   ngOnInit(): void {
   }
  
+  showLogin(): boolean {
+    return this.currentStatus != AuthStatus.LoggedIn && this.currentStatus != AuthStatus.TwoFactorRequired && this.currentStatus != AuthStatus.InvalidTwoFactorCode;
+  }
+
+  showTwoFactorLogin(): boolean {
+    return this.currentStatus === AuthStatus.TwoFactorRequired || this.currentStatus === AuthStatus.InvalidTwoFactorCode;
+  }
+
   login() {
     this.accountService.login(this.model).subscribe({
       next: _ => {
         this.router.navigateByUrl('');
-        this.model = {};
+        this.model = {} as Login;
+      }
+    });
+  }
+
+  twoFactorLogin() {
+    this.accountService.twoFactorLogin(this.model).subscribe({
+      next: _ => {
+        this.router.navigateByUrl('');
+        this.model = {} as Login;
       }
     });
   }

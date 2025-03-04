@@ -7,10 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class ListsRepository(DataContext context, IMapper mapper) : IListsRepository
+public class ListsRepository : IListsRepository
 {
-    private readonly DataContext _context = context;
-    private readonly IMapper _mapper = mapper;
+    private readonly DataContext _context;
+    private readonly IMapper _mapper;
+
+    public ListsRepository(DataContext context, IMapper mapper)
+    {
+        _context = context;
+        _mapper = mapper;
+    }
 
     // same in messeges repo, mayby add hepler or service later on ?? or ConnectionRepo ??
     // also must add messeges / lists to group name so that there wont be same name for both (as for now it is only an Id)

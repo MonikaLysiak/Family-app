@@ -1,17 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, take } from 'rxjs';
-import { User } from '../_models/user';
+import { BehaviorSubject, map, take, tap } from 'rxjs';
+import { AuthResponse, User } from '../_models/user';
 import { environment } from 'src/environments/environment';
 import { PresenceService } from './presence.service';
 import { Family } from '../_models/family';
 import { TranslateService } from '@ngx-translate/core';
+import { Login } from '../_models/login';
+import { Register } from '../_models/register';
+import { AuthStatus } from '../_enums/auth-status';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
   baseUrl = environment.apiUrl;
+
+  private currentAuthStatus = new BehaviorSubject<AuthStatus>(AuthStatus.NotLoggedIn);
+  currentAuthStatus$ = this.currentAuthStatus.asObservable();
+
   private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
 
@@ -29,25 +36,68 @@ export class AccountService {
     localStorage.setItem('language', JSON.stringify(language));
   }
 
-  login(model: any) {
-    return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
-      map((response: User) => {
-        const user = response;
+  setCurrentAuthStatus(authStatus: AuthStatus){
+    this.currentAuthStatus.next(authStatus);
+  }
+
+  login(model: Login) {
+    return this.http.post<AuthResponse>(this.baseUrl + 'account/login', model).pipe(
+      tap((response: AuthResponse) => {
+        const user = response.user;
         if (user) {
           this.setCurrentUser(user);
-        }
+        };
+        this.currentAuthStatus.next(response.status);
       })
     );
   }
 
-  register(model: any) {
-    return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
-      map(user => {
+  twoFactorLogin(model: Login) {
+    return this.http.post<AuthResponse>(this.baseUrl + 'account/twoFactorLogin', model).pipe(
+      tap((response: AuthResponse) => {
+        const user = response.user;
         if (user) {
           this.setCurrentUser(user);
-        }
+        };
+        this.currentAuthStatus.next(response.status);
       })
-    )
+    );
+  }
+
+  register(model: Register) {
+    return this.http.post<AuthResponse>(this.baseUrl + 'account/register', model).pipe(
+      tap((response: AuthResponse) => {
+        const user = response.user;
+        if (user) {
+          this.setCurrentUser(user);
+        };
+        this.currentAuthStatus.next(response.status);
+      })
+    );
+  }
+
+  confirmEmail(model: any) {
+    return this.http.post<AuthResponse>(this.baseUrl + 'account/confirmEmail',
+      {
+        userId: model.userId,
+        token: model.token
+      }).pipe(
+        tap((response: AuthResponse) => {
+          const user = response.user;
+          if (user) {
+            this.setCurrentUser(user);
+          };
+          this.currentAuthStatus.next(response.status);
+        })
+      );
+  }
+
+  resendEmail() {
+    return this.http.post<AuthResponse>(this.baseUrl + 'account/confirmEmail', {} ).pipe(
+        tap((response: AuthResponse) => {
+          this.currentAuthStatus.next(response.status);
+        })
+      );
   }
 
   setCurrentUser(user: User){
@@ -65,7 +115,8 @@ export class AccountService {
       {
         if (user)
           user = user;
-      });
+      }
+    );
     return user;
   }
 
@@ -81,7 +132,7 @@ export class AccountService {
     )
   }
 
-  //why this way? should i chnge it to simple property??
+  //why this way? should i change it to simple property??
   setCurrentFamily(family: Family | null){
     localStorage.setItem('family', JSON.stringify(family))
     this.currentFamilySource.next(family);
@@ -110,6 +161,7 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+    this.currentAuthStatus.next(AuthStatus.NotLoggedIn);
     localStorage.removeItem('family');
     this.currentFamilySource.next(null);
     this.presenceService.stopHubConnection();

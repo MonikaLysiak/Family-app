@@ -2,7 +2,7 @@
     <h3>Loading...</h3>
 </ngx-spinner>
 
-<div *ngIf="router.url === '/'" class="container background-photo-container">
+<div *ngIf="router.url === '/' || router.url.startsWith('/confirmEmail')" class="container background-photo-container">
     <img class="background-photo" src="./assets/pexels-pixabay-160994_medium.jpg">    
 </div>
 

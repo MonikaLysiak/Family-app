@@ -5,9 +5,14 @@ using Microsoft.AspNetCore.SignalR;
 namespace API.SignalR;
 
 [Authorize]
-public class PresenceHub(PresenceTracker tracker) : Hub
+public class PresenceHub : Hub
 {
-    private readonly PresenceTracker _tracker = tracker;
+    private readonly PresenceTracker _tracker;
+
+    public PresenceHub(PresenceTracker tracker)
+    {
+        _tracker = tracker;
+    }
 
     public override async Task OnConnectedAsync()
     {

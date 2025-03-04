@@ -19,16 +19,31 @@ public static class IdentityServiceExtensions
             opt.Lockout.MaxFailedAccessAttempts = 5;
             opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 
+            //commented for testing purposes
             opt.User.RequireUniqueEmail = true;
             opt.SignIn.RequireConfirmedEmail = true;
         })
             .AddRoles<AppRole>()
             .AddRoleManager<RoleManager<AppRole>>()
+            .AddSignInManager<SignInManager<AppUser>>()
+            .AddUserManager<UserManager<AppUser>>()
             .AddEntityFrameworkStores<DataContext>()
             .AddDefaultTokenProviders();
 
+
+        // services.AddAuthentication().AddJwtBearer("Identity.Application", options =>
+        // {
+        //     options.TokenValidationParameters = new TokenValidationParameters
+        //     {
+        //         ValidateIssuerSigningKey = true,
+        //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])),
+        //         ValidateIssuer = false,
+        //         ValidateAudience = false
+        //     };
+        // });
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
+        .AddJwtBearer("Identity.Application", options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -53,7 +68,8 @@ public static class IdentityServiceExtensions
                     return Task.CompletedTask;
                 }
             };
-        });
+        })
+        .AddCookie("Cookies");
 
         services.AddAuthorization(opt =>
         {

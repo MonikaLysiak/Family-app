@@ -21,9 +21,11 @@ import { familyDetailedResolver } from './_resolvers/family-detailed.resolver';
 import { InvitationsComponent } from './invitations/invitations/invitations.component';
 import { FamilyChatComponent } from './family/family-chat/family-chat.component';
 import { RecipesComponent } from './family/family-recipes/family-recipes.component';
+import { confirmEmailResolver } from './_resolvers/confirm-email.resolver';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
+  {path: 'confirmEmail', component: HomeComponent, resolve: {confirmEmail: confirmEmailResolver}},
   {path: '', 
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],

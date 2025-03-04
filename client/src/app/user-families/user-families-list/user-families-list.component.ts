@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Family } from 'src/app/_models/family';
-import { FamilyParams } from 'src/app/_models/familyParams';
+import { FamilyParams } from 'src/app/_models/family-params';
 import { Pagination } from 'src/app/_models/pagination';
 import { AccountService } from 'src/app/_services/account.service';
 import { UserFamiliesService } from 'src/app/_services/user-families.service';

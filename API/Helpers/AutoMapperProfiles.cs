@@ -20,7 +20,6 @@ public class AutoMapperProfiles : Profile
             .ForMember(dest => dest.Created, opt => opt.MapFrom(src => src.User.Created))
             .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.User.UserPhotos.FirstOrDefault(x => x.IsMain).Url))
             .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => src.User.Surname))
-            .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.User.Gender))
             .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.User.DateOfBirth.CalculateAge()));
 
         CreateMap<Family, FamilyDto>()
@@ -34,7 +33,8 @@ public class AutoMapperProfiles : Profile
         CreateMap<UserPhoto, PhotoDto>();
         CreateMap<FamilyPhoto, PhotoDto>();
         //CreateMap<FamilyMemberUpdateDto, AppUser>();
-        CreateMap<RegisterDto, AppUser>();
+        CreateMap<RegisterDto, AppUser>()
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName.ToLower()));
         CreateMap<Message, MessageDto>()
             .ForMember(d => d.SenderPhotoUrl, o => o.MapFrom(s => s.Sender.UserPhotos.FirstOrDefault(x => x.IsMain).Url))
             .ForMember(d => d.FamilyPhotoUrl, o => o.MapFrom(s => s.Family.FamilyPhotos.FirstOrDefault(x => x.IsMain).Url));

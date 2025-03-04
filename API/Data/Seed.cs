@@ -38,7 +38,8 @@ public class Seed
 
         var admin = new AppUser
         {
-            UserName = "admin"
+            UserName = "admin",
+            Email = "admin@admin.pl"
         };
 
         await userManager.CreateAsync(admin, "Pa$$w0rd");

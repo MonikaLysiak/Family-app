@@ -3,7 +3,7 @@ import { UserFamiliesService } from '../_services/user-families.service';
 import { inject } from '@angular/core';
 import { Family } from '../_models/family';
 
-//unused now mayby later, if not - to be deleted
+//unused now mayby later, if not - to be deleted confirm
 export const familyDetailedResolver: ResolveFn<Family> = (route, state) => {
   const familyService = inject(UserFamiliesService);
 

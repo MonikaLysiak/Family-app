@@ -26,6 +26,7 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<PresenceTracker>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<IEmailService, EmailService>();
+        services.AddScoped<IAccountService, AccountService>();
 
         return services;
     }

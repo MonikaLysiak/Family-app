@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Enums;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -8,47 +9,62 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-public class AccountController(UserManager<AppUser> userManager, ITokenService tokenService, IMapper mapper, IEmailService emailService) : BaseApiController
+public class AccountController : BaseApiController
 {
-    private readonly UserManager<AppUser> _userManager = userManager;
-    private readonly ITokenService _tokenService = tokenService;
-    private readonly IMapper _mapper = mapper;
-    private readonly IEmailService _emailService = emailService;
+    private readonly UserManager<AppUser> _userManager;
+    private readonly IMapper _mapper;
+    private readonly IAccountService _accountService;
+
+    public AccountController(UserManager<AppUser> userManager, IMapper mapper, IAccountService accountService)
+    {
+        _userManager = userManager;
+        _mapper = mapper;
+        _accountService = accountService;
+    }
 
     [HttpPost("register")]
-    public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+    public async Task<ActionResult> Register(RegisterDto registerDto)
     {
-        if(await UserExistsAsync(registerDto.UserName)) return BadRequest("Username is taken");
+        if (await _accountService.UserExistsAsync(registerDto.UserName)) return BadRequest("Username is taken");
 
         var user = _mapper.Map<AppUser>(registerDto);
 
-        user.UserName = registerDto.UserName.ToLower();
-
-        var result = await _userManager.CreateAsync(user, registerDto.Password);
+        var result = await _accountService.RegisterUserAsync(user, registerDto.Password, ["Member"]);
 
         if (!result.Succeeded) return BadRequest(result.Errors);
 
-        var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        if (user.Email == null) return BadRequest("User has no email");
 
-        var confirmationLink = Url.PageLink(pageName: "/Account/ConfirmEmail",
-            values: new { userId = user.Id, token = confirmationToken });
+        return Ok(await _accountService.SendConfirmationEmailAsync(user));
+    }
 
-        await _emailService.SendFromFamilyAppAsync(
-            user.Email, 
-            "Confirm your email", 
-            $"Please confirm your email by clicking this link: {confirmationLink}"
-            );
+    [HttpPost("sendConfirmationEmail")]
+    public async Task<ActionResult> SendConfirmationEmail(string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
 
-        var roleResult = await _userManager.AddToRoleAsync(user, "Member");
+        if (user == null) return BadRequest("User not found");
 
-        if (!roleResult.Succeeded) return BadRequest(roleResult.Errors);
+        if (user.Email == null) return BadRequest("User has no email");
 
-        return new UserDto 
-        {
-            Username = user.UserName,
-            Token = await _tokenService.CreateTokenAsync(user),
-            Name = user.Name
-        };
+        return Ok(await _accountService.SendConfirmationEmailAsync(user));
+    }
+
+
+    [HttpPost("confirmEmail")]
+    public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailDto confirmEmailDto)
+    {
+        var user = await _userManager.FindByIdAsync(confirmEmailDto.UserId);
+
+        if (user == null) return BadRequest("User not found");
+
+        if (user.EmailConfirmed) return Ok(new AuthResponse { Status = AuthStatus.EmailAlreadyConfirmed });
+
+        var result = await _userManager.ConfirmEmailAsync(user, confirmEmailDto.Token);
+
+        if (!result.Succeeded) return Ok(new AuthResponse { Status = AuthStatus.InvalidConfirmationToken });
+
+        return Ok(new AuthResponse { Status = AuthStatus.EmailConfirmed });
     }
 
     [HttpPost("login")]
@@ -58,23 +74,26 @@ public class AccountController(UserManager<AppUser> userManager, ITokenService t
             .Include(p => p.UserPhotos)
             .SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
-        if(user == null) return Unauthorized("Invalid username");
+        if (user == null) return Ok(new AuthResponse { Status = AuthStatus.InvalidCredentials });
+        
+        if (user.Email == null) return BadRequest("User has no email");
 
-        var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+        var result = await _accountService.LoginAsync(user, loginDto.Password);
 
-        if (!result) return Unauthorized("Invalid password");
+        if (result == null) return Unauthorized("Failed to login");
 
-        return new UserDto 
-        {
-            Username = user.UserName,
-            Token = await _tokenService.CreateTokenAsync(user),
-            PhotoUrl = user.UserPhotos.FirstOrDefault(x => x.IsMain)?.Url,
-            Name = user.Name
-        };
+        return Ok(result);
     }
 
-    private async Task<bool> UserExistsAsync(string username)
+    [HttpPost("twoFactorLogin")]
+    public async Task<ActionResult<UserDto>> TwoFactorLogin(TwoFactorLoginDto twoFactorLoginDto)
     {
-        return await _userManager.Users.AnyAsync(x => x.UserName == username.ToLower());
+        var user = await _userManager.Users
+            .Include(p => p.UserPhotos)
+            .SingleOrDefaultAsync(x => x.UserName == twoFactorLoginDto.UserName);
+
+        if (user == null) return Ok(new AuthResponse { Status = AuthStatus.InvalidCredentials });
+
+        return Ok(await _accountService.TwoFactorLoginAsync(user, twoFactorLoginDto.TwoFactorCode));
     }
 }

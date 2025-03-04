@@ -8,10 +8,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class UserRepository(DataContext context, IMapper mapper) : IUserRepository
+public class UserRepository : IUserRepository
 {
-    private readonly DataContext _context = context;
-    private readonly IMapper _mapper = mapper;
+    private readonly DataContext _context;
+    private readonly IMapper _mapper;
+
+    public UserRepository(DataContext context, IMapper mapper)
+    {
+        _context = context;
+        _mapper = mapper;
+    }
 
     public async Task<MemberDto> GetMemberAsync(string username)
     {
@@ -64,22 +70,5 @@ public class UserRepository(DataContext context, IMapper mapper) : IUserReposito
         return await _context.Users
             .Include(p => p.UserPhotos)
             .SingleOrDefaultAsync(x => x.UserName == username);
-    }
-
-    public async Task<string> GetUserGender(string username)
-    {
-        return await _context.Users.Where(x => x.UserName == username).Select(x =>x.Gender).FirstOrDefaultAsync();
-    }
-
-    public async Task<IEnumerable<AppUser>> GetUsersAsync()
-    {
-        return await _context.Users
-            .Include(p => p.UserPhotos)
-            .ToListAsync();
-    }
-
-    public void Update(AppUser user)
-    {
-        _context.Entry(user).State = EntityState.Modified;
     }
 }

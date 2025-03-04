@@ -48,4 +48,13 @@ export class MemberEditComponent implements OnInit{
     })
   }
 
+  setTwoFactorEnabled(event: Event) {
+    const isEnabled = (event.target as HTMLInputElement).checked;
+    console.log('Two-Factor Authentication is now', isEnabled ? 'Enabled' : 'Disabled');
+    this.memberService.setTwoFactorEnabled(isEnabled).subscribe({
+      next: _ => {
+        this.toastr.success('Two-factor authentication ' + (isEnabled ? 'enabled' : 'disabled'));
+      }
+    })
+  }
 }

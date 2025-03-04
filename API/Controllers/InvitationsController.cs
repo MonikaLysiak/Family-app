@@ -8,10 +8,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class InvitationsController(IUnitOfWork uow, IMapper mapper) : BaseApiController
+public class InvitationsController : BaseApiController
 {
-    private readonly IUnitOfWork _uow = uow;
-    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _uow;
+    private readonly IMapper _mapper;
+
+    public InvitationsController(IUnitOfWork uow, IMapper mapper)
+    {
+        _uow = uow;
+        _mapper = mapper;
+    }
 
     [HttpPost("{username}/{familyId}")]
     public async Task<ActionResult> AddInvitation(string username, int familyId)
