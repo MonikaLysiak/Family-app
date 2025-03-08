@@ -30,27 +30,17 @@ public static class IdentityServiceExtensions
             .AddEntityFrameworkStores<DataContext>()
             .AddDefaultTokenProviders();
 
-
-        // services.AddAuthentication().AddJwtBearer("Identity.Application", options =>
-        // {
-        //     options.TokenValidationParameters = new TokenValidationParameters
-        //     {
-        //         ValidateIssuerSigningKey = true,
-        //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])),
-        //         ValidateIssuer = false,
-        //         ValidateAudience = false
-        //     };
-        // });
-
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer("Identity.Application", options =>
+        .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])),
+                ValidateLifetime = true,
                 ValidateIssuer = false,
-                ValidateAudience = false
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
             };
 
             options.Events = new JwtBearerEvents
@@ -68,8 +58,7 @@ public static class IdentityServiceExtensions
                     return Task.CompletedTask;
                 }
             };
-        })
-        .AddCookie("Cookies");
+        });
 
         services.AddAuthorization(opt =>
         {

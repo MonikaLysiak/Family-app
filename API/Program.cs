@@ -25,11 +25,9 @@ app.UseCors(builder => builder
     .AllowCredentials()
     .WithOrigins("https://localhost:4200"));
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

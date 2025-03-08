@@ -64,13 +64,7 @@ public class AccountService : IAccountService
 
     public async Task<AuthResponse?> LoginAsync(AppUser user, string password) 
     {
-        //await _signInManager.ForgetTwoFactorClientAsync();
-        //var test = await _signInManager.GetTwoFactorAuthenticationUserAsync();
         var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
-        // var test_ = await _signInManager.CheckPasswordSignInAsync(user, password, false);
-        // var test8_ = await _signInManager.IsTwoFactorEnabledAsync(user);
-        // var test5_ = await _signInManager.IsTwoFactorClientRememberedAsync(user);
-        await _signInManager.RefreshSignInAsync(user);
 
         if (result.Succeeded)
             return new AuthResponse
