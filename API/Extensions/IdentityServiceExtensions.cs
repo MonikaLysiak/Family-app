@@ -19,9 +19,10 @@ public static class IdentityServiceExtensions
             opt.Lockout.MaxFailedAccessAttempts = 5;
             opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 
-            //commented for testing purposes
             opt.User.RequireUniqueEmail = true;
             opt.SignIn.RequireConfirmedEmail = true;
+
+            opt.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
         })
             .AddRoles<AppRole>()
             .AddRoleManager<RoleManager<AppRole>>()
@@ -33,6 +34,8 @@ public static class IdentityServiceExtensions
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,

@@ -11,4 +11,5 @@ export interface Member {
     name: string;
     surname: string;
     photos: Photo[];
+    twoFactorEnabled: boolean;
   }

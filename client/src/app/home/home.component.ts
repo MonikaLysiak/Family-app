@@ -24,8 +24,12 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.route.data.subscribe({
       next: data => {
-        if(data['confirmEmail'])
-          this.accountService.confirmEmail(this.route.queryParams);
+        if(data['confirmEmail']){
+          this.route.queryParams.subscribe(params => {
+            if (params)
+              this.accountService.confirmEmail(params).subscribe();
+          });
+        }
       }
     });
   }

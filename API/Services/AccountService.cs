@@ -3,7 +3,6 @@ using API.DTOs;
 using API.Entities;
 using API.Enums;
 using API.Interfaces;
-using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,59 +61,61 @@ public class AccountService : IAccountService
         return new AuthResponse { Status = AuthStatus.EmailConfirmationSent };
     }
 
-    public async Task<AuthResponse?> LoginAsync(AppUser user, string password) 
+    public async Task<AuthResponse?> LoginAsync(AppUser user, string password)
     {
-        var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
+        if (!await _userManager.IsEmailConfirmedAsync(user))
+        {
+            return new AuthResponse { Status = AuthStatus.EmailConfirmationSent };
+        }
 
-        if (result.Succeeded)
+        if (await _userManager.IsLockedOutAsync(user))
+        {
+            return new AuthResponse { Status = AuthStatus.LockedOut };
+        }
+
+        if (!await _userManager.CheckPasswordAsync(user, password))
+        {
+            await _userManager.AccessFailedAsync(user);
+            return new AuthResponse { Status = AuthStatus.InvalidCredentials };
+        }
+
+        await _userManager.ResetAccessFailedCountAsync(user);
+
+        if (await _userManager.GetTwoFactorEnabledAsync(user))
+        {
+            var securityCode = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
+
+            await _emailService.SendFromFamilyAppAsync(
+                user.Email,
+                "Family App's OTP",
+                $"Please use this code as the OTP: {securityCode}");
+
             return new AuthResponse
             {
-                Status = AuthStatus.LoggedIn,
-                User = new UserDto
-                {
-                    Username = user.UserName,
-                    Token = await _tokenService.CreateTokenAsync(user),
-                    PhotoUrl = user.UserPhotos.FirstOrDefault(x => x.IsMain)?.Url,
-                    Name = user.Name
-                }
+                Status = AuthStatus.TwoFactorRequired,
+                User = new UserDto { Username = user.UserName }
             };
-        else
-        {
-            if (result.IsLockedOut)
-                return new AuthResponse { Status = AuthStatus.LockedOut };
-            if (result.RequiresTwoFactor)
-            {
-                var securityCode = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
-
-                await _emailService.SendFromFamilyAppAsync(
-                    user.Email,
-                    "Family App's OTP",
-                    $"Please use this code as the OTP: {securityCode}");
-
-                return new AuthResponse
-                {
-                    Status = AuthStatus.TwoFactorRequired,
-                    User = new UserDto
-                    {
-                        Username = user.UserName,
-                        Token = await _tokenService.CreateTokenAsync(user),
-                        PhotoUrl = user.UserPhotos.FirstOrDefault(x => x.IsMain)?.Url,
-                        Name = user.Name
-                    }
-                };
-            }
-            if (result.IsNotAllowed)
-                return null;
-            else
-                return new AuthResponse { Status = AuthStatus.InvalidCredentials };
         }
+
+        return new AuthResponse
+        {
+            Status = AuthStatus.LoggedIn,
+            User = new UserDto
+            {
+                Username = user.UserName,
+                Token = await _tokenService.CreateTokenAsync(user),
+                PhotoUrl = user.UserPhotos.FirstOrDefault(x => x.IsMain)?.Url,
+                Name = user.Name
+            }
+        };
     }
+
 
     public async Task<AuthResponse> TwoFactorLoginAsync(AppUser user, string twoFactorCode)
     {
-        var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(twoFactorCode, false, false);
+        var result = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider, twoFactorCode);
 
-        if (result.Succeeded)
+        if (result)
             return new AuthResponse
             {
                 Status = AuthStatus.LoggedIn,

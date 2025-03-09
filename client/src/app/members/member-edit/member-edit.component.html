@@ -40,7 +40,7 @@
                             </div>
                             <div class="text-center">
                                 <label>
-                                    <input type="checkbox" (change)="setTwoFactorEnabled($event)" />
+                                    <input type="checkbox" [checked]="member.twoFactorEnabled" (change)="setTwoFactorEnabled($event)" />
                                     Enable Two-Factor Authentication
                                   </label>
                             </div>

@@ -54,10 +54,10 @@
     <form *ngIf="!(accountService.currentUser$ | async) && showLogin()" #loginForm="ngForm" class="d-flex" (ngSubmit)="login()"
       autocomplete="off">     
 
-      <input name="{{'username' | translate}}" [(ngModel)]="model.userName" class="form-control me-2" type="text"
+      <input name="username" [(ngModel)]="model.userName" class="form-control me-2" type="text"
         placeholder="{{'username' | translate}}">
 
-      <input name="{{'password' | translate}}" [(ngModel)]="model.password" class="form-control me-2" type="password"
+      <input name="password" [(ngModel)]="model.password" class="form-control me-2" type="password"
         placeholder="{{'password' | translate}}">
 
       <button class="btn btn-success" type="submit">{{'login' | translate}}</button>
@@ -65,7 +65,7 @@
 
     <form *ngIf="!(accountService.currentUser$ | async) && showTwoFactorLogin()" #loginForm="ngForm" class="d-flex" (ngSubmit)="twoFactorLogin()"
       autocomplete="off">
-      <input name="{{'twoFactorCode' | translate}}" [(ngModel)]="model.twoFactorCode" class="form-control me-2" type="text"
+      <input name="twoFactorCode" [(ngModel)]="model.twoFactorCode" class="form-control me-2" type="text"
         placeholder="{{'twoFactorCode' | translate}}">
       <button class="btn btn-success" type="submit">{{'twoFactorLogin' | translate}}</button>
     </form>

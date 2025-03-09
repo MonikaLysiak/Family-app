@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Login } from '../_models/login';
 import { Register } from '../_models/register';
 import { AuthStatus } from '../_enums/auth-status';
+import { ConfirmEmailDto } from '../_models/confirm-email-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -43,11 +44,11 @@ export class AccountService {
   login(model: Login) {
     return this.http.post<AuthResponse>(this.baseUrl + 'account/login', model).pipe(
       tap((response: AuthResponse) => {
+        this.currentAuthStatus.next(response.status);
         const user = response.user;
-        if (user) {
+        if (user && response.status === AuthStatus.LoggedIn) {
           this.setCurrentUser(user);
         };
-        this.currentAuthStatus.next(response.status);
       })
     );
   }
@@ -81,7 +82,7 @@ export class AccountService {
       {
         userId: model.userId,
         token: model.token
-      }).pipe(
+      } as ConfirmEmailDto).pipe(
         tap((response: AuthResponse) => {
           const user = response.user;
           if (user) {

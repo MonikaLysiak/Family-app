@@ -12,4 +12,5 @@ public class MemberDto
     public DateTime LastActive { get; set;}
     public string? Surname { get; set; }
     public List<PhotoDto> UserPhotos { get; set; }
+    public bool TwoFactorEnabled { get; set; }
 }

@@ -86,7 +86,7 @@ public class AccountController : BaseApiController
     }
 
     [HttpPost("twoFactorLogin")]
-    public async Task<ActionResult<UserDto>> TwoFactorLogin(TwoFactorLoginDto twoFactorLoginDto)
+    public async Task<ActionResult<UserDto>> TwoFactorLogin([FromBody] TwoFactorLoginDto twoFactorLoginDto)
     {
         var user = await _userManager.Users
             .Include(p => p.UserPhotos)
