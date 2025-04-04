@@ -52,19 +52,3 @@ Upload and manage images using Cloudinary integration.
 ### Family Chat
 Real-time messaging for family members, powered by SignalR.
 ![family_chat_new](https://github.com/user-attachments/assets/ee708d14-a143-4b7f-bddf-c0c457f16e41)
-
-## Installation & Setup
-
-1. Clone the repository:  
-git clone https://github.com/MonikaLysiak/Family-app.git
-
-2. Navigate to the project folder and install dependencies:  
-cd client
-npm install
-
-3. Run the Angular front-end:  
-ng serve
-
-4. Start the ASP.NET back-end:  
-cd API
-dotnet run
