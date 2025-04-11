@@ -22,33 +22,33 @@ Family App is a web application designed to simplify daily family management and
 ## Implementation Overview
 
 ### Home Page
-The landing page allows users to log in, create an account, and switch languages.  
-![home](https://github.com/user-attachments/assets/ea90a673-eb79-48fe-b418-82a45c7a9baf)
+The landing page allows users to log in, create an account, and switch languages.
+<img src="https://github.com/user-attachments/assets/ea90a673-eb79-48fe-b418-82a45c7a9baf" width="800">
 
 ### Family Dashboard
-Displays a list of families, provides navigation, and enables new family creation.  
-![home_logged_in](https://github.com/user-attachments/assets/7dedde35-d1b6-4b08-a54a-45a6082cde67)
+Displays a list of families, provides navigation, and enables new family creation.
+<img src="https://github.com/user-attachments/assets/7dedde35-d1b6-4b08-a54a-45a6082cde67" width="800">
 
 ### User Identity & Admin Panel
 User roles are managed using ASP.NET Core Identity, where admins can assign permissions.  
-![admin_with_edit](https://github.com/user-attachments/assets/c6cb6c63-befd-436c-a537-162cc6399d80)
+<img src="https://github.com/user-attachments/assets/c6cb6c63-befd-436c-a537-162cc6399d80" width="800">
 
 ### Family Members & Profiles
 Each member has a profile with a status indicator (online/offline).  
-![family_members](https://github.com/user-attachments/assets/c9e37387-bb50-4a2e-a4af-9ba719b6c31a)
+<img src="https://github.com/user-attachments/assets/c9e37387-bb50-4a2e-a4af-9ba719b6c31a" width="800">
 
 ### Invitations
 Send and manage invitations to join families.  
-![invitations_received_1](https://github.com/user-attachments/assets/b4327cb8-ce76-4958-a223-66ad716a0a59)
+<img src="https://github.com/user-attachments/assets/b4327cb8-ce76-4958-a223-66ad716a0a59" width="800">
 
 ### Task Lists
-Create, edit, and track shared family task lists.
-![family_lists](https://github.com/user-attachments/assets/6896d7ea-bf00-442d-8605-34e64fe2ca31)
+Create, edit, and track shared family task lists.  
+<img src="https://github.com/user-attachments/assets/6896d7ea-bf00-442d-8605-34e64fe2ca31" width="800">
 
 ### Photo Gallery
 Upload and manage images using Cloudinary integration.  
-![family_photos_gallery](https://github.com/user-attachments/assets/e5a6f43a-6e90-425c-8ab8-424ba855b90c)
+<img src="https://github.com/user-attachments/assets/e5a6f43a-6e90-425c-8ab8-424ba855b90c" width="800">
 
 ### Family Chat
-Real-time messaging for family members, powered by SignalR.
-![family_chat_new](https://github.com/user-attachments/assets/ee708d14-a143-4b7f-bddf-c0c457f16e41)
+Real-time messaging for family members, powered by SignalR.  
+<img src="https://github.com/user-attachments/assets/ee708d14-a143-4b7f-bddf-c0c457f16e41" width="800">
